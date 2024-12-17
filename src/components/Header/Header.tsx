@@ -28,8 +28,8 @@ function Header() {
           <li>FAQ</li>
         </ul>
         <div className="header_profile">
-          <FaRegUser size={25} />
-          <RiShoppingCart2Line size={25} />
+          <FaRegUser size={20} />
+          <RiShoppingCart2Line size={20} />
         </div>
       </div>
       <BurgerMenu isOpen={buergerMenuIsOpen} />

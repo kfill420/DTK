@@ -1,11 +1,8 @@
 import { useAppDispatch } from '../../../hooks/redux';
 import { CSSTransition } from 'react-transition-group';
 import { toggleIsOpen } from '../../../store/reducer/burgerMenu';
-import { IoLogoInstagram } from "react-icons/io5";
-import { IoLogoTiktok } from "react-icons/io5";
+import { IoLogoInstagram, IoLogoTiktok, IoLogoWhatsapp, IoCloseSharp } from "react-icons/io5";
 import { RiSnapchatFill } from "react-icons/ri";
-import { IoLogoWhatsapp } from "react-icons/io5";
-import { IoCloseSharp } from "react-icons/io5";
 import './BurgerMenu.scss';
 import { useRef } from 'react';
 

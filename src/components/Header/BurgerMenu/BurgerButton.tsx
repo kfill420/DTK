@@ -24,7 +24,7 @@ const HamburgerMenuButton = () => {
           y1="12"
           x2="30"
           y2="12"
-          stroke="black"
+          stroke="currentColor"
           strokeWidth="2"
         />
         <line
@@ -33,7 +33,7 @@ const HamburgerMenuButton = () => {
           y1="20"
           x2="30"
           y2="20"
-          stroke="black"
+          stroke="currentColor"
           strokeWidth="2"
         />
         <line
@@ -42,7 +42,7 @@ const HamburgerMenuButton = () => {
           y1="28"
           x2="30"
           y2="28"
-          stroke="black"
+          stroke="currentColor"
           strokeWidth="2"
         />
       </svg>
