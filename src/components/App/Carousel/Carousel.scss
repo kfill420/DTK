@@ -14,6 +14,10 @@
     height: 50vh;
   }
 
+  @include breakpoint.media(tablet_mini) {
+    height: 100vh;
+  }
+
   &_content {
     position: absolute;
     left: 0;
@@ -26,6 +30,7 @@
     justify-content: center;
     gap: 1rem;
     text-align: center;
+    z-index: 4;
 
     &-hidden {
       display: none;
@@ -63,22 +68,50 @@
   }
 
   &_slide {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
+    transition: all 0.2s ease-in-out;
 
-    @include breakpoint.media(mobile) {
+    img {
+      position: absolute;
+      width: 100%;
       height: 100%;
-      overflow: hidden;
       object-fit: cover;
     }
 
-    @include breakpoint.media(tablet_xs) {
-      height: 100%;
-      overflow: hidden;
-      object-fit: cover;
+    // @include breakpoint.media(mobile) {
+    //   height: 100%;
+    //   overflow: hidden;
+    //   object-fit: cover;
+    // }
+
+    // @include breakpoint.media(tablet_xs) {
+    //   height: 100%;
+    //   overflow: hidden;
+    //   object-fit: cover;
+    // }
+
+    &-entering {
+      opacity: 0;
+      z-index: 1;
+    }
+
+    &-active {
+      opacity: 1;
+      z-index: 2;
+    }
+
+    &-inactive {
+      opacity: 0;
+      z-index: 2;
     }
 
     &-hidden {
+      opacity: 0;
+      z-index: 1;
       display: none;
     }
   }
@@ -89,7 +122,7 @@
     height: 2rem;
     color: white;
     cursor: pointer;
-    z-index: 2;
+    z-index: 3;
 
     &-left {
       left: 1rem;
@@ -109,40 +142,23 @@
     z-index: 2;
 
     &_indicator {
-      background-color: white;
       height: 0.6rem;
-      width: 0.6rem;
       border-radius: 50px;
       border: none;
       outline: none;
       box-shadow: 0px 0px 5px #555;
       cursor: pointer;
+      transition: all 0.2s ease-in-out;
 
       &-active {
         width: 2rem;
+        background-color: white;
       }
 
       &-inactive {
         background-color: grey;
+        width: 0.6rem;
       }
     }
   }
-}
-
-.fade-enter {
-  opacity: 0;
-}
-
-.fade-enter-active {
-  opacity: 1;
-  transition: opacity 300ms;
-}
-
-.fade-exit {
-  opacity: 1;
-}
-
-.fade-exit-active {
-  opacity: 0;
-  transition: opacity 300ms;
 }
