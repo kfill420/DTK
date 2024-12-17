@@ -5,11 +5,19 @@
 .header {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   padding: 1rem;
+  justify-content: space-between;
+
+  @include breakpoint.media(tablet_xl_mini) {
+    justify-content: space-around;
+  }
 
   &_burger {
     order: 1;
+
+    @include breakpoint.media(tablet_xl_mini) {
+      display: none;
+    }
   }
 
   &_logo {
@@ -20,15 +28,27 @@
     font-weight: 400;
     font-style: normal;
     font-size: 1.7rem;
+
+    @include breakpoint.media(tablet_xl_mini) {
+      order: 1;
+    }
   }
 
   &_navbar {
     display: none;
 
-    @include breakpoint.media(tablet_mini) {
+    @include breakpoint.media(tablet_xl_mini) {
       display: flex;
       flex-direction: row;
+      align-items: center;
       list-style-type: none;
+      gap: 1.5rem;
+      order: 2;
+      font-weight: 700;
+    }
+
+    @include breakpoint.media(desktop) {
+      gap: 3rem;
     }
   }
 
