@@ -43,6 +43,7 @@
       font-weight: bold;
       max-width: 80%;
       text-shadow: 0px 0px 5px black;
+      transition: all 0.2s ease-in-out;
     }
 
     &_description {
@@ -51,6 +52,7 @@
       font-size: 0.8rem;
       font-weight: bold;
       text-shadow: 0px 0px 5px black;
+      transition: opacity 0.2s ease-in-out;
     }
 
     &_button {
@@ -64,6 +66,7 @@
       font-size: 0.8rem;
       font-weight: 700;
       box-shadow: 0px 0px 5px black;
+      transition: opacity 0.2s ease-in-out;
     }
   }
 
@@ -161,4 +164,41 @@
       }
     }
   }
+}
+
+.transi-ft-entering {
+  opacity: 0;
+  transform: translateY(30%);
+}
+
+.transi-ft-active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.transi-ft-inactive {
+  opacity: 0;
+}
+
+.transi-ft-hidden {
+  opacity: 0;
+  display: none;
+}
+
+
+.transi-f-entering {
+  opacity: 0;
+}
+
+.transi-f-active {
+  opacity: 1;
+}
+
+.transi-f-inactive {
+  opacity: 0;
+}
+
+.transi-f-hidden {
+  opacity: 0;
+  display: none;
 }

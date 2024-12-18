@@ -57,9 +57,18 @@ function Carousel({ slides, arrows, indicators, interval }: CarouselI) {
             }`} />
           <img src={slides[nextSlide].src} alt={slides[nextSlide].alt} />
           <div className="carousel_content">
-            {slide.title && <span className="carousel_content_title">{slide.title}</span>}
-            {slide.description && <span className="carousel_content_description">{slide.description}</span>}
-            {slide.button && <button className="carousel_content_button">{slide.button}</button>}
+            {slide.title && <span className={`carousel_content_title ${index === slideState
+              ? `transi-ft-${transitionState}`
+              : 'transi-ft-hidden'
+              }`}>{slide.title}</span>}
+            {slide.description && <span className={`carousel_content_description ${index === slideState
+              ? `transi-f-${transitionState}`
+              : 'transi-f-hidden'
+              }`}>{slide.description}</span>}
+            {slide.button && <button className={`carousel_content_button ${index === slideState
+              ? `transi-f-${transitionState}`
+              : 'transi-f-hidden'
+              }`}>{slide.button}</button>}
           </div>
         </div>
 
