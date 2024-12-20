@@ -58,7 +58,7 @@ const Service: React.FC<{ data: ServiceI['data'] }> = ({ data }) => {
     console.log(index);
 
     isNavigatingRef.current = true;
-    document.getElementById(`service-${index}`)?.scrollIntoView({ behavior: 'smooth' });
+    document.getElementById(`service-${index}`)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     setActiveIndex(index);
     setTimeout(() => {
       isNavigatingRef.current = false;
