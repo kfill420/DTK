@@ -18,8 +18,10 @@ function Store() {
 
   return (
     <div className="store">
-      <span className="store_intro">Nos meilleurs ventes</span>
-      <h3 className="store_title">Commandez dès maintenant !</h3>
+      <div>
+        <span className="store_intro">Nos meilleurs ventes</span>
+        <h3 className="store_title">Commandez dès maintenant !</h3>
+      </div>
       {list.map((product) => (
         <div key={product.id} className="store_product">
           <img src={product.image_url[0]} alt={product.name} />
