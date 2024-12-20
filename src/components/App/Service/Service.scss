@@ -9,13 +9,6 @@
   width: 100vw;
   margin-top: 1rem;
 
-  @include breakpoint.media(desktop) {
-    justify-content: center;
-    align-self: center;
-    width: 80vw;
-    margin-top: 3rem;
-  }
-
   &::-webkit-scrollbar {
     display: none;
   }
@@ -23,6 +16,13 @@
   -ms-overflow-style: none;
 
   scrollbar-width: none;
+
+  @include breakpoint.media(desktop) {
+    justify-content: center;
+    align-self: center;
+    width: 80vw;
+    margin-top: 3rem;
+  }
 
   &_card {
     flex: 0 0 100vw;

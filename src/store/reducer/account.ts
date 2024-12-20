@@ -3,10 +3,23 @@ import { createSlice } from '@reduxjs/toolkit';
 export const initialState = {
   id: null,
   logged: false,
-  credentials: {},
+  credentials: {
+    login: {
+      emailSignin: '',
+      passwordSignin: '',
+    },
+    signup: {
+      email: '',
+      password: '',
+      passwordConfirm: '',
+      firstname: '',
+      lastname: '',
+    },
+  },
+  pseudo: null,
   token: null,
   error: null,
-}
+};
 
 const accountSlice = createSlice({
   name: 'account',
@@ -19,7 +32,6 @@ const accountSlice = createSlice({
     },
     logout: (state) => {
       state.logged = false;
-      state.credentials = {};
       state.token = null;
     },
     error: (state, action) => {

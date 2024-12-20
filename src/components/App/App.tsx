@@ -5,6 +5,7 @@ import Carousel from './Carousel/Carousel';
 import { slides } from './Carousel/carouselData.json';
 import { data } from './Service/serviceData.json';
 import Service from './Service/Service';
+import Store from './Store/Store';
 
 // import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 
@@ -22,6 +23,7 @@ function App() {
       <Header />
       <Carousel slides={slides} arrows={false} indicators={true} interval={6} />
       <Service data={validatedData} />
+      <Store />
     </div>
   )
 }

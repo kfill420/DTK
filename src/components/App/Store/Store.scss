@@ -1,0 +1,61 @@
+@use '../../../styles/breakpoint.scss';
+@use '../../../styles/variables' as v;
+
+.store {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: 4rem;
+
+  &_intro {
+    font-size: 0.7rem;
+    color: v.$textColor-colorDark;
+    font-weight: 700;
+    padding: 0 1rem;
+  }
+
+  &_title {
+    padding: 0 1rem;
+  }
+
+  &_product {
+    flex: 0 0 50%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    justify-content: center;
+    flex-direction: column;
+    padding: 20px;
+
+    &_title {
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+
+    &_price {
+      font-size: 0.7rem;
+      color: v.$textColor-colorDark;
+    }
+
+    &_colors {
+      display: flex;
+      flex-direction: row;
+      gap: 0.2rem;
+
+      &_color {
+        height: 20px;
+        width: 20px;
+        border-radius: 50%;
+        border: solid 0.2rem white;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        transition: box-shadow 0.2s ease-in;
+
+        &:checked {
+          box-shadow: 0 0 0 2px v.$textColor-colorBlack;
+        }
+      }
+    }
+  }
+}
