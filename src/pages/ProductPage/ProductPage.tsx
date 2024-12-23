@@ -1,13 +1,14 @@
-import { useState } from 'react';
-import { useAppSelector } from '../../../hooks/redux';
+import { useEffect, useState } from 'react';
+import { useAppSelector } from '../../hooks/redux';
 import './ProductPage.scss'
 import { useNavigate, useParams } from 'react-router-dom';
 import { FaPlus, FaMinus } from "react-icons/fa6";
 import { IoIosStar, IoIosStarHalf, IoIosStarOutline } from "react-icons/io";
-import Question from '../Question/Question';
-import questions from '../../../data/questions';
-import ColorRadio from '../ColorRadio/ColorRadio';
-import TextRadio from '../TextRadio/TextRadio';
+import Question from '../../components/App/Question/Question';
+import questions from '../../data/questions';
+import ColorRadio from '../../components/App/ColorRadio/ColorRadio';
+import TextRadio from '../../components/App/TextRadio/TextRadio';
+import Store from '../../components/App/Store/Store';
 
 type ProductPageParams = {
   id: string;
@@ -18,21 +19,35 @@ function ProductPage() {
   const { id } = useParams<ProductPageParams>();
   const navigate = useNavigate();
 
-  const [colorSelected, setColorSelected] = useState(0);
+  const [selectorSelected, setSelectorSelected] = useState(0);
   const [stateSelected, setStateSelected] = useState(0);
   const [stockageSelected, setStockageSelected] = useState(0);
   const [quantity, setQuantity] = useState(1);
 
   const list = useAppSelector((state) => state.product.list);
-  if (id === null || id === undefined) return navigate('/');
-  const product = list.find((product) => product.id === +id);
-  console.log(product);
+  const stateProduct = useAppSelector((state) => state.product.stateProduct);
 
-  const stateProduct = ["Imparfait", "Correct", "Très bon", "Parfait"];
-  const stockageProduct = ["64Go", "128Go", "256Go", "512Go", "1To"];
+  useEffect(() => {
+    if (!id) navigate('/');
+  }, [id, navigate]);
 
-  const handleColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setColorSelected(parseInt((event.target.value).slice(-1)));
+  const product = list.find((product) => product.id === Number(id));
+
+  useEffect(() => {
+    if (!product) navigate('/');
+  }, [product, navigate]);
+
+  if (!product) return <h1>Produit introuvable</h1>
+
+  const allStockageProduct = product?.Prices.map((price) => price.stockage);
+  const stockageProduct = [...new Set(allStockageProduct)].reverse();
+
+
+  const priceSel1 = product.Prices.filter((price) => price.state === stateProduct[stateSelected]);
+  const priceSel2 = priceSel1.filter((price) => price.stockage === stockageProduct[stockageSelected]);
+
+  const handleSelectorChange = (index: number) => {
+    setSelectorSelected(index);
   }
 
   const handleStateChange = (index: number) => {
@@ -64,13 +79,13 @@ function ProductPage() {
     const stars = [];
 
     for (let i = 0; i < fullStars; i++) {
-      stars.push(<IoIosStar />);
+      stars.push(<IoIosStar key={`full${i}`} />);
     }
     for (let i = 0; i < halfStars; i++) {
-      stars.push(<IoIosStarHalf />);
+      stars.push(<IoIosStarHalf key={`half${i}`} />);
     }
     for (let i = 0; i < emptyStars; i++) {
-      stars.push(<IoIosStarOutline />);
+      stars.push(<IoIosStarOutline key={`empty${i}`} />);
     }
     return stars;
   }
@@ -80,20 +95,23 @@ function ProductPage() {
       {product === undefined ? <h1>Produit introuvable</h1> :
         <form>
           <div className="product_images">
-            <img src={product.image_url[0]} alt="" />
+            <img src={product.image_url[selectorSelected]} alt="" />
             <div className="product_images_selector">
               {product.image_url.map((image, index) => (
-                <img key={index} src={image} alt="image selector color" className="product_images_selector_img" />
+                <label htmlFor={product.name} className={selectorSelected === index ? "product_images_selector_label product_images_selector_label-checked" : "product_images_selector_label"} key={index}>
+                  <input type='radio' checked={selectorSelected === index} value={image} name={`image${product.name}`} onChange={() => handleSelectorChange(index)} alt="image selector color" className="product_images_selector_label_input" />
+                  <img src={image} alt="" className="product_images_selector_label_img" />
+                </label>
               ))}
             </div>
           </div>
           <div className="product_infos">
-            <h2>{product.name}</h2>
-            <span>{product.price[0]}€</span>
+            <h2 className="product_infos_title">{product.name}</h2>
+            <span className="product_infos_price">{`€${priceSel2[0].price}`}</span>
             <div className="product_infos_item">
-              <span>Couleur: {product.color_name[colorSelected]}</span>
+              <span>Couleur: {product.color_name[selectorSelected]}</span>
               <div className="product_colors">
-                <ColorRadio colors={product.color_code} productName={product.name} />
+                <ColorRadio selected={selectorSelected} setSelected={handleSelectorChange} colors={product.color_code} productName={product.name} />
               </div>
             </div>
 
@@ -129,9 +147,9 @@ function ProductPage() {
 
             <div className="reviews">
               <span className="reviews_title">Avis des clients</span>
-              {product.Reviews ? product.Reviews.map((review) => (
-                <div className="reviews_review">
-                  <div className="reviews_review_stars">
+              {product.Reviews ? product.Reviews.map((review, index) => (
+                <div key={index} className="reviews_review">
+                  <div key={index} className="reviews_review_stars">
                     {generateStars(review.rating)}
                   </div>
                   <span className="reviews_review_comment">{review.comment}</span>
@@ -140,6 +158,7 @@ function ProductPage() {
               <button className="reviews_button">Ajouter un avis</button>
             </div>
           </div>
+          <Store title="Explorez nos modèles" subtitle="Vous hésitez encore ?" />
         </form>
       }
 

@@ -1,11 +1,11 @@
 import './HomePage.scss'
 
-import Carousel from '../Carousel/Carousel';
-import { slides } from '../Carousel/carouselData.json';
-import { data } from '../Service/serviceData.json';
-import Service from '../Service/Service';
-import Store from '../Store/Store';
-import Questions from '../Questions/Questions';
+import Carousel from '../../components/App/Carousel/Carousel';
+import { slides } from '../../components/App/Carousel/carouselData.json';
+import { data } from '../../components/App/Service/serviceData.json';
+import Service from '../../components/App/Service/Service';
+import Store from '../../components/App/Store/Store';
+import Questions from '../../components/App/Questions/Questions';
 
 // import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 
@@ -22,7 +22,7 @@ function HomePage() {
     <div className="home">
       <Carousel slides={slides} arrows={false} indicators={true} interval={6} />
       <Service data={validatedData} />
-      <Store />
+      <Store subtitle="Nos meilleurs ventes" title="Commandez dès maintenant !" />
       <Questions />
     </div>
   )
