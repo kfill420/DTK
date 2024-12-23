@@ -23,7 +23,11 @@
       max-height: 20vh;
     }
 
-    &_display {}
+    &_display {
+      @include breakpoint.media('desktop') {
+        max-width: 20vw;
+      }
+    }
 
     &_selector {
       flex: 0 0 50%;

@@ -5,6 +5,7 @@ import ProductPage from './ProductPage/ProductPage';
 import Header from '../components/Header/Header';
 import Footer from '../components/Footer/Footer';
 import { Route, Routes } from 'react-router-dom';
+import ScrollToTop from '../components/App/ScrollToTop/ScrollToTop';
 
 // import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 
@@ -15,6 +16,7 @@ function App() {
   return (
     <div className="app">
       <Header />
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="products/:name/:id" element={<ProductPage />} />
