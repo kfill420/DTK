@@ -92,76 +92,76 @@ function ProductPage() {
 
   return (
     <div className="product">
-      {product === undefined ? <h1>Produit introuvable</h1> :
-        <form>
-          <div className="product_images">
-            <img src={product.image_url[selectorSelected]} alt="" />
-            <div className="product_images_selector">
-              {product.image_url.map((image, index) => (
-                <label htmlFor={product.name} className={selectorSelected === index ? "product_images_selector_label product_images_selector_label-checked" : "product_images_selector_label"} key={index}>
-                  <input type='radio' checked={selectorSelected === index} value={image} name={`image${product.name}`} onChange={() => handleSelectorChange(index)} alt="image selector color" className="product_images_selector_label_input" />
-                  <img src={image} alt="" className="product_images_selector_label_img" />
-                </label>
-              ))}
+      <form>
+        <div className="product_images">
+          <img src={product.image_url[selectorSelected]} alt="image display" className="product_images_display" />
+          <div className="product_images_selector">
+            {product.image_url.map((image, index) => (
+              <label htmlFor={product.name} className={selectorSelected === index ? "product_images_selector_label product_images_selector_label-checked" : "product_images_selector_label"} key={index}>
+                <input type='radio' checked={selectorSelected === index} value={image} name={`image${product.name}`} onChange={() => handleSelectorChange(index)} alt="image selector color" className="product_images_selector_label_input" />
+                <img src={image} alt="" className="product_images_selector_label_img" />
+              </label>
+            ))}
+          </div>
+        </div>
+        <div className="product_infos">
+          <h2 className="product_infos_title">{product.name}</h2>
+          <span className="product_infos_price">{`€${quantity * priceSel2[0].price},00`}</span>
+          <div className="product_infos_item">
+            <span>Couleur: {product.color_name[selectorSelected]}</span>
+            <div className="product_colors">
+              <ColorRadio selected={selectorSelected} setSelected={handleSelectorChange} colors={product.color_code} productName={product.id.toString()} />
             </div>
           </div>
-          <div className="product_infos">
-            <h2 className="product_infos_title">{product.name}</h2>
-            <span className="product_infos_price">{`€${priceSel2[0].price}`}</span>
-            <div className="product_infos_item">
-              <span>Couleur: {product.color_name[selectorSelected]}</span>
-              <div className="product_colors">
-                <ColorRadio selected={selectorSelected} setSelected={handleSelectorChange} colors={product.color_code} productName={product.name} />
-              </div>
-            </div>
 
-            <div className="product_infos_item">
-              <span>Etats: {stateProduct[stateSelected]}</span>
-              <TextRadio datas={stateProduct} stateSelected={stateSelected} setSelected={handleStateChange} />
-            </div>
+          <div className="product_infos_item">
+            <span>Etats: {stateProduct[stateSelected]}</span>
+            <TextRadio datas={stateProduct} stateSelected={stateSelected} setSelected={handleStateChange} />
+          </div>
 
-            <div>
-              <Question title="Quel état choisir ?" content={questions[0].content} />
-            </div>
+          <div>
+            <Question title="Quel état choisir ?" content={questions[0].content} />
+          </div>
 
-            <div className="product_infos_item">
-              <span>Stockage: {stockageProduct[stockageSelected]}</span>
-              <TextRadio datas={stockageProduct} stateSelected={stockageSelected} setSelected={handleStockageChange} />
-            </div>
+          <div className="product_infos_item">
+            <span>Stockage: {stockageProduct[stockageSelected]}</span>
+            <TextRadio datas={stockageProduct} stateSelected={stockageSelected} setSelected={handleStockageChange} />
+          </div>
 
-            <div className="product_infos_item">
-              <span>Quantité:</span>
-              <div className="product_infos_item_quantity">
-                <button className="product_infos_item_quantity_button" onClick={handleQuantityMenos}><FaMinus /></button>
-                <span>{quantity}</span>
-                <button className="product_infos_item_quantity_button" onClick={handleQuantityPlus}><FaPlus /></button>
-              </div>
+          <div className="product_infos_item">
+            <span>Quantité:</span>
+            <div className="product_infos_item_quantity">
+              <button className="product_infos_item_quantity_button" onClick={handleQuantityMenos}><FaMinus /></button>
+              <span>{quantity}</span>
+              <button className="product_infos_item_quantity_button" onClick={handleQuantityPlus}><FaPlus /></button>
             </div>
+          </div>
 
+          <div className="product_infos_buttons">
             <button type="button" className="product_infos_button product_infos_button-submit">Ajouter au panier</button>
             <button type="submit" className="product_infos_button">Acheter maintenant</button>
-
-            <div>
-              <Question title="Description de l'article" content={product.description} />
-            </div>
-
-            <div className="reviews">
-              <span className="reviews_title">Avis des clients</span>
-              {product.Reviews ? product.Reviews.map((review, index) => (
-                <div key={index} className="reviews_review">
-                  <div key={index} className="reviews_review_stars">
-                    {generateStars(review.rating)}
-                  </div>
-                  <span className="reviews_review_comment">{review.comment}</span>
-                </div>
-              )) : <span className="reviews_noreview">Aucun avis</span>}
-              <button className="reviews_button">Ajouter un avis</button>
-            </div>
           </div>
-          <Store title="Explorez nos modèles" subtitle="Vous hésitez encore ?" />
-        </form>
-      }
 
+
+          <div>
+            <Question title="Description de l'article" content={product.description} />
+          </div>
+
+          <div className="reviews">
+            <span className="reviews_title">Avis des clients</span>
+            {product.Reviews ? product.Reviews.map((review, index) => (
+              <div key={index} className="reviews_review">
+                <div key={index} className="reviews_review_stars">
+                  {generateStars(review.rating)}
+                </div>
+                <span className="reviews_review_comment">{review.comment}</span>
+              </div>
+            )) : <span className="reviews_noreview">Aucun avis</span>}
+            <button className="reviews_button">Ajouter un avis</button>
+          </div>
+        </div>
+      </form>
+      <Store title="Explorez nos modèles" subtitle="Vous hésitez encore ?" />
     </div>
   )
 }
