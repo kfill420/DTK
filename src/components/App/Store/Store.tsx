@@ -10,7 +10,7 @@ import { PriceI } from '../../../@types/product';
 function Store({ title, subtitle, type }: { title: string, subtitle: string, type?: string }) {
   const dispatch = useAppDispatch();
 
-  const [selectorSelected, setSelectorSelected] = useState(0);
+  const [selectorSelected, setSelectorSelected] = useState<{ [key: string]: number }>({});
 
   const list = useAppSelector((state) => state.product.list);
 
@@ -29,6 +29,13 @@ function Store({ title, subtitle, type }: { title: string, subtitle: string, typ
     return price;
   }
 
+  const handleColorChange = (productId: number, selectedColorIndex: number) => {
+    setSelectorSelected(prevState => ({
+      ...prevState,
+      [productId]: selectedColorIndex
+    }));
+  };
+
   return (
     <div className="store">
       <div>
@@ -44,7 +51,7 @@ function Store({ title, subtitle, type }: { title: string, subtitle: string, typ
             <span className="store_list_product_title">{product.name}</span>
             <span className="store_list_product_price">A partir de {minimumPrice(product.Prices)}€</span>
             <div className="store_list_product_colors">
-              <ColorRadio selected={selectorSelected} setSelected={setSelectorSelected} colors={product.color_code} productName={product.name} />
+              <ColorRadio selected={selectorSelected[product.id] || 0} setSelected={(selectedColorIndex) => handleColorChange(product.id, selectedColorIndex)} colors={product.color_code} productName={product.name} />
             </div>
 
           </div>
