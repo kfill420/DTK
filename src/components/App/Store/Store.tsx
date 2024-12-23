@@ -36,6 +36,7 @@ function Store({ title, subtitle, type }: { title: string, subtitle: string, typ
     }));
   };
 
+
   return (
     <div className="store">
       <div>
@@ -43,19 +44,22 @@ function Store({ title, subtitle, type }: { title: string, subtitle: string, typ
         <h3 className="store_title">{title}</h3>
       </div>
       <div className="store_list">
-        {list.map((product) => (
-          <div key={product.id} className="store_list_product">
-            <Link to={`/products/${product.name.replace(/\s+/g, '')}/${product.id}`}>
-              <img src={product.image_url[0]} alt={product.name} />
-            </Link>
-            <span className="store_list_product_title">{product.name}</span>
-            <span className="store_list_product_price">A partir de {minimumPrice(product.Prices)}€</span>
-            <div className="store_list_product_colors">
-              <ColorRadio selected={selectorSelected[product.id] || 0} setSelected={(selectedColorIndex) => handleColorChange(product.id, selectedColorIndex)} colors={product.color_code} productName={product.name} />
-            </div>
+        {list.map((product) => {
+          const selectedColorIndex = selectorSelected[product.id] || 0;
+          return (
+            <div key={product.id} className="store_list_product">
+              <Link to={`/products/${product.name.replace(/\s+/g, '')}/${product.id}`}>
+                <img src={product.image_url[selectedColorIndex]} alt={product.name} />
+              </Link>
+              <span className="store_list_product_title">{product.name}</span>
+              <span className="store_list_product_price">A partir de {minimumPrice(product.Prices)}€</span>
+              <div className="store_list_product_colors">
+                <ColorRadio selected={selectorSelected[product.id] || 0} setSelected={(selectedColorIndex) => handleColorChange(product.id, selectedColorIndex)} colors={product.color_code} productName={product.name} />
+              </div>
 
-          </div>
-        ))
+            </div>
+          )
+        })
         }
       </div>
 
