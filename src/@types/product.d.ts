@@ -10,4 +10,8 @@ export type ProductI = {
   image_url: string[];
   color_name: string[];
   color_code: string[];
+  Reviews: {
+    rating: number;
+    comment: string;
+  }[];
 };

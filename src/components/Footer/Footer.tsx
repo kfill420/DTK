@@ -23,11 +23,14 @@ function Footer() {
         <span className="footer_newsletter_title">Restez connecté avec les meilleures offres !</span>
         <span className="footer_newsletter_content">Inscrivez-vous à notre newsletter et soyez le premier à
           découvrir nos promotions exclusives sur les derniers téléphones.</span>
-        <fieldset className={isFocus ? "footer_newsletter_mail footer_newsletter_mail-focus" : "footer_newsletter_mail"}>
-          <input className="footer_newsletter_mail_input" type="email" onFocus={handleFocus} onBlur={handleBlur} />
-          <label className="footer_newsletter_mail_label" htmlFor="">Adresse mail</label>
-        </fieldset>
-        <button className="footer_newsletter_button"><TbMailCheck size={22} />S'inscrire</button>
+        <div className="footer_newsletter_form">
+          <fieldset className={isFocus ? "footer_newsletter_form_mail footer_newsletter_form_mail-focus" : "footer_newsletter_form_mail"}>
+            <input className="footer_newsletter_form_mail_input" type="email" onFocus={handleFocus} onBlur={handleBlur} />
+            <label className="footer_newsletter_form_mail_label" htmlFor="">Adresse mail</label>
+          </fieldset>
+          <button className="footer_newsletter_form_button"><TbMailCheck size={22} />S'inscrire</button>
+        </div>
+
       </div>
       <div className="footer_links">
         <div className="footer_links_information">

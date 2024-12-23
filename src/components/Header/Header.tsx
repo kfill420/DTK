@@ -5,15 +5,17 @@ import { RiShoppingCart2Line } from "react-icons/ri";
 import { useAppSelector } from '../../hooks/redux';
 import BurgerButton from './BurgerMenu/BurgerButton';
 import BurgerMenu from './BurgerMenu/BurgerMenu';
+import { useLocation } from 'react-router-dom';
 
 function Header() {
   // const dispatch = useAppDispatch();
   // const isLogged = useAppSelector((state) => state.account.logged);
+  const location = useLocation();
   const buergerMenuIsOpen = useAppSelector((state) => state.burgerMenu.isOpen);
 
   return (
     <>
-      <div className="header">
+      <div className={`${location.pathname === '/' ? 'header header-home' : 'header'}`}>
         <div className="header_burger">
           <BurgerButton />
         </div>
