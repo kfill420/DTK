@@ -4,6 +4,8 @@ import { ProductStateI } from '../../@types/product';
 
 export const initialState: ProductStateI = {
   list: [],
+  stateProduct: ["Imparfait", "Correct", "Très bon", "Parfait"],
+  stockageProduct: ["64Go", "128Go", "256Go", "512Go", "1To"],
 };
 
 const productSlice = createSlice({

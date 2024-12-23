@@ -2,12 +2,15 @@ import './Store.scss'
 
 import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
 import actionCheckProduct from '../../../store/thunks/checkProduct';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ColorRadio from '../ColorRadio/ColorRadio';
+import { PriceI } from '../../../@types/product';
 
-function Store() {
+function Store({ title, subtitle, type }: { title: string, subtitle: string, type?: string }) {
   const dispatch = useAppDispatch();
+
+  const [selectorSelected, setSelectorSelected] = useState(0);
 
   const list = useAppSelector((state) => state.product.list);
 
@@ -15,12 +18,22 @@ function Store() {
     dispatch(actionCheckProduct());
   }, [dispatch]);
 
+  const minimumPrice = (list: PriceI[]) => {
+    const priceList = list.map((product) => +product.price);
+    let price = priceList[0];
+    priceList.forEach(product => {
+      if (product < price) {
+        price = product;
+      }
+    });
+    return price;
+  }
 
   return (
     <div className="store">
       <div>
-        <span className="store_intro">Nos meilleurs ventes</span>
-        <h3 className="store_title">Commandez dès maintenant !</h3>
+        <span className="store_intro">{subtitle}</span>
+        <h3 className="store_title">{title}</h3>
       </div>
       <div className="store_list">
         {list.map((product) => (
@@ -29,12 +42,9 @@ function Store() {
               <img src={product.image_url[0]} alt={product.name} />
             </Link>
             <span className="store_list_product_title">{product.name}</span>
-            <span className="store_list_product_price">A partir de {product.price[0]}€</span>
+            <span className="store_list_product_price">A partir de {minimumPrice(product.Prices)}€</span>
             <div className="store_list_product_colors">
-              {/* {product.color_code.map((color, index) => (
-                <input key={index} type="radio" name={product.name} className="store_list_product_colors_color" defaultChecked={index === 0} style={{ backgroundColor: color }}></input>
-              ))} */}
-              <ColorRadio colors={product.color_code} productName={product.name} />
+              <ColorRadio selected={selectorSelected} setSelected={setSelectorSelected} colors={product.color_code} productName={product.name} />
             </div>
 
           </div>

@@ -9,7 +9,7 @@ function TextRadio({ datas, stateSelected, setSelected }: { datas: string[], sta
   return (
     <div className="states">
       {datas.map((data, index) => (
-        <label htmlFor="state" className={stateSelected === index ? "states_label states_label-checked" : "states_label"}>
+        <label htmlFor="state" className={stateSelected === index ? "states_label states_label-checked" : "states_label"} key={index}>
           <input key={index} type="radio" name='prodcutStates' value={data} checked={stateSelected === index} onChange={() => handleChange(index)} className="states_label_input"></input>
           {data}
         </label>
