@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useAppSelector } from '../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { actionCheckProduct } from '../../store/thunks/checkProduct';
 import './ProductPage.scss'
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { FaPlus, FaMinus } from "react-icons/fa6";
 import { IoIosStar, IoIosStarHalf, IoIosStarOutline } from "react-icons/io";
+import { BiUser } from "react-icons/bi";
 import Question from '../../components/App/Question/Question';
 import questions from '../../data/questions';
 import ColorRadio from '../../components/App/ColorRadio/ColorRadio';
@@ -17,7 +19,6 @@ type ProductPageParams = {
 
 function ProductPage() {
   const { id } = useParams<ProductPageParams>();
-  const navigate = useNavigate();
 
   const [selectorSelected, setSelectorSelected] = useState(0);
   const [stateSelected, setStateSelected] = useState(0);
@@ -27,21 +28,21 @@ function ProductPage() {
   const list = useAppSelector((state) => state.product.list);
   const stateProduct = useAppSelector((state) => state.product.stateProduct);
 
+  const dispatch = useAppDispatch();
+
   useEffect(() => {
-    if (!id) navigate('/');
-  }, [id, navigate]);
+    if (list.length === 0 && id) {
+      dispatch(actionCheckProduct());
+    }
+  }, [dispatch, id, list.length]);
+
 
   const product = list.find((product) => product.id === Number(id));
-
-  useEffect(() => {
-    if (!product) navigate('/');
-  }, [product, navigate]);
 
   if (!product) return <h1>Produit introuvable</h1>
 
   const allStockageProduct = product?.Prices.map((price) => price.stockage);
-  const stockageProduct = [...new Set(allStockageProduct)].reverse();
-
+  const stockageProduct = [...new Set(allStockageProduct)];
 
   const priceSel1 = product.Prices.filter((price) => price.state === stateProduct[stateSelected]);
   const priceSel2 = priceSel1.filter((price) => price.stockage === stockageProduct[stockageSelected]);
@@ -151,9 +152,13 @@ function ProductPage() {
             <span className="reviews_title">Avis des clients</span>
             {product.Reviews ? product.Reviews.map((review, index) => (
               <div key={index} className="reviews_review">
-                <div key={index} className="reviews_review_stars">
-                  {generateStars(review.rating)}
+                <div className="reviews_review_title">
+                  <div key={index} className="reviews_review_title_stars">
+                    {generateStars(review.rating)}
+                  </div>
+                  <span className="reviews_review_title_date">{review.date}</span>
                 </div>
+                <span className="reviews_review_author"><BiUser size={25} />{review.author}</span>
                 <span className="reviews_review_comment">{review.comment}</span>
               </div>
             )) : <span className="reviews_noreview">Aucun avis</span>}

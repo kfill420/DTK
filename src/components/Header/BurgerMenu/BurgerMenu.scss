@@ -1,3 +1,6 @@
+@use '../../../styles/variables' as v;
+@use '../../../styles/breakpoint.scss';
+
 .burgerMenu {
   position: fixed;
   bottom: 0;
@@ -53,6 +56,16 @@
     font-weight: 700;
     gap: 1rem;
     font-family: "Roboto", sans-serif;
+
+    &_link {
+      color: black;
+      text-decoration: none;
+      transition: color 0.2s;
+
+      &-active {
+        color: v.$textColor-other;
+      }
+    }
   }
 
   &_footer {

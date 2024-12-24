@@ -1,14 +1,14 @@
-import { MemberStateI } from '../@types/memberStateI';
+// import { MemberStateI } from '../@types/memberStateI';
 import { removeTokenJwtToAxiosInstance } from '../axios/axios';
 
 export function addTokenAndPseudoToLocalStorage(token: string) {
   localStorage.setItem('jwt', token);
 }
 
-export function addProfileToLocalStorage(profile: MemberStateI) {
-  const profileString = JSON.stringify(profile);
-  localStorage.setItem('profile', profileString);
-}
+// export function addProfileToLocalStorage(profile: MemberStateI) {
+//   const profileString = JSON.stringify(profile);
+//   localStorage.setItem('profile', profileString);
+// }
 
 export function getTokenAndPseudoFromLocalStorage() {
   const jwt = localStorage.getItem('jwt');

@@ -1,7 +1,6 @@
 @use '../../styles/variables' as v;
 @use '../../styles/breakpoint.scss';
 
-
 .header {
   position: relative;
   width: 100%;
@@ -19,7 +18,7 @@
   }
 
   @include breakpoint.media(tablet_xl_mini) {
-    justify-content: space-around;
+    justify-content: space-between;
   }
 
   &_burger {
@@ -54,12 +53,12 @@
         }
       }
     }
-
-
   }
 
   &_navbar {
     display: none;
+    padding: 0;
+    margin: 0;
 
     @include breakpoint.media(tablet_xl_mini) {
       display: flex;
@@ -74,6 +73,20 @@
     @include breakpoint.media(desktop) {
       gap: 3rem;
     }
+
+    &_link {
+      text-decoration: none;
+      color: v.$textColor-header;
+
+      &-active {
+        color: v.$textColor-other;
+        ;
+      }
+
+      &-home {
+        color: v.$textColor-header-Home;
+      }
+    }
   }
 
   &_profile {
@@ -82,5 +95,13 @@
     flex-direction: row;
     align-items: center;
     gap: 0.5rem;
+
+    &_links {
+      color: v.$textColor-header;
+
+      &-home {
+        color: v.$textColor-header-Home;
+      }
+    }
   }
 }

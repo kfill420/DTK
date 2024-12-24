@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import actionCheckProduct from '../thunks/checkProduct';
+import { actionCheckProduct } from '../thunks/checkProduct';
 import { ProductStateI } from '../../@types/product';
 
 export const initialState: ProductStateI = {
@@ -18,6 +18,9 @@ const productSlice = createSlice({
     builder.addCase(actionCheckProduct.fulfilled, (state, action) => {
       state.list = action.payload;
     });
+    // builder.addCase(actionGetOneProduct.fulfilled, (state, action) => {
+    //   state.productSelected = action.payload;
+    // });
   }
 })
 
