@@ -110,7 +110,7 @@ function ProductPage() {
           <div className="product_infos_item">
             <span>Couleur: {product.color_name[selectorSelected]}</span>
             <div className="product_colors">
-              <ColorRadio selected={selectorSelected} setSelected={handleSelectorChange} colors={product.color_code} productName={product.id.toString()} />
+              <ColorRadio selected={selectorSelected} setSelected={handleSelectorChange} colors={product.color_code} product={true} productName={product.id.toString()} />
             </div>
           </div>
 
@@ -161,7 +161,7 @@ function ProductPage() {
           </div>
         </div>
       </form>
-      <Store title="Explorez nos modèles" subtitle="Vous hésitez encore ?" />
+      <Store title="Explorez nos modèles" subtitle="Vous hésitez encore ?" amount={10} />
     </div>
   )
 }

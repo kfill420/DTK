@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import ColorRadio from '../ColorRadio/ColorRadio';
 import { PriceI } from '../../../@types/product';
 
-function Store({ title, subtitle, type }: { title: string, subtitle: string, type?: string }) {
+function Store({ title, subtitle, type, amount }: { title: string, subtitle: string, type?: string, amount?: number }) {
   const dispatch = useAppDispatch();
 
   const [selectorSelected, setSelectorSelected] = useState<{ [key: string]: number }>({});
@@ -44,12 +44,13 @@ function Store({ title, subtitle, type }: { title: string, subtitle: string, typ
         <h3 className="store_title">{title}</h3>
       </div>
       <div className="store_list">
-        {list.map((product) => {
+        {list.map((product, index) => {
           const selectedColorIndex = selectorSelected[product.id] || 0;
+          if (amount && index >= amount) return null;
           return (
             <div key={product.id} className="store_list_product">
-              <Link to={`/products/${product.name.replace(/\s+/g, '')}/${product.id}`}>
-                <img src={product.image_url[selectedColorIndex]} alt={product.name} />
+              <Link to={`/products/${product.name.replace(/\s+/g, '')}/${product.id}`} className="store_list_product_link">
+                <img src={product.image_url[selectedColorIndex]} alt={product.name} className="store_list_product_link_img" />
               </Link>
               <span className="store_list_product_title">{product.name}</span>
               <span className="store_list_product_price">A partir de {minimumPrice(product.Prices)}€</span>

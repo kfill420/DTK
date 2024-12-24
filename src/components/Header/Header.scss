@@ -42,6 +42,20 @@
     @include breakpoint.media(tablet_xl_mini) {
       order: 1;
     }
+
+    &_link {
+      text-decoration: none;
+
+      &_text {
+        color: v.$textColor-header;
+
+        &-home {
+          color: v.$textColor-header-Home;
+        }
+      }
+    }
+
+
   }
 
   &_navbar {
