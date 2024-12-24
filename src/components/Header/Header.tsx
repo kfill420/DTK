@@ -5,7 +5,7 @@ import { RiShoppingCart2Line } from "react-icons/ri";
 import { useAppSelector } from '../../hooks/redux';
 import BurgerButton from './BurgerMenu/BurgerButton';
 import BurgerMenu from './BurgerMenu/BurgerMenu';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 
 function Header() {
   // const dispatch = useAppDispatch();
@@ -25,17 +25,21 @@ function Header() {
           </Link>
         </div>
         <ul className="header_navbar">
-          <li>Accueil</li>
-          <li>iPhone</li>
-          <li>Samsung</li>
-          <li>Contact</li>
-          <li>FAQ</li>
+          <NavLink to="/" className={({ isActive }) => (isActive ? 'header_navbar_link header_navbar_link-active' : location.pathname === '/' ? 'header_navbar_link header_navbar_link-home' : 'header_navbar_link')}>Accueil</NavLink>
+          <NavLink to="/collection/iPhone" className={({ isActive }) => (isActive ? 'header_navbar_link header_navbar_link-active' : location.pathname === '/' ? 'header_navbar_link header_navbar_link-home' : 'header_navbar_link')}>iPhone</NavLink>
+          <NavLink to="/collection/Samsung" className={({ isActive }) => (isActive ? 'header_navbar_link header_navbar_link-active' : location.pathname === '/' ? 'header_navbar_link header_navbar_link-home' : 'header_navbar_link')}>Smasung</NavLink>
+          <NavLink to="/contact" className={({ isActive }) => (isActive ? 'header_navbar_link header_navbar_link-active' : location.pathname === '/' ? 'header_navbar_link header_navbar_link-home' : 'header_navbar_link')}>Contact</NavLink>
+          <NavLink to="/faq" className={({ isActive }) => (isActive ? 'header_navbar_link header_navbar_link-active' : location.pathname === '/' ? 'header_navbar_link header_navbar_link-home' : 'header_navbar_link')}>FAQ</NavLink>
         </ul>
         <div className="header_profile">
-          <FaRegUser size={20} />
-          <RiShoppingCart2Line size={20} />
+          <Link to="/login" className={location.pathname === '/' ? "header_profile_links header_profile_links-home" : "header_profile_links"}>
+            <FaRegUser className="header_profile_links_link" size={20} />
+          </Link>
+          <Link to="/login" className={location.pathname === '/' ? "header_profile_links header_profile_links-home" : "header_profile_links"}>
+            <RiShoppingCart2Line className="header_profile_links_link" size={20} />
+          </Link>
         </div>
-      </div>
+      </div >
       <BurgerMenu isOpen={buergerMenuIsOpen} />
     </>
   )

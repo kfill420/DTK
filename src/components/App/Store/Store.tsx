@@ -1,22 +1,16 @@
 import './Store.scss'
 
-import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
-import actionCheckProduct from '../../../store/thunks/checkProduct';
-import { useEffect, useState } from 'react';
+import { useAppSelector } from '../../../hooks/redux';
 import { Link } from 'react-router-dom';
 import ColorRadio from '../ColorRadio/ColorRadio';
 import { PriceI } from '../../../@types/product';
+import { useState } from 'react';
 
-function Store({ title, subtitle, type, amount }: { title: string, subtitle: string, type?: string, amount?: number }) {
-  const dispatch = useAppDispatch();
+function Store({ title, subtitle, amount }: { title: string, subtitle: string, type?: string, amount?: number }) {
 
   const [selectorSelected, setSelectorSelected] = useState<{ [key: string]: number }>({});
 
   const list = useAppSelector((state) => state.product.list);
-
-  useEffect(() => {
-    dispatch(actionCheckProduct());
-  }, [dispatch]);
 
   const minimumPrice = (list: PriceI[]) => {
     const priceList = list.map((product) => +product.price);
@@ -49,7 +43,8 @@ function Store({ title, subtitle, type, amount }: { title: string, subtitle: str
           if (amount && index >= amount) return null;
           return (
             <div key={product.id} className="store_list_product">
-              <Link to={`/products/${product.name.replace(/\s+/g, '')}/${product.id}`} className="store_list_product_link">
+              {/* <Link to={`/products/${product.id}/${product.name.replace(/\s+/g, '')}`} className="store_list_product_link"> */}
+              <Link to={`/products/${product.id}`} className="store_list_product_link">
                 <img src={product.image_url[selectedColorIndex]} alt={product.name} className="store_list_product_link_img" />
               </Link>
               <span className="store_list_product_title">{product.name}</span>

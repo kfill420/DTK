@@ -5,6 +5,7 @@ import { IoLogoInstagram, IoLogoTiktok, IoLogoWhatsapp, IoCloseSharp } from "rea
 import { RiSnapchatFill } from "react-icons/ri";
 import './BurgerMenu.scss';
 import { useRef } from 'react';
+import { NavLink } from 'react-router-dom';
 
 const HamburgerMenu = ({ isOpen }: { isOpen: boolean }) => {
   const dispatch = useAppDispatch();
@@ -25,11 +26,11 @@ const HamburgerMenu = ({ isOpen }: { isOpen: boolean }) => {
         <div ref={burgerMenuRef} className="burgerMenu">
           <div className="burgerMenu_container">
             <ul className="burgerMenu_list">
-              <li>Accueil</li>
-              <li>Iphone</li>
-              <li>Smasung</li>
-              <li>Contact</li>
-              <li>FAQ</li>
+              <NavLink to="/" className={({ isActive }) => (isActive ? 'burgerMenu_list_link burgerMenu_list_link-active' : 'burgerMenu_list_link')}>Accueil</NavLink>
+              <NavLink to="/collection/iPhone" className={({ isActive }) => (isActive ? 'burgerMenu_list_link burgerMenu_list_link-active' : 'burgerMenu_list_link')}>iPhone</NavLink>
+              <NavLink to="/collection/Samsung" className={({ isActive }) => (isActive ? 'burgerMenu_list_link burgerMenu_list_link-active' : 'burgerMenu_list_link')}>Smasung</NavLink>
+              <NavLink to="/contact" className={({ isActive }) => (isActive ? 'burgerMenu_list_link burgerMenu_list_link-active' : 'burgerMenu_list_link')}>Contact</NavLink>
+              <NavLink to="/faq" className={({ isActive }) => (isActive ? 'burgerMenu_list_link burgerMenu_list_link-active' : 'burgerMenu_list_link')}>FAQ</NavLink>
             </ul>
             <div className="burgerMenu_footer">
               <div className="burgerMenu_footer_socialNetworks">

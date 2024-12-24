@@ -2,6 +2,7 @@ export interface ProductStateI {
   list: ProductI[];
   stateProduct: string[];
   stockageProduct: string[];
+
 }
 
 export type ProductI = {
@@ -16,6 +17,8 @@ export type ProductI = {
     id: number;
     rating: number;
     comment: string;
+    author: string;
+    date: string;
   }[];
 };
 
