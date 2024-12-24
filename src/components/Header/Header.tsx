@@ -5,7 +5,7 @@ import { RiShoppingCart2Line } from "react-icons/ri";
 import { useAppSelector } from '../../hooks/redux';
 import BurgerButton from './BurgerMenu/BurgerButton';
 import BurgerMenu from './BurgerMenu/BurgerMenu';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 function Header() {
   // const dispatch = useAppDispatch();
@@ -20,7 +20,9 @@ function Header() {
           <BurgerButton />
         </div>
         <div className="header_logo">
-          <span className="header_logo_text">DTK</span>
+          <Link to="/" className="header_logo_link">
+            <span className={`${location.pathname === '/' ? 'header_logo_link_text header_logo_link_text-home' : 'header_logo_link_text'}`}>DTK</span>
+          </Link>
         </div>
         <ul className="header_navbar">
           <li>Accueil</li>

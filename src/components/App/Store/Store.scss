@@ -28,16 +28,23 @@
     flex-wrap: wrap;
 
     &_product {
+      position: relative;
       flex: 0 0 50%;
       display: flex;
-      flex-wrap: wrap;
       gap: 0.3rem;
       justify-content: center;
       flex-direction: column;
       padding: 20px;
+      max-width: 50%;
 
       @include breakpoint.media(desktop) {
         flex: 0 0 20%;
+      }
+
+      &_link {
+        display: flex;
+        align-items: center;
+        flex: 1 1 50%;
       }
 
       &_title {
