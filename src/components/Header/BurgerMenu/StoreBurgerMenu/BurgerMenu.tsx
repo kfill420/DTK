@@ -1,20 +1,25 @@
-import { useAppDispatch } from '../../../hooks/redux';
+import { useAppDispatch } from '../../../../hooks/redux';
 import { CSSTransition } from 'react-transition-group';
-import { toggleIsOpen } from '../../../store/reducer/burgerMenu';
+import { setIsOpen, toggleIsOpen } from '../../../../store/reducer/burgerMenu';
 import { IoLogoInstagram, IoLogoTiktok, IoLogoWhatsapp, IoCloseSharp } from "react-icons/io5";
 import { RiSnapchatFill } from "react-icons/ri";
 import './BurgerMenu.scss';
-import { useRef } from 'react';
-import { NavLink } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
 
 const HamburgerMenu = ({ isOpen }: { isOpen: boolean }) => {
   const dispatch = useAppDispatch();
   const burgerMenuBackgroundRef = useRef<HTMLDivElement>(null);
   const burgerMenuRef = useRef<HTMLDivElement>(null);
+  const location = useLocation();
 
   const handleOpen = () => {
     dispatch(toggleIsOpen());
   };
+
+  useEffect(() => {
+    dispatch(setIsOpen(false))
+  }, [location.pathname, dispatch]);
 
   return (
     <div>
@@ -40,7 +45,7 @@ const HamburgerMenu = ({ isOpen }: { isOpen: boolean }) => {
                 <IoLogoWhatsapp size={25} />
               </div>
               <div className="burgerMenu_footer_account">
-                <span className="burgerMenu_footer_account_text">Mon compte</span>
+                <NavLink to="/profile/infos" className="burgerMenu_footer_account_text">Mon compte</NavLink>
               </div>
             </div>
             <button className="burgerMenu_exitBtn" onClick={handleOpen}>
@@ -50,11 +55,6 @@ const HamburgerMenu = ({ isOpen }: { isOpen: boolean }) => {
         </div>
       </CSSTransition >
     </div >
-
-
-
-
-
   );
 };
 
