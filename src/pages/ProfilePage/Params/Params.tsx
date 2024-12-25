@@ -1,0 +1,31 @@
+
+import { useAppDispatch } from '../../../hooks/redux';
+import { actionLogOut } from '../../../store/reducer/account';
+import './Params.scss'
+import { IoMdLock } from "react-icons/io";
+
+function Params() {
+  const dispatch = useAppDispatch();
+
+  const handleLogOutButton = () => {
+    dispatch(actionLogOut());
+  }
+
+  return (
+    <div className="params">
+      <h2 className="params_title">Paramètres</h2>
+      <div className="params_infos">
+        <span className="params_infos_name"><IoMdLock />Se déconnecter partout</span>
+        <span className="params_infos_value">Si vous avez perdu un appareil ou si vous avez des problèmes de sécurité,
+          déconnectez-vous partout pour assurer la sécurité de votre compte.</span>
+      </div>
+      <div className="params_btn">
+        <button onClick={handleLogOutButton} className="params_btn_name">Se déconnecter partout</button>
+        <span className="params_btn_value">Vous serez déconnecté(e) sur cet appareil aussi.</span>
+      </div>
+
+    </div>
+  )
+}
+
+export default Params;

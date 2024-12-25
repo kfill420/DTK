@@ -1,5 +1,5 @@
-@use '../../../styles/variables' as v;
-@use '../../../styles/breakpoint.scss';
+@use '../../../../styles/variables' as v;
+@use '../../../../styles/breakpoint.scss';
 
 .burgerMenu {
   position: fixed;
@@ -87,6 +87,8 @@
       border-top: solid 1px #e1e1e1;
 
       &_text {
+        text-decoration: none;
+        color: v.$textColor-colorBlack;
         display: block;
       }
     }

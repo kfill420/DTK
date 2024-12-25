@@ -1,9 +1,10 @@
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { actionChangeConnection, actionChangeCredentials } from '../../store/reducer/account';
-import { actionCheckConnexion } from '../../store/thunks/checkLogin';
+import { actionCheckConnexion, actionCheckSignin, actionCheckSignup } from '../../store/thunks/checkLogin';
 import { TbArrowBackUpDouble } from "react-icons/tb";
 
 import './LoginPage.scss'
+import { useNavigate } from 'react-router-dom';
 
 function LoginPage() {
   const dispatch = useAppDispatch();
@@ -15,8 +16,10 @@ function LoginPage() {
   const validFormConnection = useAppSelector((state) => state.account.credentials.formConnection);
   const validFormSignup1 = useAppSelector((state) => state.account.credentials.formSignup1);
   const validFormSignup2 = useAppSelector((state) => state.account.credentials.formSignup2);
-  const error = useAppSelector((state) => state.account.error);
+  const errorSignup = useAppSelector((state) => state.account.credentials.errorSignup);
+  const errorSignin = useAppSelector((state) => state.account.credentials.errorSignup);
 
+  const navigate = useNavigate();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target as { name: 'email' | 'password' | 'passwordConfirm' | 'passwordSignin', value: string };;
@@ -34,15 +37,23 @@ function LoginPage() {
 
   const handleSignupSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    await dispatch(actionCheckSignup());
+  }
 
+  const handleSiginSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const resultSignin = await dispatch(actionCheckSignin());
+    if (actionCheckSignin.fulfilled.match(resultSignin)) {
+      navigate('/profile/infos');
+    }
   }
 
   return (
     <div className="container">
 
-      <div className={connection === 'signup' ? "connection connection-signup" : "connection"}>
+      <div className={connection === 'checking' ? "connection" : "connection connection-signup"}>
         {/* <h1 className="connection_title">DTK</h1> */}
-        <form onSubmit={handleEmailSubmit} className={connection === 'checking' ? "connection_form" : "connection_form connection_form-hidden"}>
+        <form onSubmit={handleEmailSubmit} className="connection_form">
           <span className="connection_form_title">Se connecter</span>
           <label htmlFor="mail" className="connection_form_mailLabel">Saisissez votre adresse e-mail.</label>
           <input type="mail" placeholder='E-mail' name='email' value={mailValue} onChange={handleChange} className="connection_form_mailInput" />
@@ -55,12 +66,15 @@ function LoginPage() {
       </div>
 
       <div className={connection === 'login' ? "login" : "login login-hidden"}>
-        <form onSubmit={handleEmailSubmit} className="login_form">
+        <form onSubmit={handleSiginSubmit} className="login_form">
           <span className="login_form_title">Se connecter</span>
-          <label htmlFor="password" className="login_form_mailLabel">Choisissez votre mot de passe.</label>
+          <label htmlFor="password" className="login_form_mailLabel">Indiquer votre mot de passe.</label>
           <input type="password" placeholder='Mot de passe' name='passwordSignin' value={passwordSigninValue} onChange={handleChange} className="login_form_mailInput" />
           <button type="submit" className="login_form_mailButton">Continuer</button>
         </form>
+        <div className="login_form_errors">
+          <span className="login_form_errors_error">{errorSignin}</span>
+        </div>
         <div className={connection === 'signup' ? "connection_bottom connection_bottom-signup" : "connection_bottom"}>
           <span className="connection_bottom_conf">Confidentialité</span>
           <TbArrowBackUpDouble size={35} onClick={changeConnection} className="connection_bottom_back" />
@@ -76,7 +90,7 @@ function LoginPage() {
           </fieldset>
 
           <div className="signup_form_errors">
-            {typeof error === "object" && error && error.map((err, index) => (
+            {typeof errorSignup === "object" && errorSignup && errorSignup.map((err, index) => (
               index === 0 && <span key={index} className="signup_form_errors_error">{err}</span>
             ))}
           </div>

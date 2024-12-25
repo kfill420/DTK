@@ -11,8 +11,11 @@ const burgerMenu = createSlice({
     toggleIsOpen: (state) => {
       state.isOpen = !state.isOpen;
     },
+    setIsOpen: (state, action) => {
+      state.isOpen = action.payload;
+    },
   }
 })
 
-export const { toggleIsOpen } = burgerMenu.actions;
+export const { toggleIsOpen, setIsOpen } = burgerMenu.actions;
 export default burgerMenu.reducer;
