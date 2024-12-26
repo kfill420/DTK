@@ -14,7 +14,7 @@ const actionCheckToken = createAsyncThunk(
       }
       addTokenJwtToAxiosInstance(token);
       const response = await axiosInstance.post('/valide-token');
-      return { valid: response.data.valid };
+      return { valid: response.data.valid, data: response.data };
     } catch (error) {
       const axiosError = error as AxiosError;
       return thunkAPI.rejectWithValue(axiosError.response?.data);
@@ -31,11 +31,12 @@ const actionCheckSignin = createAsyncThunk(
         email: state.account.credentials.email,
         password: state.account.credentials.passwordSignin,
       });
+
       const { token } = response.data;
       addTokenJwtToAxiosInstance(token);
       addTokenAndPseudoToLocalStorage(token);
 
-      return { token, email: response.data.account.email };
+      return { token, data: response.data };
     } catch (error) {
       const axiosError = error as AxiosError;
       return thunkAPI.rejectWithValue(axiosError.response?.data);
