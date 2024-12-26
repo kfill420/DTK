@@ -15,21 +15,28 @@ import ProfilePage from './ProfilePage/ProfilePage';
 import Order from './ProfilePage/Order/Order';
 import Params from './ProfilePage/Params/Params';
 import Infos from './ProfilePage/Infos/Infos';
-
-// import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import SpinnerSquare from '../components/App/SpinnerSquare/SpinnerSquare';
 
 function App() {
-  // const dispatch = useAppDispatch();
-  // const isLogged = useAppSelector((state) => state.account.logged);
   const location = useLocation();
   const dispatch = useAppDispatch();
   const noFooterPage = location.pathname === '/login' || location.pathname === '/profile/params' || location.pathname === '/profile/order' || location.pathname === '/profile/infos';
   const isAuthentificated = useAppSelector((state) => state.account.isAuthentificated);
-
+  const account = useAppSelector((state) => state.account.account);
+  const tokenIsLoading = useAppSelector((state) => state.account.tokenIsLoading);
+  const initialCheck = useAppSelector((state) => state.account.initialCheck);
 
   useEffect(() => {
     dispatch(actionCheckToken())
-  })
+  }, [dispatch]);
+
+  if (tokenIsLoading || initialCheck) {
+    return (
+      <div className="loader">
+        <SpinnerSquare />
+      </div>
+    )
+  }
 
   return (
     <div className="app">
@@ -43,7 +50,7 @@ function App() {
           <Route path="" element={<Navigate to="infos" />} />
           <Route path="params" element={<Params />} />
           <Route path="order" element={<Order />} />
-          <Route path="infos" element={<Infos />} />
+          <Route path="infos" element={<Infos account={account} />} />
         </Route>
       </Routes>
       {!noFooterPage && <Footer />}

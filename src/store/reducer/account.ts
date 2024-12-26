@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { actionCheckConnexion, actionCheckSignin, actionCheckSignup, actionCheckToken } from '../thunks/checkLogin';
 import { validateEmail, validePassword } from '../../utils/regexValidator';
 import { disconnectLocalStorage } from '../../localStorage/localStorage';
+import { changeCredentialsPayload } from '../../@types/payload';
 
 export const initialState = {
   id: null,
@@ -18,15 +19,28 @@ export const initialState = {
     errorSignup: null as string | string[] | null,
     errorSigin: null as string | string[] | null,
   },
+  account: {
+    email: '',
+    firstname: '',
+    lastname: '',
+    address: {
+      default: false,
+      firstname: '',
+      lastname: '',
+      entreprise: '',
+      address: '',
+      precision: '',
+      postal_code: '',
+      city: '',
+      country: '',
+      phone: '',
+    },
+  },
   connection: 'checking',
-  token: null,
-
+  token: null as null | string,
+  tokenIsLoading: false,
+  initialCheck: true,
 };
-
-interface changeCredentialsPayload {
-  name: 'email' | 'password' | 'passwordConfirm' | 'passwordSignin';
-  value: string;
-}
 
 const accountSlice = createSlice({
   name: 'account',
@@ -86,6 +100,10 @@ const accountSlice = createSlice({
     builder.addCase(actionCheckSignin.fulfilled, (state, action) => {
       state.token = action.payload.token;
       state.isAuthentificated = true;
+      state.account.email = action.payload.data.email;
+      state.account.firstname = action.payload.data.firstname;
+      state.account.lastname = action.payload.data.lastname;
+      state.account.address = action.payload.data.address;
       state.credentials.errorSignup = null;
       state.credentials.passwordSignin = '';
       state.credentials.password = '';
@@ -102,6 +120,22 @@ const accountSlice = createSlice({
     });
     builder.addCase(actionCheckToken.fulfilled, (state, action) => {
       state.isAuthentificated = action.payload.valid;
+      state.tokenIsLoading = false;
+      state.initialCheck = false;
+      if (action.payload.valid === true) {
+        state.account.email = action.payload.data.email;
+        state.account.firstname = action.payload.data.firstname;
+        state.account.lastname = action.payload.data.lastname;
+        state.account.address = action.payload.data.address;
+      }
+    });
+    builder.addCase(actionCheckToken.pending, (state) => {
+      state.tokenIsLoading = true;
+    });
+    builder.addCase(actionCheckToken.rejected, (state) => {
+      state.tokenIsLoading = false;
+      state.isAuthentificated = false;
+      state.initialCheck = false;
     });
   },
 });

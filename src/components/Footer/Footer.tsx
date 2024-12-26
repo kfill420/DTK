@@ -3,20 +3,9 @@ import { IoLogoInstagram, IoLogoTiktok, IoLogoWhatsapp } from "react-icons/io5";
 import { BiLogoSnapchat } from "react-icons/bi";
 import { FaCcVisa, FaCcMastercard, FaCcAmex } from "react-icons/fa6";
 import { TbMailCheck } from "react-icons/tb";
-import { useState } from 'react';
+import Input from '../App/Input/Input';
 
 function Footer() {
-  const [isFocus, setIsFocus] = useState(false);
-
-  const handleFocus = () => {
-    setIsFocus(true);
-  }
-
-  const handleBlur = () => {
-    setIsFocus(false);
-  }
-
-
   return (
     <div className="footer">
       <div className="footer_newsletter">
@@ -24,10 +13,7 @@ function Footer() {
         <span className="footer_newsletter_content">Inscrivez-vous à notre newsletter et soyez le premier à
           découvrir nos promotions exclusives sur les derniers téléphones.</span>
         <div className="footer_newsletter_form">
-          <fieldset className={isFocus ? "footer_newsletter_form_mail footer_newsletter_form_mail-focus" : "footer_newsletter_form_mail"}>
-            <input className="footer_newsletter_form_mail_input" type="email" onFocus={handleFocus} onBlur={handleBlur} />
-            <label className="footer_newsletter_form_mail_label" htmlFor="">Adresse mail</label>
-          </fieldset>
+          <Input name="newsletter" type="email" text="Adresse mail" />
           <button className="footer_newsletter_form_button"><TbMailCheck size={22} />S'inscrire</button>
         </div>
 
