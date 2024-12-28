@@ -3,6 +3,8 @@ import { actionCheckConnexion, actionCheckSignin, actionCheckSignup, actionCheck
 import { validateEmail, validePassword } from '../../utils/regexValidator';
 import { disconnectLocalStorage } from '../../localStorage/localStorage';
 import { changeCredentialsPayload } from '../../@types/payload';
+import { actionAddAddressFromAccount, actionDeleteAddressFromAccount, actionUpdateAddressFromAccount, actionUpdateInfosFromAccount } from '../thunks/checkAccount';
+import { CheckProfileAddressI, CountryI } from '../../@types/account';
 
 export const initialState = {
   id: null,
@@ -20,10 +22,13 @@ export const initialState = {
     errorSigin: null as string | string[] | null,
   },
   account: {
+    id: null as null | number,
     email: '',
     firstname: '',
     lastname: '',
     address: {
+      id: null,
+      account_id: null,
       default: false,
       firstname: '',
       lastname: '',
@@ -32,14 +37,22 @@ export const initialState = {
       precision: '',
       postal_code: '',
       city: '',
-      country: '',
+      country_id: '',
+      country: {
+        id: null as null | number,
+        name: '',
+        code: '',
+        dial_code: '',
+      },
       phone: '',
     },
+    listAddress: [] as CheckProfileAddressI[],
   },
   connection: 'checking',
   token: null as null | string,
   tokenIsLoading: false,
   initialCheck: true,
+  listCountries: [] as CountryI[],
 };
 
 const accountSlice = createSlice({
@@ -100,10 +113,12 @@ const accountSlice = createSlice({
     builder.addCase(actionCheckSignin.fulfilled, (state, action) => {
       state.token = action.payload.token;
       state.isAuthentificated = true;
-      state.account.email = action.payload.data.email;
-      state.account.firstname = action.payload.data.firstname;
-      state.account.lastname = action.payload.data.lastname;
-      state.account.address = action.payload.data.address;
+      state.account.id = action.payload.data.account.id;
+      state.account.email = action.payload.data.account.email;
+      state.account.firstname = action.payload.data.account.firstname;
+      state.account.lastname = action.payload.data.account.lastname;
+      state.account.listAddress = action.payload.data.account.addresses;
+      state.listCountries = action.payload.data.listCountries;
       state.credentials.errorSignup = null;
       state.credentials.passwordSignin = '';
       state.credentials.password = '';
@@ -123,10 +138,12 @@ const accountSlice = createSlice({
       state.tokenIsLoading = false;
       state.initialCheck = false;
       if (action.payload.valid === true) {
+        state.account.id = action.payload.data.id;
         state.account.email = action.payload.data.email;
         state.account.firstname = action.payload.data.firstname;
         state.account.lastname = action.payload.data.lastname;
-        state.account.address = action.payload.data.address;
+        state.account.listAddress = action.payload.data.addresses;
+        state.listCountries = action.payload.data.listCountries;
       }
     });
     builder.addCase(actionCheckToken.pending, (state) => {
@@ -136,6 +153,21 @@ const accountSlice = createSlice({
       state.tokenIsLoading = false;
       state.isAuthentificated = false;
       state.initialCheck = false;
+    });
+    builder.addCase(actionAddAddressFromAccount.fulfilled, (state, action) => {
+      state.account.listAddress = action.payload;
+    });
+    builder.addCase(actionDeleteAddressFromAccount.fulfilled, (state, action) => {
+      const id = action.payload;
+      state.account.listAddress = state.account.listAddress.filter((address) => address.id !== id);
+    });
+    builder.addCase(actionUpdateAddressFromAccount.fulfilled, (state, action) => {
+      state.account.listAddress = action.payload;
+    });
+    builder.addCase(actionUpdateInfosFromAccount.fulfilled, (state, action) => {
+      state.account.email = action.payload.email;
+      state.account.firstname = action.payload.firstname;
+      state.account.lastname = action.payload.lastname;
     });
   },
 });
