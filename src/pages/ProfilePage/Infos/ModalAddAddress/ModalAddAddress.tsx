@@ -1,53 +1,50 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import { CSSTransition } from 'react-transition-group';
-import countriesData from '../../../../data/countriesData.json';
 import './ModalAddAddress.scss';
 import Input from '../../../../components/App/Input/Input';
 import Checkbox from '../../../../components/App/Checkbox/Checkbox';
+import { ModalAddAddressProps } from '../../../../@types/Modal';
 
-function ModalAddAddress({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: () => void }) {
-  const [countries, setCountries] = useState<{ code: string; name: string }[]>([]);
+function ModalAddAddress({ isOpen, formData, modalAddressIsEdit, countries, handleChange, handleDelete, handleReset, handleSubmit }: ModalAddAddressProps) {
   const modalAdressbackgroundRef = useRef<HTMLDivElement>(null);
   const modalAdress = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setCountries(countriesData);
-  }, []);
 
   return (
     <div>
       <CSSTransition nodeRef={modalAdressbackgroundRef} in={isOpen} timeout={300} classNames="modalAddAddress_fade" unmountOnExit>
-        <div ref={modalAdressbackgroundRef} className="modalAddAddress_background" onClick={setIsOpen}></div>
+        <div ref={modalAdressbackgroundRef} className="modalAddAddress_background" onClick={handleReset}></div>
       </CSSTransition>
 
       <CSSTransition nodeRef={modalAdress} in={isOpen} timeout={300} classNames="modalAddAddress_slide-up" unmountOnExit>
         <div ref={modalAdress} className="modalAddAddress">
-          <form className="modalAddAddress_form">
-            <h2 className="modalAddAddress_title">Ajouter une adresse</h2>
-            <Checkbox text="Définir comme adresse par défaut" />
-            <select name="country-select" id="country-select" className="modalAddAddress_countries" required>
+          <form className="modalAddAddress_form" onSubmit={handleSubmit} onReset={handleReset}>
+            <h2 className="modalAddAddress_title">{modalAddressIsEdit ? "Modifier une adresse" : "Ajouter une adresse"} </h2>
+            <Checkbox text="Définir comme adresse par défaut" checked={formData.default} handleChange={handleChange} />
+            <select name="country" id="country_id" className="modalAddAddress_countries" value={formData.country.code} onChange={handleChange} required>
               {countries.map((country, index) => (
-                country.code === "FR" ? <option key={index} value={country.code} selected>{country.name}</option>
-                  :
-                  <option key={index} value={country.code}>{country.name}</option>
+                <option key={index} value={country.code}>{country.name}</option>
               ))}
             </select>
             <div className="modalAddAddress_container">
-              <Input name='firstname' type='text' text='Prénom' backWhite required />
-              <Input name='lastname' type='text' text='Nom' backWhite required />
+              <Input name='firstname' type='text' text='Prénom' backWhite required handleChange={handleChange} value={formData.firstname} />
+              <Input name='lastname' type='text' text='Nom' backWhite required handleChange={handleChange} value={formData.lastname} />
             </div>
 
-            <Input name='entreprise' type='text' text='Entreprise' backWhite required />
-            <Input name='address' type='text' text='Adresse' backWhite required />
-            <Input name='precision' type='text' text="Complément d\'adresse" backWhite required />
+            <Input name='entreprise' type='text' text='Entreprise' backWhite handleChange={handleChange} value={formData.entreprise} />
+            <Input name='address' type='text' text='Adresse' backWhite required handleChange={handleChange} value={formData.address} />
+            <Input name='precision' type='text' text="Complément d\'adresse" backWhite handleChange={handleChange} value={formData.precision} />
             <div className="modalAddAddress_container">
-              <Input name='postal_code' type='text' text='Code postal' backWhite required />
-              <Input name='city' type='text' text='Ville' backWhite required />
+              <Input name='postal_code' type='text' text='Code postal' backWhite required handleChange={handleChange} value={formData.postal_code} />
+              <Input name='city' type='text' text='Ville' backWhite required handleChange={handleChange} value={formData.city} />
             </div>
-            <Input name='phone' type='text' text='Téléphone' backWhite required />
-            <div className="modalAddAddress_buttons">
-              <button className="modalAddAddress_buttons_cancel">Annnuler</button>
-              <button type="submit" className="modalAddAddress_buttons_submit">Enregistrer</button>
+            <Input name='phone' type='text' text='Téléphone' backWhite required handleChange={handleChange} value={formData.phone} />
+            <div className={modalAddressIsEdit ? "modalAddAddress_buttons" : "modalAddAddress_buttons modalAddAddress_buttons-edit"}>
+              <button type='button' onClick={handleDelete} className={modalAddressIsEdit ? "modalAddAddress_buttons_delete modalAddAddress_buttons_delete-edit" : "modalAddAddress_buttons_delete"}>Supprimer</button>
+              <div className="modalAddAddress_buttons_right">
+                <button type="reset" className="modalAddAddress_buttons_right_cancel">Annnuler</button>
+                <button type="submit" className="modalAddAddress_buttons_right_submit">Enregistrer</button>
+              </div>
+
             </div>
           </form>
         </div>

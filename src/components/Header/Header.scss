@@ -204,6 +204,7 @@
         &_popup {
           position: absolute;
           top: 4.5rem;
+          right: 0;
           display: none;
           flex-direction: column;
           padding: 1rem;
@@ -213,6 +214,7 @@
           width: 300px;
           gap: 0.5rem;
           border-radius: 5px;
+          z-index: 1;
 
           &-isOpen {
             display: flex;
@@ -226,6 +228,11 @@
             color: v.$textColor-colorDark;
             border-bottom: solid 1px v.$textColor-colorLightGray;
             padding-bottom: 0.5rem;
+
+            &_email {
+              font-weight: 500;
+              font-size: 0.9rem;
+            }
           }
 
           &_content {

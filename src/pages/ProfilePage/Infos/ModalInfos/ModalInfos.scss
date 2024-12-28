@@ -1,7 +1,7 @@
 @use '../../../../styles/breakpoint.scss';
 @use '../../../../styles/variables' as v;
 
-.modalAddAddress_background {
+.modalInfo_background {
   position: fixed;
   top: 0;
   left: 0;
@@ -12,7 +12,7 @@
   z-index: 1;
 }
 
-.modalAddAddress {
+.modalInfo {
   position: fixed;
   left: 0;
   bottom: 0;
@@ -73,7 +73,7 @@
   &_buttons {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: right;
     gap: 1rem;
     margin-top: 1rem;
 
@@ -111,8 +111,6 @@
         background-color: v.$textColor-primary;
       }
     }
-
-
   }
 
 

@@ -28,6 +28,11 @@
     font-size: 1.2rem;
     z-index: 2;
 
+    &-disabled {
+      background-color: v.$textColor-colorLightGrayTrans;
+      color: v.$textColor-colorDarkTrans2;
+    }
+
     &:focus {
       outline: none;
     }
@@ -80,6 +85,11 @@
     width: 100%;
     font-size: 1.2rem;
     z-index: 2;
+
+    &-disabled {
+      background-color: v.$textColor-colorLightGrayTrans;
+      color: v.$textColor-colorDarkTrans2;
+    }
 
     &:focus {
       outline: none;

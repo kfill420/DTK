@@ -40,7 +40,7 @@ function App() {
 
   return (
     <div className="app">
-      <Header isAuthentificated={isAuthentificated} />
+      <Header isAuthentificated={isAuthentificated} email={account.email} />
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<HomePage />} />

@@ -14,9 +14,10 @@ import { actionLogOut } from '../../store/reducer/account';
 
 interface HeaderI {
   isAuthentificated: boolean;
+  email: string;
 }
 
-function Header({ isAuthentificated }: HeaderI) {
+function Header({ isAuthentificated, email }: HeaderI) {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const buergerMenuIsOpen = useAppSelector((state) => state.burgerMenu.isOpen);
@@ -51,7 +52,7 @@ function Header({ isAuthentificated }: HeaderI) {
               <div className={popupisOpen ? "header-profile_right_popup header-profile_right_popup-isOpen" : "header-profile_right_popup"}>
                 <div className="header-profile_right_popup_header">
                   <PiUserCircleThin size={30} />
-                  <span>MAIL</span>
+                  <span className="header-profile_right_popup_header_email">{email}</span>
                 </div>
                 <div className="header-profile_right_popup_content">
                   <NavLink to="/profile/infos" className={({ isActive }) => (isActive ? 'header-profile_right_popup_content_link header-profile_right_popup_content_link-active' : 'header-profile_right_popup_content_link')}>Profil</NavLink>
@@ -95,7 +96,7 @@ function Header({ isAuthentificated }: HeaderI) {
             </div>
           </div >
       }
-      {location.pathname === '/profile/params' || location.pathname === '/profile/order' || location.pathname === '/profile/infos' ? <ProfileBurgerMenu isOpen={buergerMenuIsOpen} /> : <StoreBurgerMenu isOpen={buergerMenuIsOpen} />}
+      {location.pathname === '/profile/params' || location.pathname === '/profile/order' || location.pathname === '/profile/infos' ? <ProfileBurgerMenu isOpen={buergerMenuIsOpen} email={email} /> : <StoreBurgerMenu isOpen={buergerMenuIsOpen} />}
 
 
     </>

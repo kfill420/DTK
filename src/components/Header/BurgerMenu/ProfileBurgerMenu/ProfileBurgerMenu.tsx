@@ -7,7 +7,7 @@ import { useEffect, useRef } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { actionLogOut } from '../../../../store/reducer/account';
 
-const HamburgerMenu = ({ isOpen }: { isOpen: boolean }) => {
+const HamburgerMenu = ({ isOpen, email }: { isOpen: boolean, email: string }) => {
   const dispatch = useAppDispatch();
   const burgerMenuBackgroundRef = useRef<HTMLDivElement>(null);
   const burgerMenuRef = useRef<HTMLDivElement>(null);
@@ -38,7 +38,7 @@ const HamburgerMenu = ({ isOpen }: { isOpen: boolean }) => {
             <div className="pburgerMenu_container_header">
               <div className="pburgerMenu_container_header_mail">
                 <PiUserCircleThin size={30} />
-                <span className="pburgerMenu_container_header_mail_text">MAIL</span>
+                <span className="pburgerMenu_container_header_mail_text">{email}</span>
               </div>
               <ul className="pburgerMenu_list">
                 <NavLink to="/" className={({ isActive }) => (isActive ? 'pburgerMenu_list_link pburgerMenu_list_link-active' : 'pburgerMenu_list_link')}>Boutique</NavLink>

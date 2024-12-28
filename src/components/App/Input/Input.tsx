@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import './Input.scss'
+import { inputI } from '../../../@types/props';
 
-function Input({ name, type, text, backWhite, required }: { name: string, type: string, text: string, backWhite?: boolean, required?: boolean }) {
+function Input({ name, type, text, backWhite, required, handleChange, value, modal, disabled }: inputI) {
   const [isFocus, setIsFocus] = useState(false);
 
   const handleFocus = () => {
@@ -16,12 +17,12 @@ function Input({ name, type, text, backWhite, required }: { name: string, type: 
       {
         backWhite ? (
           <fieldset className={isFocus ? "inputModifWhite inputModifWhite-focus" : "inputModifWhite"} >
-            < input id={name} name={name} className="inputModifWhite_input" type={type} onFocus={handleFocus} onBlur={handleBlur} required={required} placeholder='' />
+            <input id={name} name={name} className={disabled ? "inputModifWhite_input inputModifWhite_input-disabled" : "inputModifWhite_input"} type={type} onFocus={handleFocus} onBlur={handleBlur} required={required} onChange={handleChange} value={value} data-modal={modal} disabled={disabled} placeholder='' />
             <label className="inputModifWhite_label" htmlFor={name}>{text}</label>
           </fieldset >
         ) : (
           <fieldset className={isFocus ? "inputModif inputModif-focus" : "inputModif"}>
-            <input id={name} name={name} className="inputModif_input" type={type} onFocus={handleFocus} onBlur={handleBlur} required placeholder='' />
+            <input id={name} name={name} className={disabled ? "inputModif_input inputModif_input-disabled" : "inputModif_input"} type={type} onFocus={handleFocus} onBlur={handleBlur} required onChange={handleChange} data-modal={modal} disabled={disabled} placeholder='' />
             <label className="inputModif_label" htmlFor={name}>{text}</label>
           </fieldset>
         )
