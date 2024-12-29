@@ -1,5 +1,4 @@
 import './HomePage.scss'
-
 import Carousel from '../../components/App/Carousel/Carousel';
 import { slides } from '../../components/App/Carousel/carouselData.json';
 import { data } from '../../components/App/Service/serviceData.json';
@@ -10,12 +9,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { useEffect } from 'react';
 import { actionCheckProduct } from '../../store/thunks/checkProduct';
 
-// import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-
 function HomePage() {
-  // const dispatch = useAppDispatch();
-  // const isLogged = useAppSelector((state) => state.account.logged);
-
   const dispatch = useAppDispatch();
 
   const list = useAppSelector((state) => state.product.list);

@@ -3,6 +3,11 @@ export interface changeCredentialsPayload {
   value: string;
 }
 
+export interface modal_setIsOpen {
+  modal: 'burgerModalIsOpen' | 'confirmModalIsOpen';
+  value: boolean;
+}
+
 // export interface changeCredentialsPayloadSignin {
 //   token: string;
 //   email: string;

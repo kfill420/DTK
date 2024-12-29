@@ -1,14 +1,20 @@
 
 import { useAppDispatch } from '../../../hooks/redux';
 import { actionLogOut } from '../../../store/reducer/account';
+import { setIsOpen } from '../../../store/reducer/modal';
 import './Params.scss'
 import { IoMdLock } from "react-icons/io";
+import { MdDeleteSweep } from "react-icons/md";
 
 function Params() {
   const dispatch = useAppDispatch();
 
   const handleLogOutButton = () => {
     dispatch(actionLogOut());
+  }
+
+  const handleOpenModalButton = () => {
+    dispatch(setIsOpen({ modal: 'confirmModalIsOpen', value: true }));
   }
 
   return (
@@ -23,7 +29,14 @@ function Params() {
         <button onClick={handleLogOutButton} className="params_btn_name">Se déconnecter partout</button>
         <span className="params_btn_value">Vous serez déconnecté(e) sur cet appareil aussi.</span>
       </div>
-
+      <div className="params_infos">
+        <span className="params_infos_name"><MdDeleteSweep />Supprimer son compte</span>
+        <span className="params_infos_value">Si vous souhaitez supprimer définitement votre compte.</span>
+      </div>
+      <div className="params_btn">
+        <button onClick={handleOpenModalButton} className="params_btn_name params_btn_name-important">Supprimer le compte</button>
+        <span className="params_btn_value">Votre compte sera définitivement perdu.</span>
+      </div>
     </div>
   )
 }

@@ -1,25 +1,20 @@
 import { useAppDispatch } from '../../../../hooks/redux';
 import { CSSTransition } from 'react-transition-group';
-import { setIsOpen, toggleIsOpen } from '../../../../store/reducer/burgerMenu';
+import { setIsOpen } from '../../../../store/reducer/modal';
 import { IoLogoInstagram, IoLogoTiktok, IoLogoWhatsapp, IoCloseSharp } from "react-icons/io5";
 import { RiSnapchatFill } from "react-icons/ri";
 import './BurgerMenu.scss';
-import { useEffect, useRef } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { useRef } from 'react';
+import { NavLink } from 'react-router-dom';
 
 const HamburgerMenu = ({ isOpen }: { isOpen: boolean }) => {
   const dispatch = useAppDispatch();
   const burgerMenuBackgroundRef = useRef<HTMLDivElement>(null);
   const burgerMenuRef = useRef<HTMLDivElement>(null);
-  const location = useLocation();
 
   const handleOpen = () => {
-    dispatch(toggleIsOpen());
+    dispatch(setIsOpen({ modal: 'burgerModalIsOpen', value: false }));
   };
-
-  useEffect(() => {
-    dispatch(setIsOpen(false))
-  }, [location.pathname, dispatch]);
 
   return (
     <div>
@@ -31,11 +26,11 @@ const HamburgerMenu = ({ isOpen }: { isOpen: boolean }) => {
         <div ref={burgerMenuRef} className="burgerMenu">
           <div className="burgerMenu_container">
             <ul className="burgerMenu_list">
-              <NavLink to="/" className={({ isActive }) => (isActive ? 'burgerMenu_list_link burgerMenu_list_link-active' : 'burgerMenu_list_link')}>Accueil</NavLink>
-              <NavLink to="/collection/iPhone" className={({ isActive }) => (isActive ? 'burgerMenu_list_link burgerMenu_list_link-active' : 'burgerMenu_list_link')}>iPhone</NavLink>
-              <NavLink to="/collection/Samsung" className={({ isActive }) => (isActive ? 'burgerMenu_list_link burgerMenu_list_link-active' : 'burgerMenu_list_link')}>Smasung</NavLink>
-              <NavLink to="/contact" className={({ isActive }) => (isActive ? 'burgerMenu_list_link burgerMenu_list_link-active' : 'burgerMenu_list_link')}>Contact</NavLink>
-              <NavLink to="/faq" className={({ isActive }) => (isActive ? 'burgerMenu_list_link burgerMenu_list_link-active' : 'burgerMenu_list_link')}>FAQ</NavLink>
+              <NavLink to="/" onClick={handleOpen} className={({ isActive }) => (isActive ? 'burgerMenu_list_link burgerMenu_list_link-active' : 'burgerMenu_list_link')}>Accueil</NavLink>
+              <NavLink to="/collection/iPhone" onClick={handleOpen} className={({ isActive }) => (isActive ? 'burgerMenu_list_link burgerMenu_list_link-active' : 'burgerMenu_list_link')}>iPhone</NavLink>
+              <NavLink to="/collection/Samsung" onClick={handleOpen} className={({ isActive }) => (isActive ? 'burgerMenu_list_link burgerMenu_list_link-active' : 'burgerMenu_list_link')}>Smasung</NavLink>
+              <NavLink to="/contact" onClick={handleOpen} className={({ isActive }) => (isActive ? 'burgerMenu_list_link burgerMenu_list_link-active' : 'burgerMenu_list_link')}>Contact</NavLink>
+              <NavLink to="/faq" onClick={handleOpen} className={({ isActive }) => (isActive ? 'burgerMenu_list_link burgerMenu_list_link-active' : 'burgerMenu_list_link')}>FAQ</NavLink>
             </ul>
             <div className="burgerMenu_footer">
               <div className="burgerMenu_footer_socialNetworks">
@@ -45,7 +40,7 @@ const HamburgerMenu = ({ isOpen }: { isOpen: boolean }) => {
                 <IoLogoWhatsapp size={25} />
               </div>
               <div className="burgerMenu_footer_account">
-                <NavLink to="/profile/infos" className="burgerMenu_footer_account_text">Mon compte</NavLink>
+                <NavLink to="/profile/infos" onClick={handleOpen} className="burgerMenu_footer_account_text">Mon compte</NavLink>
               </div>
             </div>
             <button className="burgerMenu_exitBtn" onClick={handleOpen}>

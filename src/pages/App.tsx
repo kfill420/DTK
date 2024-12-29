@@ -16,6 +16,7 @@ import Order from './ProfilePage/Order/Order';
 import Params from './ProfilePage/Params/Params';
 import Infos from './ProfilePage/Infos/Infos';
 import SpinnerSquare from '../components/App/SpinnerSquare/SpinnerSquare';
+import CollectionPage from './CollectionPage/CollectionPage';
 
 function App() {
   const location = useLocation();
@@ -40,10 +41,11 @@ function App() {
 
   return (
     <div className="app">
-      <Header isAuthentificated={isAuthentificated} email={account.email} />
+      <Header isAuthentificated={isAuthentificated} email={account.email} account_id={account.id} />
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/collection/:brand" element={<CollectionPage />} />
         <Route path="/products/:id" element={<ProductPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/profile" element={<PrivateRoute isAuthenticated={isAuthentificated}><ProfilePage /></PrivateRoute>}>

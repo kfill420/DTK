@@ -1,6 +1,7 @@
 const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 // const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{8,}$/;
 const nameRegex = /^[a-zA-Z0-9._-]{3,}$/;
+const postalCodeRegex = /^[0-9]{5}$/;
 
 export const validateEmail = (email: string): boolean => {
   return emailRegex.test(email);
@@ -35,3 +36,14 @@ export const validePassword = (password: string): string[] => {
 export const valideName = (name: string): boolean => {
   return nameRegex.test(name);
 };
+
+export const validePostalCode = (postalCode: string): boolean => {
+  console.log(postalCodeRegex.test(postalCode));
+
+  return postalCodeRegex.test(postalCode);
+}
+
+export const isNumeric = (text: string): boolean => {
+  const regex = /^\d+$/;
+  return regex.test(text);
+}

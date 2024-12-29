@@ -11,16 +11,21 @@ import { Link, NavLink, useLocation } from 'react-router-dom';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import { useState } from 'react';
 import { actionLogOut } from '../../store/reducer/account';
+import ModalConfirm from '../Modal/ModalConfirm/ModalConfirm';
+import { actionDeleteAccount } from '../../store/thunks/checkAccount';
+import { setIsOpen } from '../../store/reducer/modal';
 
 interface HeaderI {
   isAuthentificated: boolean;
   email: string;
+  account_id?: number | null;
 }
 
-function Header({ isAuthentificated, email }: HeaderI) {
+function Header({ isAuthentificated, email, account_id }: HeaderI) {
   const location = useLocation();
   const dispatch = useAppDispatch();
-  const buergerMenuIsOpen = useAppSelector((state) => state.burgerMenu.isOpen);
+  const burgerMenuIsOpen = useAppSelector((state) => state.ModalMenu.burgerModalIsOpen);
+  const confirmModalIsOpen = useAppSelector((state) => state.ModalMenu.confirmModalIsOpen);
   const [popupisOpen, setpopupIsOpen] = useState(false);
 
   const handlePopupButton = () => {
@@ -29,6 +34,15 @@ function Header({ isAuthentificated, email }: HeaderI) {
 
   const handleDisconnectButton = () => {
     dispatch(actionLogOut());
+  }
+
+  const handleDeleteAccountButton = () => {
+    dispatch(setIsOpen({ modal: 'confirmModalIsOpen', value: false }));
+    dispatch(actionDeleteAccount(account_id));
+  }
+
+  const handleCancelAccounDeletetButton = () => {
+    dispatch(setIsOpen({ modal: 'confirmModalIsOpen', value: false }));
   }
 
   return (
@@ -96,7 +110,10 @@ function Header({ isAuthentificated, email }: HeaderI) {
             </div>
           </div >
       }
-      {location.pathname === '/profile/params' || location.pathname === '/profile/order' || location.pathname === '/profile/infos' ? <ProfileBurgerMenu isOpen={buergerMenuIsOpen} email={email} /> : <StoreBurgerMenu isOpen={buergerMenuIsOpen} />}
+      {location.pathname === '/profile/params' || location.pathname === '/profile/order' || location.pathname === '/profile/infos' ? <ProfileBurgerMenu isOpen={burgerMenuIsOpen} email={email} /> : <StoreBurgerMenu isOpen={burgerMenuIsOpen} />}
+      {
+        isAuthentificated && location.pathname === '/profile/params' && <ModalConfirm isOpen={confirmModalIsOpen} title='Confirmation' content='Cette action est irréversible, souhaitez-vous vraiment supprimer définitivement votre compte ?' acceptFunction={handleDeleteAccountButton} cancelFunction={handleCancelAccounDeletetButton} />
+      }
 
 
     </>

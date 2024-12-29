@@ -1,10 +1,10 @@
 import accountSlice from './account';
-import burgerMenuSlice from './burgerMenu';
+import modalMenuSlice from './modal';
 import productSlice from './product';
 
 const reducer = {
   account: accountSlice,
-  burgerMenu: burgerMenuSlice,
+  ModalMenu: modalMenuSlice,
   product: productSlice,
 };
 

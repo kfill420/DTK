@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { actionAddAddressFromAccount, actionDeleteAddressFromAccount, actionUpdateAddressFromAccount, actionUpdateInfosFromAccount } from '../../../store/thunks/checkAccount';
 import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
 import ModalInfos from './ModalInfos/ModalInfos';
+import { isNumeric } from '../../../utils/regexValidator';
 
 function Infos({ account }: AccountI) {
   const [modalAdressIsOpen, setModalAdressIsOpen] = useState(false);
@@ -90,17 +91,31 @@ function Infos({ account }: AccountI) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
     if (modalAdressIsOpen) {
-      if (name === 'default') {
-        setFormData({ ...formData, [name]: !formData.default });
-        return;
+      switch (name) {
+        case 'default':
+          setFormData({ ...formData, [name]: !formData.default });
+          return;
+        case 'country': {
+          const country = countries.find(country => country.code === value);
+          if (!country) return;
+          const newFormData = { ...formData, country_id: country.id, country: country };
+          setFormData(newFormData);
+          return;
+        }
+        case 'postal_code':
+          if (value.length > 5 || !isNumeric(value)) {
+            return;
+          } else setFormData({ ...formData, [name]: value });
+          break;
+        case 'phone':
+          if (value.length > 14 || !isNumeric(value)) {
+            return;
+          } else setFormData({ ...formData, [name]: value });
+          break;
+        default:
+          setFormData({ ...formData, [name]: value });
+          break;
       }
-      else if (name === 'country') {
-        const country = countries.find(country => country.code === value);
-        if (!country) return;
-        const newFormData = { ...formData, country_id: country.id, country: country };
-        setFormData(newFormData);
-      } else
-        setFormData({ ...formData, [name]: value });
     }
     if
       (modalInfosIsOpen) {
