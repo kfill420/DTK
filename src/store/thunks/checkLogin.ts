@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import type { RootState } from '..';
 import axiosInstance, { addTokenJwtToAxiosInstance } from '../../axios/axios';
-import { addTokenAndPseudoToLocalStorage } from '../../localStorage/localStorage';
+import { addTokenAndPseudoToLocalStorage, disconnectLocalStorage } from '../../localStorage/localStorage';
 import { AxiosError } from 'axios';
 
 const actionCheckToken = createAsyncThunk(
@@ -14,9 +14,12 @@ const actionCheckToken = createAsyncThunk(
       }
       addTokenJwtToAxiosInstance(token);
       const response = await axiosInstance.post('/valide-token');
+      console.log(response.data);
 
       return { valid: response.data.valid, data: response.data };
     } catch (error) {
+      console.log(error);
+      disconnectLocalStorage();
       const axiosError = error as AxiosError;
       return thunkAPI.rejectWithValue(axiosError.response?.data);
     }

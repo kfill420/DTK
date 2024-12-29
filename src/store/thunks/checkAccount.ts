@@ -14,8 +14,6 @@ const actionAddAddressFromAccount = createAsyncThunk<CheckProfileAddressI[], Che
   async (payload: CheckProfileAddressI, thunkAPI) => {
     try {
       const response = await axiosInstance.post(`/account/addAddress/${payload.account_id}`, payload);
-      console.log(response.data);
-
       return response.data;
     } catch (error) {
       const axiosError = error as AxiosError;
@@ -65,4 +63,20 @@ const actionUpdateInfosFromAccount = createAsyncThunk<updateInfosPayload, update
   }
 );
 
-export { actionAddAddressFromAccount, actionDeleteAddressFromAccount, actionUpdateAddressFromAccount, actionUpdateInfosFromAccount };
+
+const actionDeleteAccount = createAsyncThunk<number, number | undefined | null>(
+  'account/DELETE_ACCOUNT',
+  async (payload, thunkAPI) => {
+    try {
+      if (payload === null)
+        return thunkAPI.rejectWithValue('No account id');
+      const response = await axiosInstance.delete(`/account/deleteAccount/${payload}`);
+      return response.data;
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      return thunkAPI.rejectWithValue(axiosError.response?.data);
+    }
+  }
+);
+
+export { actionAddAddressFromAccount, actionDeleteAddressFromAccount, actionUpdateAddressFromAccount, actionUpdateInfosFromAccount, actionDeleteAccount };

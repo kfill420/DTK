@@ -39,6 +39,7 @@
 
       @include breakpoint.media(desktop) {
         flex: 0 0 20%;
+        width: 20%;
       }
 
       &_link {

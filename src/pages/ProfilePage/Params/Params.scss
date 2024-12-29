@@ -46,6 +46,7 @@
     padding: 1rem;
     border-radius: 10px;
     gap: 1rem;
+    margin-bottom: 2rem;
 
     &_name {
       border: 0;
@@ -54,6 +55,10 @@
       border-radius: 10px;
       background-color: v.$textColor-colorLightGray;
       color: v.$textColor-colorBlack;
+
+      &-important {
+        color: red;
+      }
     }
 
     &_value {

@@ -1,7 +1,7 @@
-@use '../../../../styles/breakpoint.scss';
-@use '../../../../styles/variables' as v;
+@use '../../../styles/breakpoint.scss';
+@use '../../../styles/variables' as v;
 
-.modalAddAddress_background {
+.modalConfirmBackground {
   position: fixed;
   top: 0;
   left: 0;
@@ -12,7 +12,7 @@
   z-index: 10;
 }
 
-.modalAddAddress {
+.modalConfirm {
   position: fixed;
   left: 0;
   bottom: 0;
@@ -51,46 +51,41 @@
     }
   }
 
-  &_countries {
-    font-size: 1.2rem;
-    padding: 0.4rem;
-    margin-bottom: 0rem;
-    border-radius: 5px;
-    border: solid 1px v.$textColor-colorDarkTrans4;
-  }
-
-  &_container {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+  &_content {
+    font-size: 1rem;
+    font-weight: 400;
+    margin-bottom: 1rem;
 
     @include breakpoint.media('tablet_mini') {
-      flex-direction: row;
-      gap: 1rem;
+      margin-bottom: 2rem;
     }
   }
+
+  // &_countries {
+  //   font-size: 1.2rem;
+  //   padding: 0.4rem;
+  //   margin-bottom: 0rem;
+  //   border-radius: 5px;
+  //   border: solid 1px v.$textColor-colorDarkTrans4;
+  // }
+
+  // &_container {
+  //   display: flex;
+  //   flex-direction: column;
+  //   gap: 0.5rem;
+
+  //   @include breakpoint.media('tablet_mini') {
+  //     flex-direction: row;
+  //     gap: 1rem;
+  //   }
+  // }
 
   &_buttons {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: flex-end;
     gap: 1rem;
     margin-top: 1rem;
-
-    &-edit {
-      align-self: flex-end;
-    }
-
-    &_delete {
-      display: none;
-      background-color: transparent;
-      border: none;
-      color: red;
-
-      &-edit {
-        display: block;
-      }
-    }
 
     &_right {
       display: flex;
@@ -111,7 +106,6 @@
         background-color: v.$textColor-primary;
       }
     }
-
 
   }
 

@@ -1,10 +1,10 @@
 import { useAppDispatch } from '../../../../hooks/redux';
 import { CSSTransition } from 'react-transition-group';
-import { setIsOpen, toggleIsOpen } from '../../../../store/reducer/burgerMenu';
+import { setIsOpen } from '../../../../store/reducer/modal';
 import { PiUserCircleThin } from "react-icons/pi";
 import './ProfileBurgerMenu.scss';
-import { useEffect, useRef } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { useRef } from 'react';
+import { NavLink } from 'react-router-dom';
 import { actionLogOut } from '../../../../store/reducer/account';
 
 const HamburgerMenu = ({ isOpen, email }: { isOpen: boolean, email: string }) => {
@@ -12,19 +12,13 @@ const HamburgerMenu = ({ isOpen, email }: { isOpen: boolean, email: string }) =>
   const burgerMenuBackgroundRef = useRef<HTMLDivElement>(null);
   const burgerMenuRef = useRef<HTMLDivElement>(null);
 
-  const location = useLocation();
-
   const handleOpen = () => {
-    dispatch(toggleIsOpen());
+    dispatch(setIsOpen({ modal: 'burgerModalIsOpen', value: false }));
   };
 
   const handleDisconnectButton = () => {
     dispatch(actionLogOut());
   }
-
-  useEffect(() => {
-    dispatch(setIsOpen(false))
-  }, [location.pathname, dispatch]);
 
   return (
     <div>
@@ -41,14 +35,14 @@ const HamburgerMenu = ({ isOpen, email }: { isOpen: boolean, email: string }) =>
                 <span className="pburgerMenu_container_header_mail_text">{email}</span>
               </div>
               <ul className="pburgerMenu_list">
-                <NavLink to="/" className={({ isActive }) => (isActive ? 'pburgerMenu_list_link pburgerMenu_list_link-active' : 'pburgerMenu_list_link')}>Boutique</NavLink>
-                <NavLink to="/profile/order" className={({ isActive }) => (isActive ? 'pburgerMenu_list_link pburgerMenu_list_link-active' : 'pburgerMenu_list_link')}>Commandes</NavLink>
+                <NavLink to="/" onClick={handleOpen} className={({ isActive }) => (isActive ? 'pburgerMenu_list_link pburgerMenu_list_link-active' : 'pburgerMenu_list_link')}>Boutique</NavLink>
+                <NavLink to="/profile/order" onClick={handleOpen} className={({ isActive }) => (isActive ? 'pburgerMenu_list_link pburgerMenu_list_link-active' : 'pburgerMenu_list_link')}>Commandes</NavLink>
               </ul>
             </div>
 
             <div className="pburgerMenu_footer">
-              <NavLink to="/profile/infos" className={({ isActive }) => (isActive ? 'pburgerMenu_footer_link pburgerMenu_footer_link-active' : 'pburgerMenu_footer_link')}>Profil</NavLink>
-              <NavLink to="/profile/params" className={({ isActive }) => (isActive ? 'pburgerMenu_footer_link pburgerMenu_footer_link-active' : 'pburgerMenu_footer_link')}>Paramètres</NavLink>
+              <NavLink to="/profile/infos" onClick={handleOpen} className={({ isActive }) => (isActive ? 'pburgerMenu_footer_link pburgerMenu_footer_link-active' : 'pburgerMenu_footer_link')}>Profil</NavLink>
+              <NavLink to="/profile/params" onClick={handleOpen} className={({ isActive }) => (isActive ? 'pburgerMenu_footer_link pburgerMenu_footer_link-active' : 'pburgerMenu_footer_link')}>Paramètres</NavLink>
               <button onClick={handleDisconnectButton} className="pburgerMenu_footer_link">Se déconnecter</button>
             </div>
           </div>

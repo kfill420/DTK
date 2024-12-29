@@ -1,13 +1,13 @@
 import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
-import { toggleIsOpen } from '../../../store/reducer/burgerMenu';
+import { toggleIsOpen } from '../../../store/reducer/modal';
 import './BurgerButton.scss';
 
 const HamburgerMenuButton = () => {
   const dispatch = useAppDispatch();
-  const isOpen = useAppSelector((state) => state.burgerMenu.isOpen);
+  const burgerMenuIsOpen = useAppSelector((state) => state.ModalMenu.burgerModalIsOpen);
 
   const handleOpen = () => {
-    dispatch(toggleIsOpen());
+    dispatch(toggleIsOpen('burgerModalIsOpen'));
   };
 
   return (
@@ -19,7 +19,7 @@ const HamburgerMenuButton = () => {
         xmlns="http://www.w3.org/2000/svg"
       >
         <line
-          className={`line line1 ${isOpen ? 'open' : ''}`}
+          className={`line line1 ${burgerMenuIsOpen ? 'open' : ''}`}
           x1="10"
           y1="12"
           x2="30"
@@ -28,7 +28,7 @@ const HamburgerMenuButton = () => {
           strokeWidth="2"
         />
         <line
-          className={`line line2 ${isOpen ? 'open' : ''}`}
+          className={`line line2 ${burgerMenuIsOpen ? 'open' : ''}`}
           x1="10"
           y1="20"
           x2="30"
@@ -37,7 +37,7 @@ const HamburgerMenuButton = () => {
           strokeWidth="2"
         />
         <line
-          className={`line line3 ${isOpen ? 'open' : ''}`}
+          className={`line line3 ${burgerMenuIsOpen ? 'open' : ''}`}
           x1="10"
           y1="28"
           x2="30"

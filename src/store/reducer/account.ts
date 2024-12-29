@@ -3,7 +3,7 @@ import { actionCheckConnexion, actionCheckSignin, actionCheckSignup, actionCheck
 import { validateEmail, validePassword } from '../../utils/regexValidator';
 import { disconnectLocalStorage } from '../../localStorage/localStorage';
 import { changeCredentialsPayload } from '../../@types/payload';
-import { actionAddAddressFromAccount, actionDeleteAddressFromAccount, actionUpdateAddressFromAccount, actionUpdateInfosFromAccount } from '../thunks/checkAccount';
+import { actionAddAddressFromAccount, actionDeleteAccount, actionDeleteAddressFromAccount, actionUpdateAddressFromAccount, actionUpdateInfosFromAccount } from '../thunks/checkAccount';
 import { CheckProfileAddressI, CountryI } from '../../@types/account';
 
 export const initialState = {
@@ -168,6 +168,11 @@ const accountSlice = createSlice({
       state.account.email = action.payload.email;
       state.account.firstname = action.payload.firstname;
       state.account.lastname = action.payload.lastname;
+    });
+    builder.addCase(actionDeleteAccount.fulfilled, (state) => {
+      state.isAuthentificated = false;
+      state.token = null;
+      disconnectLocalStorage();
     });
   },
 });
