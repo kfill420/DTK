@@ -55,7 +55,7 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
             </div>
             <ul className="header-profile_left">
               <Link to="/" className="header-profile_left_logo">DTK</Link>
-              <Link to="/store" className="header-profile_left_link">Boutique</Link>
+              <Link to="/" className="header-profile_left_link">Boutique</Link>
               <NavLink to="/profile/order" className={({ isActive }) => (isActive ? 'header-profile_left_link header-profile_left_link-active' : 'header-profile_left_link')}>Commandes</NavLink>
             </ul>
             <div onClick={handlePopupButton} className="header-profile_right">
