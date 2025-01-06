@@ -115,23 +115,19 @@
 
 
 .slide-up-enter {
-  transform: translateY(100%);
-  opacity: 0;
+  transform: translateY(150%);
 }
 
 .slide-up-enter-active {
   transform: translateY(0);
-  opacity: 1;
-  transition: opacity 300ms, transform 300ms;
+  transition: transform 300ms;
 }
 
 .slide-up-exit {
   transform: translateY(0);
-  opacity: 1;
 }
 
 .slide-up-exit-active {
-  transform: translateY(100%);
-  opacity: 0;
-  transition: opacity 300ms, transform 300ms;
+  transform: translateY(150%);
+  transition: transform 300ms;
 }
