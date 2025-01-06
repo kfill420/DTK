@@ -26,10 +26,18 @@ function App() {
   const account = useAppSelector((state) => state.account.account);
   const tokenIsLoading = useAppSelector((state) => state.account.tokenIsLoading);
   const initialCheck = useAppSelector((state) => state.account.initialCheck);
+  const modalIsOpen = useAppSelector((state) => state.ModalMenu.burgerModalIsOpen);
 
   useEffect(() => {
     dispatch(actionCheckToken())
   }, [dispatch]);
+
+  useEffect(() => {
+    if (modalIsOpen)
+      document.body.style.overflow = 'hidden';
+    else
+      document.body.style.overflow = 'auto';
+  }, [modalIsOpen]);
 
   if (tokenIsLoading || initialCheck) {
     return (
