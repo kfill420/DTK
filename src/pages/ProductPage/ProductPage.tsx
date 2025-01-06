@@ -166,7 +166,7 @@ function ProductPage() {
           </div>
         </div>
       </form>
-      <Store title="Explorez nos modèles" subtitle="Vous hésitez encore ?" amount={10} />
+      <Store title="Explorez nos modèles" subtitle="Vous hésitez encore ?" amount={10} list={list} />
     </div>
   )
 }
