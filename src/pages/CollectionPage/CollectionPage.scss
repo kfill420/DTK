@@ -1,5 +1,41 @@
-.home {
+@use '../../styles/breakpoint.scss';
+@use '../../styles/variables' as v;
+
+.collectionPage {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   overflow: hidden;
+
+  &_filter {
+    display: none;
+  }
+
+  &_title {
+    display: flex;
+    width: 100%;
+    height: 4rem;
+    justify-content: center;
+    align-items: center;
+    background-color: v.$bgColor-primary;
+    text-align: center;
+    color: v.$textColor-colorWhite;
+  }
+
+
+  &_filterButton {
+    display: flex;
+    flex-direction: row;
+    position: fixed;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: v.$bgColor-primary;
+    color: v.$textColor-colorWhite;
+    border: none;
+    bottom: 1rem;
+    padding: 1rem 2rem;
+    border-radius: 30px;
+  }
 }

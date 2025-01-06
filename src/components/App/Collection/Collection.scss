@@ -6,6 +6,10 @@
   flex-direction: row;
   flex-wrap: wrap;
 
+  @include breakpoint.media(desktop) {
+    margin: 0 10%;
+  }
+
   &_product {
     position: relative;
     flex: 0 0 50%;

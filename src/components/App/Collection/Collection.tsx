@@ -1,24 +1,12 @@
 import './Collection.scss'
 
-import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
 import { Link } from 'react-router-dom';
 import ColorRadio from '../ColorRadio/ColorRadio';
-import { PriceI } from '../../../@types/product';
-import { useEffect, useState } from 'react';
-import { actionCheckProduct } from '../../../store/thunks/checkProduct';
+import { PriceI, ProductI } from '../../../@types/product';
+import { useState } from 'react';
 
-function Collection({ brand, amount }: { brand?: string, amount?: number }) {
-  const dispatch = useAppDispatch();
+function Collection({ list, amount, minPrice, maxPrice }: { list?: ProductI[], amount?: number, minPrice?: number, maxPrice?: number }) {
   const [selectorSelected, setSelectorSelected] = useState<{ [key: string]: number }>({});
-
-  const list = useAppSelector((state) => state.product.list);
-
-  useEffect(() => {
-    if (list.length === 0) {
-      dispatch(actionCheckProduct());
-    }
-  }, [dispatch, list.length]);
-  console.log(list);
 
   const minimumPrice = (list: PriceI[]) => {
     const priceList = list.map((product) => +product.price);
@@ -41,9 +29,11 @@ function Collection({ brand, amount }: { brand?: string, amount?: number }) {
 
   return (
     <div className="collection">
-      {list.map((product, index) => {
+      {list && list.map((product, index) => {
         const selectedColorIndex = selectorSelected[product.id] || 0;
         if (amount && index >= amount) return null;
+        if (minPrice && minimumPrice(product.Prices) < minPrice) return null;
+        if (maxPrice && minimumPrice(product.Prices) > maxPrice) return null;
         return (
           <div key={product.id} className="collection_product">
             <Link to={`/products/${product.id}`} className="collection_product_link">

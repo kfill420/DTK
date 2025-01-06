@@ -19,7 +19,7 @@ function ModalConfirm({ isOpen, title, content, acceptFunction, cancelFunction }
             <span className="modalConfirm_text">{content}</span>
             <div className="modalConfirm_buttons">
               <div className="modalConfirm_buttons_right">
-                <button type="reset" className="modalConfirm_buttons_right_cancel">Annnuler</button>
+                <button type="reset" className="modalConfirm_buttons_right_cancel">Annuler</button>
                 <button type="submit" className="modalConfirm_buttons_right_submit">Confirmer</button>
               </div>
 
