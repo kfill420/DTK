@@ -29,7 +29,7 @@ function HomePage() {
     <div className="home">
       <Carousel slides={slides} arrows={false} indicators={true} interval={6} />
       <Service data={validatedData} />
-      <Store subtitle="Nos meilleurs ventes" title="Commandez dès maintenant !" />
+      <Store subtitle="Nos meilleurs ventes" title="Commandez dès maintenant !" list={list} />
       <Questions />
     </div>
   )

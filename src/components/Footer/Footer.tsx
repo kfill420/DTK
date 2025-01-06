@@ -4,8 +4,14 @@ import { BiLogoSnapchat } from "react-icons/bi";
 import { FaCcVisa, FaCcMastercard, FaCcAmex } from "react-icons/fa6";
 import { TbMailCheck } from "react-icons/tb";
 import Input from '../App/Input/Input';
+import { ChangeEvent, useState } from "react";
 
 function Footer() {
+  const [email, setEmail] = useState('');
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  }
   return (
     <div className="footer">
       <div className="footer_newsletter">
@@ -13,7 +19,7 @@ function Footer() {
         <span className="footer_newsletter_content">Inscrivez-vous à notre newsletter et soyez le premier à
           découvrir nos promotions exclusives sur les derniers téléphones.</span>
         <div className="footer_newsletter_form">
-          <Input name="newsletter" type="email" text="Adresse mail" />
+          <Input name="newsletter" type="email" text="Adresse mail" value={email} handleChange={handleChange} />
           <button className="footer_newsletter_form_button"><TbMailCheck size={22} />S'inscrire</button>
         </div>
 
