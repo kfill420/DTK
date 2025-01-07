@@ -9,6 +9,8 @@ import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { ProductI } from "../../@types/product";
 import { actionCheckProduct } from "../../store/thunks/checkProduct";
 import { setIsOpen, setPriceValue, toggleIsOpen } from "../../store/reducer/modal";
+import PriceSelector from "../../components/App/PriceSelector/PriceSelector";
+import { MdKeyboardArrowDown, MdOutlineKeyboardArrowUp } from "react-icons/md";
 
 function CollectionPage() {
   const { brand } = useParams<string>();
@@ -17,13 +19,14 @@ function CollectionPage() {
   const [brandList, setBrandList] = useState<ProductI[]>([]);
   const [filteredList, setFilteredList] = useState<ProductI[]>([]);
   const list = useAppSelector((state) => state.product.list);
-  const [filtered, setFiltered] = useState(false);
+  const [priceSectionIsopen, setPriceSectionIsOpen] = useState(false);
 
   const modalCollectionFilterIsOpen = useAppSelector((state) => state.ModalMenu.modalCollectionFilterIsOpen);
   const minPrice = useAppSelector((state) => state.ModalMenu.modalCollectionFilter.minVal);
   const maxPrice = useAppSelector((state) => state.ModalMenu.modalCollectionFilter.maxVal);
   const selectedMinPrice = useAppSelector((state) => state.ModalMenu.modalCollectionFilter.selectedMinPrice);
   const selectedMaxPrice = useAppSelector((state) => state.ModalMenu.modalCollectionFilter.selectedMaxPrice);
+  const filtered = useAppSelector((state) => state.ModalMenu.modalCollectionFilter.filtered);
 
   useEffect(() => {
     if (list.length === 0) {
@@ -35,11 +38,13 @@ function CollectionPage() {
     switch (brand) {
       case 'iPhone':
         setBrandList(list.filter((product) => product.brand === 'iPhone'));
-        setFiltered(false);
+        dispatch(setPriceValue({ name: "filtered", value: false }));
+        // setFiltered(false);
         break;
       case 'Samsung':
         setBrandList(list.filter((product) => product.brand === 'Samsung'));
-        setFiltered(false);
+        dispatch(setPriceValue({ name: "filtered", value: false }));
+        // setFiltered(false);
         break;
     }
     setFilteredList(brandList);
@@ -104,7 +109,7 @@ function CollectionPage() {
 
   const acceptFunction = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setFiltered(true);
+    dispatch(setPriceValue({ name: "filtered", value: true }));
     dispatch(setPriceValue({ name: "selectedMinPrice", value: minPrice }));
     dispatch(setPriceValue({ name: "selectedMaxPrice", value: maxPrice }));
     dispatch(setIsOpen({ modal: 'modalCollectionFilterIsOpen', value: false }));
@@ -119,14 +124,27 @@ function CollectionPage() {
     <div className="collectionPage">
       <h3 className="collectionPage_title">{brand}</h3>
       <div className="collectionPage_container">
-        <div className="collectionPage_filter">
-          <h3 className="collectionPage_filter_title">Filtres</h3>
-          <div className="collectionPage_filter_available">
-            <span className="collectionPage_filter_available_text">En stock uniquement</span>
+        <div className="collectionPage_container_filter">
+          <h3 className="collectionPage_container_filter_title"><VscSettings size={20} /> Filtres</h3>
+          <div className="collectionPage_container_filter_available">
+            <span className="collectionPage_container_filter_available_text">En stock uniquement</span>
             <ToggleSwitch />
           </div>
+          <div className="collectionPage_container_filter_price">
+            <div className="collectionPage_container_filter_price_container" onClick={() => setPriceSectionIsOpen(!priceSectionIsopen)}>
+              <span className="collectionPage_container_filter_price_container_text">Prix</span>
+              {priceSectionIsopen ? <MdKeyboardArrowDown size={25} /> : <MdOutlineKeyboardArrowUp size={25} />}
+            </div>
+            {
+              priceSectionIsopen && <PriceSelector min={minPrice} max={maxPrice} direct={true} />
+            }
+
+          </div>
         </div>
-        <Collection list={filteredList} />
+        <div className="collectionPage_container_collection">
+          <Collection list={filteredList} numberPerRow={3} />
+        </div>
+
       </div>
 
       <button className="collectionPage_filterButton" onClick={handleOpen}><VscSettings size={20} />Filtrer et trier</button>

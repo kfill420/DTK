@@ -4,9 +4,11 @@ import { Link } from 'react-router-dom';
 import ColorRadio from '../ColorRadio/ColorRadio';
 import { PriceI, ProductI } from '../../../@types/product';
 import { useState } from 'react';
+import useBreakpoint from '../../../utils/useBreakpoint';
 
-function Collection({ list, amount, minPrice, maxPrice }: { list?: ProductI[], amount?: number, minPrice?: number, maxPrice?: number }) {
+function Collection({ list, amount, minPrice, maxPrice, numberPerRow }: { list?: ProductI[], amount?: number, minPrice?: number, maxPrice?: number, numberPerRow?: number }) {
   const [selectorSelected, setSelectorSelected] = useState<{ [key: string]: number }>({});
+  const { isMobile } = useBreakpoint();
 
   const minimumPrice = (list: PriceI[]) => {
     const priceList = list.map((product) => +product.price);
@@ -26,6 +28,17 @@ function Collection({ list, amount, minPrice, maxPrice }: { list?: ProductI[], a
     }));
   };
 
+  const customNumberPerRow = () => {
+    if (!numberPerRow || (numberPerRow && isMobile)) {
+      return {};
+    } else {
+      return {
+        width: `${100 / numberPerRow}%`,
+        flex: `0 0 ${100 / numberPerRow}%`
+      };
+    }
+  };
+
 
   return (
     <div className="collection">
@@ -35,7 +48,8 @@ function Collection({ list, amount, minPrice, maxPrice }: { list?: ProductI[], a
         if (minPrice && minimumPrice(product.Prices) < minPrice) return null;
         if (maxPrice && minimumPrice(product.Prices) > maxPrice) return null;
         return (
-          <div key={product.id} className="collection_product">
+
+          <div key={product.id} className="collection_product" style={customNumberPerRow()}>
             <Link to={`/products/${product.id}`} className="collection_product_link">
               <img src={product.image_url[selectedColorIndex]} alt={product.name} className="collection_product_link_img" />
             </Link>

@@ -1,7 +1,7 @@
 import './PriceSelector.scss'
 import DoubleRangeSelector from "../DoubleRangeSelector/DoubleRangeSelector";
 
-function PriceSelector({ min, max }: { min: number, max: number }) {
+function PriceSelector({ min, max, direct }: { min: number, max: number, direct?: boolean }) {
 
   return (
     <div className="card-conteiner">
@@ -10,7 +10,7 @@ function PriceSelector({ min, max }: { min: number, max: number }) {
           <label className="label-min-value">{min}</label>
           <label className="label-max-value">{max}</label>
         </div>
-        <DoubleRangeSelector />
+        <DoubleRangeSelector direct={direct} />
       </div>
     </div>
   )

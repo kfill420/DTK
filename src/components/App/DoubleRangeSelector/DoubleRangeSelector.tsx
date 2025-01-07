@@ -3,7 +3,7 @@ import "./DoubleRangeSelector.scss";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
 import { setPriceValue } from "../../../store/reducer/modal";
 
-const CatlogPriceFilter = () => {
+const CatlogPriceFilter = ({ direct }: { direct?: boolean }) => {
   const dispatch = useAppDispatch();
 
   // const initialMinPrice = useAppSelector((state) => state.ModalMenu.priceRangeModal.initialMinPrice);
@@ -17,7 +17,6 @@ const CatlogPriceFilter = () => {
   const isDragging = useAppSelector((state) => state.ModalMenu.modalCollectionFilter.isDraging);
   const minGap = useAppSelector((state) => state.ModalMenu.modalCollectionFilter.minGap);
 
-
   useEffect(() => {
     setSliderTrack();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -28,6 +27,11 @@ const CatlogPriceFilter = () => {
     if (value >= sliderMinValue && maxVal - value >= minGap) {
       dispatch(setPriceValue({ name: "minVal", value }));
       dispatch(setPriceValue({ name: "minInput", value }));
+      if (direct) {
+        dispatch(setPriceValue({ name: "filtered", value: true }));
+        dispatch(setPriceValue({ name: "selectedMinPrice", value: value }));
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     }
   };
 
@@ -36,12 +40,16 @@ const CatlogPriceFilter = () => {
     if (value <= sliderMaxValue && value - minVal >= minGap) {
       dispatch(setPriceValue({ name: "maxVal", value }));
       dispatch(setPriceValue({ name: "maxInput", value }));
+      if (direct) {
+        dispatch(setPriceValue({ name: "filtered", value: true }));
+        dispatch(setPriceValue({ name: "selectedMaxPrice", value: value }));
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
     }
   };
 
   const setSliderTrack = () => {
     const range = document.querySelector(".slider-track") as HTMLElement;
-
     if (range) {
       const minPercent =
         ((minVal - sliderMinValue) / (sliderMaxValue - sliderMinValue)) * 100;
@@ -54,26 +62,24 @@ const CatlogPriceFilter = () => {
   };
 
   const handleMinInput = (e: ChangeEvent<HTMLInputElement>) => {
-    const value =
-      e.target.value === "" ? sliderMinValue : parseInt(e.target.value, 10);
-    if (value >= sliderMinValue && value < maxVal - minGap) {
-      dispatch(setPriceValue({ name: "minInput", value }));
-      dispatch(setPriceValue({ name: "minVal", value }));
-    }
+    const value = e.target.value === "" ? sliderMinValue : parseInt(e.target.value, 10);
+    dispatch(setPriceValue({ name: "minInput", value }));
+    // if (value >= sliderMinValue && value < maxVal - minGap) {
+    //   dispatch(setPriceValue({ name: "minInput", value }));
+    //   dispatch(setPriceValue({ name: "minVal", value }));
+    // }
   };
 
   const handleMaxInput = (e: ChangeEvent<HTMLInputElement>) => {
-    const value =
-      e.target.value === "" ? sliderMaxValue : parseInt(e.target.value, 10);
-    if (value <= sliderMaxValue && value > minVal + minGap) {
-      dispatch(setPriceValue({ name: "maxInput", value }));
-      dispatch(setPriceValue({ name: "maxVal", value }));
-    }
+    const value = e.target.value === "" ? sliderMaxValue : parseInt(e.target.value, 10);
+    dispatch(setPriceValue({ name: "maxInput", value }));
+    // if (value <= sliderMaxValue && value > minVal + minGap) {
+    //   dispatch(setPriceValue({ name: "maxInput", value }));
+    //   dispatch(setPriceValue({ name: "maxVal", value }));
+    // }
   };
 
   const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, type: string) => {
-    console.log(e.currentTarget.value);
-
     if (e.key === "Enter") {
       const value = parseInt(e.currentTarget.value, 10);
       if (
@@ -82,12 +88,23 @@ const CatlogPriceFilter = () => {
         value < maxVal - minGap
       ) {
         dispatch(setPriceValue({ name: "minVal", value }));
+        if (direct) {
+          dispatch(setPriceValue({ name: "filtered", value: true }));
+          dispatch(setPriceValue({ name: "selectedMinPrice", value: value }));
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
       } else if (
         type === "max" &&
         value <= sliderMaxValue &&
         value > minVal + minGap
       ) {
         dispatch(setPriceValue({ name: "maxVal", value }));
+        if (direct) {
+          dispatch(setPriceValue({ name: "filtered", value: true }));
+          dispatch(setPriceValue({ name: "selectedMaxPrice", value: value }));
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
       }
     }
   };
