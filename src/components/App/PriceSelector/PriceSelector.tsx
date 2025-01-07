@@ -1,7 +1,7 @@
-import { ChangeEvent } from "react";
 import './PriceSelector.scss'
+import DoubleRangeSelector from "../DoubleRangeSelector/DoubleRangeSelector";
 
-function PriceSelector({ min, max, change, minValue, maxValue }: { min: number, max: number, change: (e: ChangeEvent<HTMLInputElement>) => void, minValue: number, maxValue: number }) {
+function PriceSelector({ min, max }: { min: number, max: number }) {
 
   return (
     <div className="card-conteiner">
@@ -10,22 +10,7 @@ function PriceSelector({ min, max, change, minValue, maxValue }: { min: number, 
           <label className="label-min-value">{min}</label>
           <label className="label-max-value">{max}</label>
         </div>
-        <div className="rangeslider">
-          <input id="min" className="min input-ranges" name="range_1" type="range" min={min} max={max} value={minValue} onChange={change} />
-          <input id="max" className="max input-ranges" name="range_1" type="range" min={min} max={max} value={maxValue} onChange={change} />
-        </div>
-
-        <div className="rangesinput">
-          <div className="rangesinput_min">
-            <label className="rangesinput_min_label" htmlFor="">€</label>
-            <input className="rangesinput_min_input" name="range_1" type="number" min={min} max={max} placeholder={minValue.toString()} />
-          </div>
-          <span className="rangesinput_joint">à</span>
-          <div className="rangesinput_max">
-            <label className="rangesinput_max_label" htmlFor="">€</label>
-            <input className="rangesinput_max_input" name="range_1" type="number" min={min} max={max} placeholder={maxValue.toString()} />
-          </div>
-        </div>
+        <DoubleRangeSelector />
       </div>
     </div>
   )

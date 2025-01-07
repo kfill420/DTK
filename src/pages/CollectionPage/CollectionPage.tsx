@@ -8,19 +8,25 @@ import { useEffect, useState, ChangeEvent, FormEvent } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { ProductI } from "../../@types/product";
 import { actionCheckProduct } from "../../store/thunks/checkProduct";
+import { setIsOpen, toggleIsOpen } from "../../store/reducer/modal";
 
 function CollectionPage() {
   const { brand } = useParams<string>();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [brandList, setBrandList] = useState<ProductI[]>([]);
+  const [filteredList, setFilteredList] = useState<ProductI[]>([]);
   const list = useAppSelector((state) => state.product.list);
+
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(100);
   const [selectedMinPrice, setSelectedMinPrice] = useState(0);
   const [selectedMaxPrice, setSelectedMaxPrice] = useState(100);
+  const [inputMinPrice, setInputMinPrice] = useState(0);
+  const [inputMaxPrice, setInputMaxPrice] = useState(100);
   const [filtered, setFiltered] = useState(false);
-  const [modalCollectionFilterIsOpen, setModalCollectionFilterIsOpen] = useState(false);
+
+  const modalCollectionFilterIsOpen = useAppSelector((state) => state.ModalMenu.modalCollectionFilterIsOpen);
 
   useEffect(() => {
     if (list.length === 0) {
@@ -32,22 +38,24 @@ function CollectionPage() {
     switch (brand) {
       case 'iPhone':
         setBrandList(list.filter((product) => product.brand === 'iPhone'));
+        setFiltered(false);
         break;
       case 'Samsung':
         setBrandList(list.filter((product) => product.brand === 'Samsung'));
+        setFiltered(false);
         break;
     }
-
+    setFilteredList(brandList);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [brand, list]);
+  }, [brand, list, brandList.length]);
 
   useEffect(() => {
     if (filtered) {
       const brandListFiltered = brandList.filter((product) => product.Prices.some((price) => +price.price >= selectedMinPrice && +price.price <= selectedMaxPrice));
-      setBrandList(brandListFiltered);
+      setFilteredList(brandListFiltered);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filtered]);
+  }, [filtered, selectedMinPrice, selectedMaxPrice]);
 
   useEffect(() => {
     const initGlobalPrice = () => {
@@ -75,46 +83,51 @@ function CollectionPage() {
             price = product;
           }
         });
-        console.log(priceList);
 
         if (product) return price;
       });
 
-      if (maxGlobalPrice.length === 0) return;
-      if (minGlobalPrice.length === 0) return;
+      if (maxGlobalPrice.length === 0 || minGlobalPrice.length === 0) return;
 
+      setInputMinPrice(Math.min(...minGlobalPrice.filter((price): price is number => price !== undefined)))
+      setInputMaxPrice(Math.max(...maxGlobalPrice.filter((price): price is number => price !== undefined)));
       setMinPrice(Math.min(...minGlobalPrice.filter((price): price is number => price !== undefined)));
-      setSelectedMinPrice(Math.min(...minGlobalPrice.filter((price): price is number => price !== undefined)))
       setMaxPrice(Math.max(...maxGlobalPrice.filter((price): price is number => price !== undefined)));
-      setSelectedMaxPrice(Math.max(...maxGlobalPrice.filter((price): price is number => price !== undefined)));
+
     }
-    initGlobalPrice();
-  }, [brandList]);
+    if (!filtered)
+      initGlobalPrice();
+  }, [brandList, list]);
 
   if (!brand) {
     navigate('/');
     return null;
   }
 
-  console.log(brandList);
-
-
   const acceptFunction = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setFiltered(true);
-    setModalCollectionFilterIsOpen(!modalCollectionFilterIsOpen);
+    setSelectedMinPrice(inputMinPrice);
+    setSelectedMaxPrice(inputMaxPrice);
+    dispatch(setIsOpen({ modal: 'modalCollectionFilterIsOpen', value: false }));
   };
 
   const handleOpen = () => {
-    setModalCollectionFilterIsOpen(!modalCollectionFilterIsOpen);
+    dispatch(toggleIsOpen('modalCollectionFilterIsOpen'));
   };
 
   const handleModifyPrice = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.id === 'min') {
-      setSelectedMinPrice(parseInt(e.target.value));
+      if (parseInt(e.target.value) > inputMaxPrice)
+        setInputMinPrice(inputMaxPrice - 10);
+      else
+        setInputMinPrice(parseInt(e.target.value));
     }
     if (e.target.id === 'max') {
-      setSelectedMaxPrice(parseInt(e.target.value));
+      if (parseInt(e.target.value) < inputMinPrice)
+        setInputMaxPrice(inputMinPrice + 10);
+      else
+        setInputMaxPrice(parseInt(e.target.value));
     }
   };
 
@@ -129,11 +142,11 @@ function CollectionPage() {
             <ToggleSwitch />
           </div>
         </div>
-        <Collection list={brandList} />
+        <Collection list={filteredList} />
       </div>
 
       <button className="collectionPage_filterButton" onClick={handleOpen}><VscSettings size={20} />Filtrer et trier</button>
-      <ModalCollectionFilter isOpen={modalCollectionFilterIsOpen} acceptFunction={acceptFunction} cancelFunction={handleOpen} min={minPrice} max={maxPrice} modifyFunction={handleModifyPrice} minValue={selectedMinPrice} maxValue={selectedMaxPrice} />
+      <ModalCollectionFilter isOpen={modalCollectionFilterIsOpen} acceptFunction={acceptFunction} cancelFunction={handleOpen} min={minPrice} max={maxPrice} modifyFunction={handleModifyPrice} minValue={inputMinPrice} maxValue={inputMaxPrice} />
     </div>
   )
 }
