@@ -17,6 +17,7 @@ export const initialState: initialStateModal = {
     selectedMinPrice: 0,
     selectedMaxPrice: 1000,
     isDraging: false,
+    filtered: false,
     minGap: 5,
   }
 }
@@ -33,7 +34,7 @@ const ModalMenu = createSlice({
     },
     setPriceValue: (state, action: PayloadAction<setPriceValuePayload>) => {
       const { name, value } = action.payload;
-      if (name === 'isDraging') {
+      if (name === 'isDraging' || name === 'filtered') {
         if (value === true) state.modalCollectionFilter[name] = true;
         else state.modalCollectionFilter[name] = false;
       }

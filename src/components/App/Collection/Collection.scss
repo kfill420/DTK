@@ -7,7 +7,7 @@
   flex-wrap: wrap;
 
   @include breakpoint.media(desktop) {
-    margin: 0 10%;
+    // margin: 0 10%;
   }
 
   &_product {
