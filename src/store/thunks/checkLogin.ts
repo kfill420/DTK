@@ -14,7 +14,6 @@ const actionCheckToken = createAsyncThunk(
       }
       addTokenJwtToAxiosInstance(token);
       const response = await axiosInstance.post('/valide-token');
-      console.log(response.data);
 
       return { valid: response.data.valid, data: response.data };
     } catch (error) {

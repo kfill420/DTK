@@ -29,6 +29,7 @@
     bottom: 50%;
     transform: translate(-50%, 50%);
     padding: 1.5rem;
+    min-width: 500px;
   }
 
   &_form {
@@ -38,6 +39,7 @@
 
     @include breakpoint.media('tablet_mini') {
       gap: 0.8rem;
+      width: 100%;
     }
   }
 

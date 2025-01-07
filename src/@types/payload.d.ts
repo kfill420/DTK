@@ -4,27 +4,31 @@ export interface changeCredentialsPayload {
 }
 
 export interface modal_setIsOpen {
-  modal: 'burgerModalIsOpen' | 'confirmModalIsOpen';
+  modal: 'burgerModalIsOpen' | 'confirmModalIsOpen' | 'modalCollectionFilterIsOpen';
   value: boolean;
 }
 
-// export interface changeCredentialsPayloadSignin {
-//   token: string;
-//   email: string;
-//   firstname: string;
-//   lastname: string;
-//   address: AddressI;
-// }
+export interface PriceRangeModal {
+  initialMinPrice: number;
+  initialMaxPrice: number;
+  sliderMinValue: number;
+  sliderMaxValue: number;
+  minVal: number;
+  maxVal: number;
+  minInput: number;
+  maxInput: number;
+  isDraging: boolean;
+  minGap: number;
+}
 
-// export type AddressI = {
-//   default: boolean,
-//   firstname: string,
-//   lastname: string,
-//   entreprise: string,
-//   address: string,
-//   precision: string,
-//   postal_code: string,
-//   city: string,
-//   country: string,
-//   phone: string,
-// };
+export interface initialStateModal {
+  burgerModalIsOpen: boolean;
+  confirmModalIsOpen: boolean;
+  modalCollectionFilterIsOpen: boolean;
+  modalCollectionFilter: PriceRangeModal;
+}
+
+export interface setPriceValuePayload {
+  name: keyof PriceRangeModal;
+  value: number | boolean;
+}

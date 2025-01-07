@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useRef, useState } from 'react';
+import { FormEvent, useRef, useState } from 'react';
 import './ModalCollectionFilter.scss';
 import { CSSTransition } from 'react-transition-group';
 import { IoCloseSharp } from "react-icons/io5";
@@ -7,7 +7,7 @@ import { MdKeyboardArrowDown, MdOutlineKeyboardArrowUp } from "react-icons/md";
 import ToggleSwitch from "../../App/ToggleSwitch/ToggleSwitch";
 import PriceSelector from "../../App/PriceSelector/PriceSelector";
 
-function ModalCollectionFilter({ isOpen, acceptFunction, cancelFunction, min, max, modifyFunction, minValue, maxValue }: { isOpen: boolean, acceptFunction: (e: FormEvent<HTMLFormElement>) => void, cancelFunction: () => void, min: number, max: number, modifyFunction: (e: ChangeEvent<HTMLInputElement>) => void, minValue: number, maxValue: number }) {
+function ModalCollectionFilter({ isOpen, acceptFunction, cancelFunction, min, max }: { isOpen: boolean, acceptFunction: (e: FormEvent<HTMLFormElement>) => void, cancelFunction: () => void, min: number, max: number }) {
   const modalCollectionFilterBackgroundRef = useRef<HTMLDivElement>(null);
   const modalCollectionFilterRef = useRef<HTMLDivElement>(null);
   const [priceSectionIsopen, setPriceSectionIsOpen] = useState(false);
@@ -20,7 +20,7 @@ function ModalCollectionFilter({ isOpen, acceptFunction, cancelFunction, min, ma
 
       <CSSTransition nodeRef={modalCollectionFilterRef} in={isOpen} timeout={300} classNames="modalCollectionFilter_slide-up" unmountOnExit>
         <div ref={modalCollectionFilterRef} className="modalCollectionFilter">
-          <form className="modalConfirm_form" onSubmit={acceptFunction} onReset={cancelFunction}>
+          <form className="modalCollectionFilter_form" onSubmit={acceptFunction} onReset={cancelFunction}>
             <div className="modalCollectionFilter_categories">
               <div className="modalCollectionFilter_categories_header">
                 <span className="modalCollectionFilter_categories_text">En stock uniquement</span>
@@ -34,7 +34,7 @@ function ModalCollectionFilter({ isOpen, acceptFunction, cancelFunction, min, ma
                 {priceSectionIsopen ? <MdKeyboardArrowDown size={25} /> : <MdOutlineKeyboardArrowUp size={25} />}
               </div>
               {
-                priceSectionIsopen && <PriceSelector min={min} max={max} change={modifyFunction} minValue={minValue} maxValue={maxValue} />
+                priceSectionIsopen && <PriceSelector min={min} max={max} />
               }
 
             </div>
