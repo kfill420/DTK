@@ -17,6 +17,8 @@ export interface PriceRangeModal {
   maxVal: number;
   minInput: number;
   maxInput: number;
+  selectedMinPrice: number;
+  selectedMaxPrice: number;
   isDraging: boolean;
   minGap: number;
 }
