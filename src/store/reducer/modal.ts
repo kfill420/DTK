@@ -14,6 +14,8 @@ export const initialState: initialStateModal = {
     maxVal: 1000,
     minInput: 0,
     maxInput: 1000,
+    selectedMinPrice: 0,
+    selectedMaxPrice: 1000,
     isDraging: false,
     minGap: 5,
   }

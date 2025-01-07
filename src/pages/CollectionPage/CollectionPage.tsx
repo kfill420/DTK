@@ -4,11 +4,11 @@ import Collection from '../../components/App/Collection/Collection';
 import ToggleSwitch from "../../components/App/ToggleSwitch/ToggleSwitch";
 import { VscSettings } from "react-icons/vsc";
 import ModalCollectionFilter from "../../components/Modal/ModalCollectionFilter/ModalCollectionFilter";
-import { useEffect, useState, ChangeEvent, FormEvent } from "react";
+import { useEffect, useState, FormEvent } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { ProductI } from "../../@types/product";
 import { actionCheckProduct } from "../../store/thunks/checkProduct";
-import { setIsOpen, toggleIsOpen } from "../../store/reducer/modal";
+import { setIsOpen, setPriceValue, toggleIsOpen } from "../../store/reducer/modal";
 
 function CollectionPage() {
   const { brand } = useParams<string>();
@@ -17,16 +17,13 @@ function CollectionPage() {
   const [brandList, setBrandList] = useState<ProductI[]>([]);
   const [filteredList, setFilteredList] = useState<ProductI[]>([]);
   const list = useAppSelector((state) => state.product.list);
-
-  const [minPrice, setMinPrice] = useState(0);
-  const [maxPrice, setMaxPrice] = useState(100);
-  const [selectedMinPrice, setSelectedMinPrice] = useState(0);
-  const [selectedMaxPrice, setSelectedMaxPrice] = useState(100);
-  const [inputMinPrice, setInputMinPrice] = useState(0);
-  const [inputMaxPrice, setInputMaxPrice] = useState(100);
   const [filtered, setFiltered] = useState(false);
 
   const modalCollectionFilterIsOpen = useAppSelector((state) => state.ModalMenu.modalCollectionFilterIsOpen);
+  const minPrice = useAppSelector((state) => state.ModalMenu.modalCollectionFilter.minVal);
+  const maxPrice = useAppSelector((state) => state.ModalMenu.modalCollectionFilter.maxVal);
+  const selectedMinPrice = useAppSelector((state) => state.ModalMenu.modalCollectionFilter.selectedMinPrice);
+  const selectedMaxPrice = useAppSelector((state) => state.ModalMenu.modalCollectionFilter.selectedMaxPrice);
 
   useEffect(() => {
     if (list.length === 0) {
@@ -88,11 +85,12 @@ function CollectionPage() {
       });
 
       if (maxGlobalPrice.length === 0 || minGlobalPrice.length === 0) return;
-
-      setInputMinPrice(Math.min(...minGlobalPrice.filter((price): price is number => price !== undefined)))
-      setInputMaxPrice(Math.max(...maxGlobalPrice.filter((price): price is number => price !== undefined)));
-      setMinPrice(Math.min(...minGlobalPrice.filter((price): price is number => price !== undefined)));
-      setMaxPrice(Math.max(...maxGlobalPrice.filter((price): price is number => price !== undefined)));
+      dispatch(setPriceValue({ name: "minVal", value: Math.min(...minGlobalPrice.filter((price): price is number => price !== undefined)) }));
+      dispatch(setPriceValue({ name: "sliderMinValue", value: Math.min(...minGlobalPrice.filter((price): price is number => price !== undefined)) }));
+      dispatch(setPriceValue({ name: "minInput", value: Math.min(...minGlobalPrice.filter((price): price is number => price !== undefined)) }));
+      dispatch(setPriceValue({ name: "maxVal", value: Math.max(...maxGlobalPrice.filter((price): price is number => price !== undefined)) }));
+      dispatch(setPriceValue({ name: "sliderMaxValue", value: Math.max(...maxGlobalPrice.filter((price): price is number => price !== undefined)) }));
+      dispatch(setPriceValue({ name: "maxInput", value: Math.max(...maxGlobalPrice.filter((price): price is number => price !== undefined)) }));
 
     }
     if (!filtered)
@@ -107,28 +105,14 @@ function CollectionPage() {
   const acceptFunction = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setFiltered(true);
-    setSelectedMinPrice(inputMinPrice);
-    setSelectedMaxPrice(inputMaxPrice);
+    dispatch(setPriceValue({ name: "selectedMinPrice", value: minPrice }));
+    dispatch(setPriceValue({ name: "selectedMaxPrice", value: maxPrice }));
     dispatch(setIsOpen({ modal: 'modalCollectionFilterIsOpen', value: false }));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleOpen = () => {
     dispatch(toggleIsOpen('modalCollectionFilterIsOpen'));
-  };
-
-  const handleModifyPrice = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.id === 'min') {
-      if (parseInt(e.target.value) > inputMaxPrice)
-        setInputMinPrice(inputMaxPrice - 10);
-      else
-        setInputMinPrice(parseInt(e.target.value));
-    }
-    if (e.target.id === 'max') {
-      if (parseInt(e.target.value) < inputMinPrice)
-        setInputMaxPrice(inputMinPrice + 10);
-      else
-        setInputMaxPrice(parseInt(e.target.value));
-    }
   };
 
   return (
@@ -146,7 +130,7 @@ function CollectionPage() {
       </div>
 
       <button className="collectionPage_filterButton" onClick={handleOpen}><VscSettings size={20} />Filtrer et trier</button>
-      <ModalCollectionFilter isOpen={modalCollectionFilterIsOpen} acceptFunction={acceptFunction} cancelFunction={handleOpen} min={minPrice} max={maxPrice} modifyFunction={handleModifyPrice} minValue={inputMinPrice} maxValue={inputMaxPrice} />
+      <ModalCollectionFilter isOpen={modalCollectionFilterIsOpen} acceptFunction={acceptFunction} cancelFunction={handleOpen} min={minPrice} max={maxPrice} />
     </div>
   )
 }
