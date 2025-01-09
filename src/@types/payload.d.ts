@@ -15,8 +15,8 @@ export interface PriceRangeModal {
   sliderMaxValue: number;
   minVal: number;
   maxVal: number;
-  minInput: number;
-  maxInput: number;
+  minInput: string;
+  maxInput: string;
   selectedMinPrice: number;
   selectedMaxPrice: number;
   isDraging: boolean;
@@ -33,5 +33,5 @@ export interface initialStateModal {
 
 export interface setPriceValuePayload {
   name: keyof PriceRangeModal;
-  value: number | boolean;
+  value: number | boolean | string;
 }
