@@ -1,10 +1,18 @@
+import { useRef } from "react";
+import { CSSTransition } from 'react-transition-group';
 import './SpinnerSquare.scss'
 
-function SpinnerSquare() {
+function SpinnerSquare({ isOpen }: { isOpen: boolean }) {
+  const loaderRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div className="spinnerSquare">
-    </div>
+    <CSSTransition nodeRef={loaderRef} in={isOpen} timeout={500} classNames="loader_fade" unmountOnExit>
+      <div ref={loaderRef} className="loader">
+        <div className="spinnerSquare"></div>
+      </div>
+
+    </CSSTransition>
+
   )
 }
 

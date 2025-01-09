@@ -1,8 +1,6 @@
 @use '../../../styles/breakpoint.scss';
 @use '../../../styles/variables' as v;
 
-
-$base: #263238;
 $lite: orange;
 $size: 48px;
 
@@ -95,5 +93,34 @@ $size: 48px;
 
   100% {
     transform: translate(0, 0) rotateX(0) rotateY(360deg)
+  }
+}
+
+.loader {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: black;
+  z-index: 1000;
+
+  &_fade-enter {
+    opacity: 0;
+  }
+
+  &_fade-enter-active {
+    opacity: 1;
+    transition: opacity 500ms;
+  }
+
+  &_fade-exit {
+    opacity: 1;
+  }
+
+  &_fade-exit-active {
+    transition: opacity 500ms;
+    opacity: 0;
   }
 }

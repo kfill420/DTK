@@ -39,31 +39,39 @@ function App() {
       document.body.style.overflow = 'auto';
   }, [modalIsOpen]);
 
-  if (tokenIsLoading || initialCheck) {
-    return (
-      <div className="loader">
-        <SpinnerSquare />
-      </div>
-    )
-  }
+  // if (tokenIsLoading || initialCheck) {
+  //   return (
+  //     <div className="loader">
+  //       <SpinnerSquare />
+  //     </div>
+  //   )
+  // }
 
   return (
     <div className="app">
-      <Header isAuthentificated={isAuthentificated} email={account.email} account_id={account.id} />
-      <ScrollToTop />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/collection/:brand" element={<CollectionPage />} />
-        <Route path="/products/:id" element={<ProductPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/profile" element={<PrivateRoute isAuthenticated={isAuthentificated}><ProfilePage /></PrivateRoute>}>
-          <Route path="" element={<Navigate to="infos" />} />
-          <Route path="params" element={<Params />} />
-          <Route path="order" element={<Order />} />
-          <Route path="infos" element={<Infos account={account} />} />
-        </Route>
-      </Routes>
-      {!noFooterPage && <Footer />}
+
+
+      <SpinnerSquare isOpen={tokenIsLoading || initialCheck} />
+
+
+      <div>
+        <Header isAuthentificated={isAuthentificated} email={account.email} account_id={account.id} />
+        <ScrollToTop />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/collection/:brand" element={<CollectionPage />} />
+          <Route path="/products/:id" element={<ProductPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/profile" element={<PrivateRoute isAuthenticated={isAuthentificated}><ProfilePage /></PrivateRoute>}>
+            <Route path="" element={<Navigate to="infos" />} />
+            <Route path="params" element={<Params />} />
+            <Route path="order" element={<Order />} />
+            <Route path="infos" element={<Infos account={account} />} />
+          </Route>
+        </Routes>
+        {!noFooterPage && <Footer />}
+      </div>
+
     </div>
   )
 }
