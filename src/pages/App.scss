@@ -14,4 +14,13 @@
   height: 100vh;
   width: 100vw;
   background: v.$textColor-colorBlack;
+
+  &-exit {
+    opacity: 1;
+  }
+
+  &-exit-active {
+    transition: opacity 300ms;
+    opacity: 0;
+  }
 }
