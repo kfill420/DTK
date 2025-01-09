@@ -92,10 +92,10 @@ function CollectionPage() {
       if (maxGlobalPrice.length === 0 || minGlobalPrice.length === 0) return;
       dispatch(setPriceValue({ name: "minVal", value: Math.min(...minGlobalPrice.filter((price): price is number => price !== undefined)) }));
       dispatch(setPriceValue({ name: "sliderMinValue", value: Math.min(...minGlobalPrice.filter((price): price is number => price !== undefined)) }));
-      dispatch(setPriceValue({ name: "minInput", value: Math.min(...minGlobalPrice.filter((price): price is number => price !== undefined)) }));
+      dispatch(setPriceValue({ name: "minInput", value: Math.min(...minGlobalPrice.filter((price): price is number => price !== undefined)).toString() }));
       dispatch(setPriceValue({ name: "maxVal", value: Math.max(...maxGlobalPrice.filter((price): price is number => price !== undefined)) }));
       dispatch(setPriceValue({ name: "sliderMaxValue", value: Math.max(...maxGlobalPrice.filter((price): price is number => price !== undefined)) }));
-      dispatch(setPriceValue({ name: "maxInput", value: Math.max(...maxGlobalPrice.filter((price): price is number => price !== undefined)) }));
+      dispatch(setPriceValue({ name: "maxInput", value: Math.max(...maxGlobalPrice.filter((price): price is number => price !== undefined)).toString() }));
 
     }
     if (!filtered)

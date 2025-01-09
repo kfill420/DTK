@@ -12,8 +12,8 @@ export const initialState: initialStateModal = {
     sliderMaxValue: 1000,
     minVal: 0,
     maxVal: 1000,
-    minInput: 0,
-    maxInput: 1000,
+    minInput: '',
+    maxInput: '',
     selectedMinPrice: 0,
     selectedMaxPrice: 1000,
     isDraging: false,
@@ -34,11 +34,16 @@ const ModalMenu = createSlice({
     },
     setPriceValue: (state, action: PayloadAction<setPriceValuePayload>) => {
       const { name, value } = action.payload;
-      if (name === 'isDraging' || name === 'filtered') {
+      console.log(typeof (value), value, name);
+
+      if (typeof (value) === "boolean" && (name === 'isDraging' || name === 'filtered')) {
         if (value === true) state.modalCollectionFilter[name] = true;
         else state.modalCollectionFilter[name] = false;
       }
-      else if (typeof (value) === "number") {
+      else if (typeof (value) === "string" && (name === "minInput" || name === "maxInput")) {
+        state.modalCollectionFilter[name] = value;
+      }
+      else if (typeof (value) === "number" && (name === "initialMinPrice" || name === "initialMaxPrice" || name === "sliderMinValue" || name === "sliderMaxValue" || name === "minVal" || name === "maxVal" || name === "selectedMinPrice" || name === "selectedMaxPrice" || name === "minGap")) {
         state.modalCollectionFilter[name] = value;
       }
     }

@@ -26,7 +26,7 @@ const CatlogPriceFilter = ({ direct }: { direct?: boolean }) => {
     const value = parseInt(e.target.value, 10);
     if (value >= sliderMinValue && maxVal - value >= minGap) {
       dispatch(setPriceValue({ name: "minVal", value }));
-      dispatch(setPriceValue({ name: "minInput", value }));
+      dispatch(setPriceValue({ name: "minInput", value: e.target.value }));
       if (direct) {
         dispatch(setPriceValue({ name: "filtered", value: true }));
         dispatch(setPriceValue({ name: "selectedMinPrice", value: value }));
@@ -39,7 +39,7 @@ const CatlogPriceFilter = ({ direct }: { direct?: boolean }) => {
     const value = parseInt(e.target.value, 10);
     if (value <= sliderMaxValue && value - minVal >= minGap) {
       dispatch(setPriceValue({ name: "maxVal", value }));
-      dispatch(setPriceValue({ name: "maxInput", value }));
+      dispatch(setPriceValue({ name: "maxInput", value: e.target.value }));
       if (direct) {
         dispatch(setPriceValue({ name: "filtered", value: true }));
         dispatch(setPriceValue({ name: "selectedMaxPrice", value: value }));
@@ -62,7 +62,8 @@ const CatlogPriceFilter = ({ direct }: { direct?: boolean }) => {
   };
 
   const handleMinInput = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value === "" ? sliderMinValue : parseInt(e.target.value, 10);
+    // const value = e.target.value === "" ? sliderMinValue : parseInt(e.target.value, 10);
+    const value = parseInt(e.target.value, 10);
     dispatch(setPriceValue({ name: "minInput", value }));
     // if (value >= sliderMinValue && value < maxVal - minGap) {
     //   dispatch(setPriceValue({ name: "minInput", value }));
@@ -71,8 +72,11 @@ const CatlogPriceFilter = ({ direct }: { direct?: boolean }) => {
   };
 
   const handleMaxInput = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value === "" ? sliderMaxValue : parseInt(e.target.value, 10);
+    // const value = e.target.value === "" ? sliderMaxValue : parseInt(e.target.value, 10);
+    const value = e.target.value;
     dispatch(setPriceValue({ name: "maxInput", value }));
+
+
     // if (value <= sliderMaxValue && value > minVal + minGap) {
     //   dispatch(setPriceValue({ name: "maxInput", value }));
     //   dispatch(setPriceValue({ name: "maxVal", value }));
