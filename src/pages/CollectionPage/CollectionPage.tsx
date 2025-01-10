@@ -8,9 +8,9 @@ import { useEffect, useState, FormEvent } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { ProductI } from "../../@types/product";
 import { actionCheckProduct } from "../../store/thunks/checkProduct";
-import { setIsOpen, setPriceValue, toggleIsOpen } from "../../store/reducer/modal";
+import { setIsOpen, setFilterValue, toggleIsOpen } from "../../store/reducer/modal";
 import PriceSelector from "../../components/App/PriceSelector/PriceSelector";
-import { MdKeyboardArrowDown, MdOutlineKeyboardArrowUp } from "react-icons/md";
+import { MdOutlineKeyboardArrowUp } from "react-icons/md";
 
 function CollectionPage() {
   const { brand } = useParams<string>();
@@ -21,6 +21,7 @@ function CollectionPage() {
   const list = useAppSelector((state) => state.product.list);
   const [priceSectionIsopen, setPriceSectionIsOpen] = useState(false);
 
+  const available = useAppSelector((state) => state.ModalMenu.modalCollectionFilter.available);
   const modalCollectionFilterIsOpen = useAppSelector((state) => state.ModalMenu.modalCollectionFilterIsOpen);
   const minPrice = useAppSelector((state) => state.ModalMenu.modalCollectionFilter.minVal);
   const maxPrice = useAppSelector((state) => state.ModalMenu.modalCollectionFilter.maxVal);
@@ -38,12 +39,12 @@ function CollectionPage() {
     switch (brand) {
       case 'iPhone':
         setBrandList(list.filter((product) => product.brand === 'iPhone'));
-        dispatch(setPriceValue({ name: "filtered", value: false }));
+        dispatch(setFilterValue({ name: "filtered", value: false }));
         // setFiltered(false);
         break;
       case 'Samsung':
         setBrandList(list.filter((product) => product.brand === 'Samsung'));
-        dispatch(setPriceValue({ name: "filtered", value: false }));
+        dispatch(setFilterValue({ name: "filtered", value: false }));
         // setFiltered(false);
         break;
     }
@@ -90,12 +91,12 @@ function CollectionPage() {
       });
 
       if (maxGlobalPrice.length === 0 || minGlobalPrice.length === 0) return;
-      dispatch(setPriceValue({ name: "minVal", value: Math.min(...minGlobalPrice.filter((price): price is number => price !== undefined)) }));
-      dispatch(setPriceValue({ name: "sliderMinValue", value: Math.min(...minGlobalPrice.filter((price): price is number => price !== undefined)) }));
-      dispatch(setPriceValue({ name: "minInput", value: Math.min(...minGlobalPrice.filter((price): price is number => price !== undefined)).toString() }));
-      dispatch(setPriceValue({ name: "maxVal", value: Math.max(...maxGlobalPrice.filter((price): price is number => price !== undefined)) }));
-      dispatch(setPriceValue({ name: "sliderMaxValue", value: Math.max(...maxGlobalPrice.filter((price): price is number => price !== undefined)) }));
-      dispatch(setPriceValue({ name: "maxInput", value: Math.max(...maxGlobalPrice.filter((price): price is number => price !== undefined)).toString() }));
+      dispatch(setFilterValue({ name: "minVal", value: Math.min(...minGlobalPrice.filter((price): price is number => price !== undefined)) }));
+      dispatch(setFilterValue({ name: "sliderMinValue", value: Math.min(...minGlobalPrice.filter((price): price is number => price !== undefined)) }));
+      dispatch(setFilterValue({ name: "minInput", value: Math.min(...minGlobalPrice.filter((price): price is number => price !== undefined)).toString() }));
+      dispatch(setFilterValue({ name: "maxVal", value: Math.max(...maxGlobalPrice.filter((price): price is number => price !== undefined)) }));
+      dispatch(setFilterValue({ name: "sliderMaxValue", value: Math.max(...maxGlobalPrice.filter((price): price is number => price !== undefined)) }));
+      dispatch(setFilterValue({ name: "maxInput", value: Math.max(...maxGlobalPrice.filter((price): price is number => price !== undefined)).toString() }));
 
     }
     if (!filtered)
@@ -107,11 +108,19 @@ function CollectionPage() {
     return null;
   }
 
+  const toggleAvailable = () => {
+    dispatch(setFilterValue({ name: "available", value: !available }));
+  };
+
+  const handlePriceSectionClick = () => {
+    setPriceSectionIsOpen(!priceSectionIsopen)
+  };
+
   const acceptFunction = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(setPriceValue({ name: "filtered", value: true }));
-    dispatch(setPriceValue({ name: "selectedMinPrice", value: minPrice }));
-    dispatch(setPriceValue({ name: "selectedMaxPrice", value: maxPrice }));
+    dispatch(setFilterValue({ name: "filtered", value: true }));
+    dispatch(setFilterValue({ name: "selectedMinPrice", value: minPrice }));
+    dispatch(setFilterValue({ name: "selectedMaxPrice", value: maxPrice }));
     dispatch(setIsOpen({ modal: 'modalCollectionFilterIsOpen', value: false }));
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -128,23 +137,23 @@ function CollectionPage() {
           <h3 className="collectionPage_container_filter_title"><VscSettings size={20} /> Filtres</h3>
           <div className="collectionPage_container_filter_available">
             <span className="collectionPage_container_filter_available_text">En stock uniquement</span>
-            <ToggleSwitch />
+            <ToggleSwitch value={available} toggleValue={toggleAvailable} />
           </div>
-          <div className="collectionPage_container_filter_price">
-            <div className="collectionPage_container_filter_price_container" onClick={() => setPriceSectionIsOpen(!priceSectionIsopen)}>
-              <span className="collectionPage_container_filter_price_container_text">Prix</span>
-              {priceSectionIsopen ? <MdKeyboardArrowDown size={25} /> : <MdOutlineKeyboardArrowUp size={25} />}
-            </div>
-            {
-              priceSectionIsopen && <PriceSelector min={minPrice} max={maxPrice} direct={true} />
-            }
 
+          <div className={priceSectionIsopen ? "collectionPage_container_filter_price collectionPage_container_filter_price-open" : "collectionPage_container_filter_price"}>
+            <div className="collectionPage_container_filter_price_container">
+              <span className="collectionPage_container_filter_price_container_text">Prix</span>
+              <div className={priceSectionIsopen ? "collectionPage_container_filter_price_container_icon collectionPage_container_filter_price_container_icon-open" : "collectionPage_container_filter_price_container_icon"} onClick={handlePriceSectionClick}>
+                <MdOutlineKeyboardArrowUp size={25} />
+              </div>
+
+            </div>
+            <PriceSelector isOpen={priceSectionIsopen} min={minPrice} max={maxPrice} direct={true} />
           </div>
         </div>
         <div className="collectionPage_container_collection">
           <Collection list={filteredList} numberPerRow={3} />
         </div>
-
       </div>
 
       <button className="collectionPage_filterButton" onClick={handleOpen}><VscSettings size={20} />Filtrer et trier</button>

@@ -195,8 +195,16 @@
           padding: 0.5rem;
           border-radius: 10px;
 
-          &:hover {
+          &_icon {
+            transition: transform 0.3s;
+            transform: rotate(0deg);
 
+            &-open {
+              transform: rotate(180deg);
+            }
+          }
+
+          &:hover {
             background-color: v.$textColor-colorLightGray;
           }
         }
@@ -207,7 +215,7 @@
           right: 0;
           display: none;
           flex-direction: column;
-          padding: 1rem;
+          padding: 0rem 1rem;
           background-color: v.$bgColor-White;
           box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
           transform: translate(-1rem, -1rem);
@@ -215,9 +223,36 @@
           gap: 0.5rem;
           border-radius: 5px;
           z-index: 1;
+          height: 0px;
+          transition: height 0.3s, padding 0.5s;
+          overflow: hidden;
 
-          &-isOpen {
+          &-open {
             display: flex;
+            height: 0px;
+            padding: 0rem 1rem;
+          }
+
+          &-open-active {
+            display: flex;
+            height: 185px;
+            padding: 1rem 1rem;
+          }
+
+          &-exit {
+            display: flex;
+            height: 185px;
+            padding: 1rem 1rem;
+          }
+
+          &-exit-active {
+            display: flex;
+            height: 0px;
+            padding: 0rem 1rem;
+          }
+
+          &-close {
+            display: none;
           }
 
           &_header {

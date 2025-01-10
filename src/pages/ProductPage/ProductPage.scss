@@ -136,6 +136,7 @@
   display: flex;
   flex-direction: column;
   border-top: solid 2px v.$textColor-colorLightGray;
+  align-items: center;
 
   &_title {
     text-align: center;
@@ -151,6 +152,7 @@
     background-color: v.$textColor-colorLightGrayTrans2;
     padding: 1rem;
     border-radius: 20px;
+    width: 100%;
 
     &_author {
       display: flex;
@@ -196,5 +198,10 @@
     border: none;
     background-color: v.$textColor-primary;
     color: v.$bgColor-White;
+    width: 100%;
+
+    @include breakpoint.media('tablet_xl_mini') {
+      width: 30%;
+    }
   }
 }

@@ -1,7 +1,7 @@
 import { ChangeEvent, useEffect } from "react";
 import "./DoubleRangeSelector.scss";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
-import { setPriceValue } from "../../../store/reducer/modal";
+import { setFilterValue } from "../../../store/reducer/modal";
 
 const CatlogPriceFilter = ({ direct }: { direct?: boolean }) => {
   const dispatch = useAppDispatch();
@@ -25,11 +25,11 @@ const CatlogPriceFilter = ({ direct }: { direct?: boolean }) => {
   const slideMin = (e: ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value, 10);
     if (value >= sliderMinValue && maxVal - value >= minGap) {
-      dispatch(setPriceValue({ name: "minVal", value }));
-      dispatch(setPriceValue({ name: "minInput", value: e.target.value }));
+      dispatch(setFilterValue({ name: "minVal", value }));
+      dispatch(setFilterValue({ name: "minInput", value: e.target.value }));
       if (direct) {
-        dispatch(setPriceValue({ name: "filtered", value: true }));
-        dispatch(setPriceValue({ name: "selectedMinPrice", value: value }));
+        dispatch(setFilterValue({ name: "filtered", value: true }));
+        dispatch(setFilterValue({ name: "selectedMinPrice", value: value }));
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     }
@@ -38,11 +38,11 @@ const CatlogPriceFilter = ({ direct }: { direct?: boolean }) => {
   const slideMax = (e: ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value, 10);
     if (value <= sliderMaxValue && value - minVal >= minGap) {
-      dispatch(setPriceValue({ name: "maxVal", value }));
-      dispatch(setPriceValue({ name: "maxInput", value: e.target.value }));
+      dispatch(setFilterValue({ name: "maxVal", value }));
+      dispatch(setFilterValue({ name: "maxInput", value: e.target.value }));
       if (direct) {
-        dispatch(setPriceValue({ name: "filtered", value: true }));
-        dispatch(setPriceValue({ name: "selectedMaxPrice", value: value }));
+        dispatch(setFilterValue({ name: "filtered", value: true }));
+        dispatch(setFilterValue({ name: "selectedMaxPrice", value: value }));
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     }
@@ -64,22 +64,22 @@ const CatlogPriceFilter = ({ direct }: { direct?: boolean }) => {
   const handleMinInput = (e: ChangeEvent<HTMLInputElement>) => {
     // const value = e.target.value === "" ? sliderMinValue : parseInt(e.target.value, 10);
     const value = parseInt(e.target.value, 10);
-    dispatch(setPriceValue({ name: "minInput", value }));
+    dispatch(setFilterValue({ name: "minInput", value }));
     // if (value >= sliderMinValue && value < maxVal - minGap) {
-    //   dispatch(setPriceValue({ name: "minInput", value }));
-    //   dispatch(setPriceValue({ name: "minVal", value }));
+    //   dispatch(setFilterValue({ name: "minInput", value }));
+    //   dispatch(setFilterValue({ name: "minVal", value }));
     // }
   };
 
   const handleMaxInput = (e: ChangeEvent<HTMLInputElement>) => {
     // const value = e.target.value === "" ? sliderMaxValue : parseInt(e.target.value, 10);
     const value = e.target.value;
-    dispatch(setPriceValue({ name: "maxInput", value }));
+    dispatch(setFilterValue({ name: "maxInput", value }));
 
 
     // if (value <= sliderMaxValue && value > minVal + minGap) {
-    //   dispatch(setPriceValue({ name: "maxInput", value }));
-    //   dispatch(setPriceValue({ name: "maxVal", value }));
+    //   dispatch(setFilterValue({ name: "maxInput", value }));
+    //   dispatch(setFilterValue({ name: "maxVal", value }));
     // }
   };
 
@@ -91,10 +91,10 @@ const CatlogPriceFilter = ({ direct }: { direct?: boolean }) => {
         value >= sliderMinValue &&
         value < maxVal - minGap
       ) {
-        dispatch(setPriceValue({ name: "minVal", value }));
+        dispatch(setFilterValue({ name: "minVal", value }));
         if (direct) {
-          dispatch(setPriceValue({ name: "filtered", value: true }));
-          dispatch(setPriceValue({ name: "selectedMinPrice", value: value }));
+          dispatch(setFilterValue({ name: "filtered", value: true }));
+          dispatch(setFilterValue({ name: "selectedMinPrice", value: value }));
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -103,10 +103,10 @@ const CatlogPriceFilter = ({ direct }: { direct?: boolean }) => {
         value <= sliderMaxValue &&
         value > minVal + minGap
       ) {
-        dispatch(setPriceValue({ name: "maxVal", value }));
+        dispatch(setFilterValue({ name: "maxVal", value }));
         if (direct) {
-          dispatch(setPriceValue({ name: "filtered", value: true }));
-          dispatch(setPriceValue({ name: "selectedMaxPrice", value: value }));
+          dispatch(setFilterValue({ name: "filtered", value: true }));
+          dispatch(setFilterValue({ name: "selectedMaxPrice", value: value }));
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }
       }
@@ -114,11 +114,11 @@ const CatlogPriceFilter = ({ direct }: { direct?: boolean }) => {
   };
 
   const startDrag = () => {
-    dispatch(setPriceValue({ name: "isDraging", value: true }));
+    dispatch(setFilterValue({ name: "isDraging", value: true }));
   };
 
   const stopDrag = () => {
-    dispatch(setPriceValue({ name: "isDraging", value: false }));
+    dispatch(setFilterValue({ name: "isDraging", value: false }));
   };
 
   return (

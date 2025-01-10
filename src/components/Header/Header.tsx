@@ -8,7 +8,7 @@ import BurgerButton from './BurgerMenu/BurgerButton';
 import StoreBurgerMenu from './BurgerMenu/StoreBurgerMenu/BurgerMenu';
 import ProfileBurgerMenu from './BurgerMenu/ProfileBurgerMenu/ProfileBurgerMenu';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
+import { IoIosArrowUp } from 'react-icons/io';
 import { useState } from 'react';
 import { actionLogOut } from '../../store/reducer/account';
 import ModalConfirm from '../Modal/ModalConfirm/ModalConfirm';
@@ -26,10 +26,31 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
   const dispatch = useAppDispatch();
   const burgerMenuIsOpen = useAppSelector((state) => state.ModalMenu.burgerModalIsOpen);
   const confirmModalIsOpen = useAppSelector((state) => state.ModalMenu.confirmModalIsOpen);
-  const [popupisOpen, setpopupIsOpen] = useState(false);
+  // const [popupisOpen, setpopupIsOpen] = useState(false);
+  // const [popupisOpenActive, setpopupIsOpenActive] = useState(false);
+  // const [popupisExit, setpopupIsExit] = useState(false);
+  // const [popupisExitActive, setpopupIsExitActive] = useState(false);
+  // const [popupisExitend, setpopupIsExitEnd] = useState(false);
+  const [stateAnimationPopup, setstateAnimationPopup] = useState<string>('close');
 
   const handlePopupButton = () => {
-    setpopupIsOpen(!popupisOpen);
+    switch (stateAnimationPopup) {
+      case 'close':
+        setstateAnimationPopup('open');
+        setTimeout(() => {
+          setstateAnimationPopup('open-active');
+        }, 1);
+        break;
+      case 'open-active':
+        setstateAnimationPopup('exit');
+        setTimeout(() => {
+          setstateAnimationPopup('exit-active');
+          setTimeout(() => {
+            setstateAnimationPopup('close');
+          }, 300);
+        }, 1);
+        break;
+    }
   }
 
   const handleDisconnectButton = () => {
@@ -44,6 +65,15 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
   const handleCancelAccounDeletetButton = () => {
     dispatch(setIsOpen({ modal: 'confirmModalIsOpen', value: false }));
   }
+
+  const animePopup = (className: string) => {
+    if (stateAnimationPopup) {
+      return `${className}-${stateAnimationPopup}`;
+    }
+  }
+
+  // if (test.current)
+  //   console.log(window.getComputedStyle(test.current).height);
 
   return (
     <>
@@ -61,9 +91,12 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
             <div onClick={handlePopupButton} className="header-profile_right">
               <div className="header-profile_right_container">
                 <PiUserCircleThin size={30} />
-                {popupisOpen ? <IoIosArrowDown size={15} /> : <IoIosArrowUp size={15} />}
+                <div className={stateAnimationPopup === 'open-active' ? "header-profile_right_container_icon header-profile_right_container_icon-open" : "header-profile_right_container_icon"}>
+                  <IoIosArrowUp size={15} />
+                </div>
+
               </div>
-              <div className={popupisOpen ? "header-profile_right_popup header-profile_right_popup-isOpen" : "header-profile_right_popup"}>
+              <div className={animePopup("header-profile_right_popup header-profile_right_popup")}>
                 <div className="header-profile_right_popup_header">
                   <PiUserCircleThin size={30} />
                   <span className="header-profile_right_popup_header_email">{email}</span>

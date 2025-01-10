@@ -6,6 +6,8 @@ export const initialState: initialStateModal = {
   confirmModalIsOpen: false,
   modalCollectionFilterIsOpen: false,
   modalCollectionFilter: {
+    available: true,
+
     initialMinPrice: 0,
     initialMaxPrice: 1000,
     sliderMinValue: 0,
@@ -32,11 +34,9 @@ const ModalMenu = createSlice({
     setIsOpen: (state, action: PayloadAction<modal_setIsOpen>) => {
       state[action.payload.modal] = action.payload.value;
     },
-    setPriceValue: (state, action: PayloadAction<setPriceValuePayload>) => {
+    setFilterValue: (state, action: PayloadAction<setPriceValuePayload>) => {
       const { name, value } = action.payload;
-      console.log(typeof (value), value, name);
-
-      if (typeof (value) === "boolean" && (name === 'isDraging' || name === 'filtered')) {
+      if (typeof (value) === "boolean" && (name === 'isDraging' || name === 'filtered' || name === 'available')) {
         if (value === true) state.modalCollectionFilter[name] = true;
         else state.modalCollectionFilter[name] = false;
       }
@@ -50,5 +50,5 @@ const ModalMenu = createSlice({
   }
 })
 
-export const { toggleIsOpen, setIsOpen, setPriceValue } = ModalMenu.actions;
+export const { toggleIsOpen, setIsOpen, setFilterValue } = ModalMenu.actions;
 export default ModalMenu.reducer;
