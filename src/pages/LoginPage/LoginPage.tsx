@@ -5,6 +5,7 @@ import { TbArrowBackUpDouble } from "react-icons/tb";
 
 import './LoginPage.scss'
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useRef } from "react";
 
 function LoginPage() {
   const dispatch = useAppDispatch();
@@ -19,7 +20,35 @@ function LoginPage() {
   const errorSignup = useAppSelector((state) => state.account.credentials.errorSignup);
   const errorSignin = useAppSelector((state) => state.account.credentials.errorSignup);
 
+  const connectionRef = useRef<HTMLInputElement>(null);
+  const loginRef = useRef<HTMLInputElement>(null);
+  const signupRef = useRef<HTMLInputElement>(null);
+
   const navigate = useNavigate();
+
+  useEffect(() => {
+    switch (connection) {
+      case 'checking':
+        if (connectionRef.current) {
+          connectionRef.current.focus();
+        }
+        break;
+      case 'login':
+        if (loginRef.current) {
+          setTimeout(() => {
+            loginRef.current?.focus();
+          }, 500);
+        }
+
+        break;
+      case 'signup':
+        if (signupRef.current) {
+          setTimeout(() => {
+            signupRef.current?.focus();
+          }, 500);
+        }
+    }
+  }, [connection])
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target as { name: 'email' | 'password' | 'passwordConfirm' | 'passwordSignin', value: string };;
@@ -56,7 +85,7 @@ function LoginPage() {
         <form onSubmit={handleEmailSubmit} className="connection_form">
           <span className="connection_form_title">Se connecter</span>
           <label htmlFor="mail" className="connection_form_mailLabel">Saisissez votre adresse e-mail.</label>
-          <input type="mail" placeholder='E-mail' name='email' value={mailValue} onChange={handleChange} className="connection_form_mailInput" />
+          <input type="mail" placeholder='E-mail' name='email' ref={connectionRef} value={mailValue} onChange={handleChange} className="connection_form_mailInput" />
           <button type="submit" className={validFormConnection ? "connection_form_mailButton" : "connection_form_mailButton connection_form_mailButton-disabled"} disabled={!validFormConnection}>Continuer</button>
         </form>
         <div className="connection_bottom">
@@ -69,7 +98,7 @@ function LoginPage() {
         <form onSubmit={handleSiginSubmit} className="login_form">
           <span className="login_form_title">Se connecter</span>
           <label htmlFor="password" className="login_form_mailLabel">Indiquer votre mot de passe.</label>
-          <input type="password" placeholder='Mot de passe' name='passwordSignin' value={passwordSigninValue} onChange={handleChange} className="login_form_mailInput" />
+          <input type="password" placeholder='Mot de passe' name='passwordSignin' ref={loginRef} value={passwordSigninValue} onChange={handleChange} className="login_form_mailInput" />
           <button type="submit" className="login_form_mailButton">Continuer</button>
         </form>
         <div className="login_form_errors">
@@ -86,7 +115,7 @@ function LoginPage() {
           <span className="signup_form_title">S'inscrire</span>
           <fieldset className="signup_form_password">
             <label htmlFor="password" className="signup_form_password_label">Choisissez votre mot de passe.</label>
-            <input type="password" placeholder='Mot de passe' name='password' value={passwordValue} onChange={handleChange} className="signup_form_password_input" />
+            <input type="password" placeholder='Mot de passe' name='password' ref={signupRef} value={passwordValue} onChange={handleChange} className="signup_form_password_input" />
           </fieldset>
 
           <div className="signup_form_errors">

@@ -10,7 +10,7 @@ import LoginPage from './LoginPage/LoginPage';
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { actionCheckToken } from '../store/thunks/checkLogin';
-import PrivateRoute from '../components/App/PrivateRoute/PrivateRoute';
+import { NonPrivateRoute, PrivateRoute } from '../components/App/PrivateRoute/PrivateRoute';
 import ProfilePage from './ProfilePage/ProfilePage';
 import Order from './ProfilePage/Order/Order';
 import Params from './ProfilePage/Params/Params';
@@ -59,8 +59,8 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/collection/:brand" element={<CollectionPage />} />
         <Route path="/products/:id" element={<ProductPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/cart" element={<PrivateRoute isAuthenticated={isAuthentificated}><CartPage /></PrivateRoute>}></Route>
+        <Route path="/login" element={<NonPrivateRoute isAuthenticated={isAuthentificated}><LoginPage /></NonPrivateRoute>}></Route>
+        <Route path="/cart" element={<CartPage />} />
         <Route path="/profile" element={<PrivateRoute isAuthenticated={isAuthentificated}><ProfilePage /></PrivateRoute>}>
           <Route path="" element={<Navigate to="infos" />} />
           <Route path="params" element={<Params />} />
