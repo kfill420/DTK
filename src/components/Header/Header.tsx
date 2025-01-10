@@ -1,8 +1,8 @@
 import './Header.scss'
 import { FaRegUser } from "react-icons/fa";
-import { RiShoppingCart2Line } from "react-icons/ri";
 import { PiSignInFill } from "react-icons/pi";
 import { PiUserCircleThin } from "react-icons/pi";
+import { BiBasket } from "react-icons/bi";
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import BurgerButton from './BurgerMenu/BurgerButton';
 import StoreBurgerMenu from './BurgerMenu/StoreBurgerMenu/BurgerMenu';
@@ -26,11 +26,6 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
   const dispatch = useAppDispatch();
   const burgerMenuIsOpen = useAppSelector((state) => state.ModalMenu.burgerModalIsOpen);
   const confirmModalIsOpen = useAppSelector((state) => state.ModalMenu.confirmModalIsOpen);
-  // const [popupisOpen, setpopupIsOpen] = useState(false);
-  // const [popupisOpenActive, setpopupIsOpenActive] = useState(false);
-  // const [popupisExit, setpopupIsExit] = useState(false);
-  // const [popupisExitActive, setpopupIsExitActive] = useState(false);
-  // const [popupisExitend, setpopupIsExitEnd] = useState(false);
   const [stateAnimationPopup, setstateAnimationPopup] = useState<string>('close');
 
   const handlePopupButton = () => {
@@ -137,8 +132,8 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
                 </Link>
               }
 
-              <Link to="/login" className={location.pathname === '/' ? "header_profile_links header_profile_links-home" : "header_profile_links"}>
-                <RiShoppingCart2Line className="header_profile_links_link" size={20} />
+              <Link to="/cart" className={location.pathname === '/' ? "header_profile_links header_profile_links-home" : "header_profile_links"}>
+                <BiBasket className="header_profile_links_link" size={20} />
               </Link>
             </div>
           </div >

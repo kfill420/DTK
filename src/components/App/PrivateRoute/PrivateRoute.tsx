@@ -10,4 +10,8 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, isAuthenticated }
     return isAuthenticated ? children : <Navigate to="/login" />;
 };
 
-export default PrivateRoute;
+const NonPrivateRoute: React.FC<PrivateRouteProps> = ({ children, isAuthenticated }) => {
+    return isAuthenticated ? <Navigate to="/" /> : children;
+};
+
+export {PrivateRoute, NonPrivateRoute};

@@ -1,4 +1,49 @@
 @use '../../styles/breakpoint.scss';
 @use '../../styles/variables' as v;
 
-.cartPage {}
+.cartPage {
+  margin-top: 3rem;
+
+  &_noCart {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+
+    &_iconContainer {
+      position: relative;
+
+      &_icon {
+        position: relative;
+      }
+
+      &_nbrArticle {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        top: 0;
+        right: 0;
+        font-size: 0.7rem;
+        font-weight: 600;
+        background-color: v.$textColor-colorBlack;
+        color: v.$textColor-colorwhite;
+        padding: 0.1rem 0.4rem 0.1rem 0.4rem;
+        border-radius: 50px;
+      }
+    }
+
+    &_title {
+      font-size: 1.5rem;
+      font-weight: 500;
+    }
+
+    &_link {
+      text-decoration: none;
+      color: v.$textColor-colorWhite;
+      background-color: v.$bgColor-primary;
+      padding: 1rem 2rem;
+      border-radius: 30px;
+    }
+  }
+}
