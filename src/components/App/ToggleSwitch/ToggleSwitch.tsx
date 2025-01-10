@@ -1,10 +1,10 @@
 import './ToggleSwitch.scss'
 
-function ToggleSwitch() {
+function ToggleSwitch({ value, toggleValue }: { value: boolean, toggleValue: () => void }) {
 
   return (
-    <div className="checkbox-wrapper-51">
-      <input id="cbx-51" type="checkbox" />
+    <div className="toggleSwitch">
+      <input id="cbx-51" type="checkbox" checked={value} onChange={toggleValue} />
       <label className="toggle" htmlFor="cbx-51">
         <span>
           <svg viewBox="0 0 10 10" height="10px" width="10px">

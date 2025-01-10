@@ -3,10 +3,30 @@
 
 /* From Uiverse.io by Li-Deheng */
 .card-conteiner {
+  overflow: hidden;
+
   cursor: default;
   --color-primary: #275efe;
   --color-headline: #3f4656;
   --color-text: #99a3ba;
+
+  &_fade-enter {
+    opacity: 0;
+  }
+
+  &_fade-enter-active {
+    opacity: 1;
+    transition: opacity 500ms ease-in-out;
+  }
+
+  &_fade-exit {
+    opacity: 1;
+  }
+
+  &_fade-exit-active {
+    transition: opacity 200ms ease-in-out;
+    opacity: 0;
+  }
 }
 
 .card-content {

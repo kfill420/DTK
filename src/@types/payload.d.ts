@@ -9,6 +9,7 @@ export interface modal_setIsOpen {
 }
 
 export interface PriceRangeModal {
+  available: boolean;
   initialMinPrice: number;
   initialMaxPrice: number;
   sliderMinValue: number;
@@ -35,3 +36,7 @@ export interface setPriceValuePayload {
   name: keyof PriceRangeModal;
   value: number | boolean | string;
 }
+
+// export interface stateAnimationPopupPayload {
+//   state: 'close' | 'open' | 'open-active' | 'exit' | 'exit-active' | 'exit-end';
+// }
