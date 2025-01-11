@@ -1,12 +1,9 @@
-import { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { BiBasket } from "react-icons/bi";
 import './CartPage.scss'
 import { Link } from "react-router-dom";
 
 
 function CartPage() {
-  const dispatch = useAppDispatch();
 
   return (
     <div className="cartPage">
