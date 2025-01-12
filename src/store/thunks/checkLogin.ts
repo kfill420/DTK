@@ -4,24 +4,27 @@ import axiosInstance, { addTokenJwtToAxiosInstance } from '../../axios/axios';
 import { addTokenAndPseudoToLocalStorage, disconnectLocalStorage } from '../../localStorage/localStorage';
 import { AxiosError } from 'axios';
 import { escapeHtml } from "../../utils/escapeHtml";
+import { checkTokenExpiration } from "../../utils/checkTokenExpiration";
+import { actionCheckTokenPayload, RejectPayload } from "../../@types/payload";
 
-const actionCheckToken = createAsyncThunk(
+const actionCheckToken = createAsyncThunk<actionCheckTokenPayload, void, { rejectValue: RejectPayload }>(
   'account/CHECK_TOKEN',
   async (_, thunkAPI) => {
     try {
       const token = localStorage.getItem('token');
-      if (!token) {
-        return { valid: false };
-      }
-      addTokenJwtToAxiosInstance(token);
-      const response = await axiosInstance.post('/valide-token');
+      if (checkTokenExpiration() === false)
+        return thunkAPI.rejectWithValue({ tokenExpired: true });
 
+      if (token)
+        addTokenJwtToAxiosInstance(token);
+
+      const response = await axiosInstance.post('/valide-token');
       return { valid: response.data.valid, data: response.data };
     } catch (error) {
       console.log(error);
       disconnectLocalStorage();
       const axiosError = error as AxiosError;
-      return thunkAPI.rejectWithValue(axiosError.response?.data);
+      return thunkAPI.rejectWithValue(axiosError.response?.data as RejectPayload);
     }
   }
 );

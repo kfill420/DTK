@@ -40,7 +40,7 @@ const HamburgerMenu = ({ isOpen }: { isOpen: boolean }) => {
                 <IoLogoWhatsapp size={25} />
               </div>
               <div className="burgerMenu_footer_account">
-                <NavLink to="/profile/infos" onClick={handleOpen} className="burgerMenu_footer_account_text">Mon compte</NavLink>
+                <NavLink to="/profile" onClick={handleOpen} className="burgerMenu_footer_account_text">Mon compte</NavLink>
               </div>
             </div>
             <button className="burgerMenu_exitBtn" onClick={handleOpen}>

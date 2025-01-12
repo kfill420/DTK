@@ -39,13 +39,13 @@ const HamburgerMenu = ({ isOpen, email }: { isOpen: boolean, email: string }) =>
               </div>
               <ul className="pburgerMenu_list">
                 <NavLink to="/" onClick={handleOpen} className={({ isActive }) => (isActive ? 'pburgerMenu_list_link pburgerMenu_list_link-active' : 'pburgerMenu_list_link')}>Boutique</NavLink>
-                <NavLink to="/profile/order" onClick={handleOpen} className={({ isActive }) => (isActive ? 'pburgerMenu_list_link pburgerMenu_list_link-active' : 'pburgerMenu_list_link')}>Commandes</NavLink>
+                <NavLink to="/order" onClick={handleOpen} className={({ isActive }) => (isActive ? 'pburgerMenu_list_link pburgerMenu_list_link-active' : 'pburgerMenu_list_link')}>Commandes</NavLink>
               </ul>
             </div>
 
             <div className="pburgerMenu_footer">
-              <NavLink to="/profile/infos" onClick={handleOpen} className={({ isActive }) => (isActive ? 'pburgerMenu_footer_link pburgerMenu_footer_link-active' : 'pburgerMenu_footer_link')}>Profil</NavLink>
-              <NavLink to="/profile/params" onClick={handleOpen} className={({ isActive }) => (isActive ? 'pburgerMenu_footer_link pburgerMenu_footer_link-active' : 'pburgerMenu_footer_link')}>Paramètres</NavLink>
+              <NavLink to="/profile" onClick={handleOpen} className={({ isActive }) => (isActive ? 'pburgerMenu_footer_link pburgerMenu_footer_link-active' : 'pburgerMenu_footer_link')}>Profil</NavLink>
+              <NavLink to="/params" onClick={handleOpen} className={({ isActive }) => (isActive ? 'pburgerMenu_footer_link pburgerMenu_footer_link-active' : 'pburgerMenu_footer_link')}>Paramètres</NavLink>
               <button onClick={handleDisconnectButton} className="pburgerMenu_footer_link">Se déconnecter</button>
             </div>
           </div>

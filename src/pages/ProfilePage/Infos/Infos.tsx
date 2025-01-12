@@ -10,7 +10,7 @@ import { actionAddAddressFromAccount, actionDeleteAddressFromAccount, actionUpda
 import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
 import ModalInfos from './ModalInfos/ModalInfos';
 import { isNumeric } from '../../../utils/regexValidator';
-import { escapeHtml } from "../../../utils/escapeHtml";
+import DOMPurify from 'dompurify';
 
 function Infos({ account }: AccountI) {
   const [modalAdressIsOpen, setModalAdressIsOpen] = useState(false);
@@ -162,9 +162,9 @@ function Infos({ account }: AccountI) {
 
     if (modalInfosIsOpen) {
       const data = { ...infosFormData, account_id: account.id };
-      const escapedEmail = escapeHtml(data.email);
-      const escapedFirstname = escapeHtml(data.firstname);
-      const escapedLastname = escapeHtml(data.lastname);
+      const escapedEmail = DOMPurify.sanitize(data.email);
+      const escapedFirstname = DOMPurify.sanitize(data.firstname);
+      const escapedLastname = DOMPurify.sanitize(data.lastname);
       const dataEscaped = { email: escapedEmail, firstname: escapedFirstname, lastname: escapedLastname, account_id: data.account_id };
       dispatch(actionUpdateInfosFromAccount(dataEscaped));
       setModalInfosIsOpen(!modalInfosIsOpen);
@@ -174,28 +174,28 @@ function Infos({ account }: AccountI) {
       setFormData(initialFormData);
       const dataEscaped = {
         ...formData,
-        firstname: escapeHtml(formData.firstname),
-        lastname: escapeHtml(formData.lastname),
-        entreprise: escapeHtml(formData.entreprise),
-        address: escapeHtml(formData.address),
-        precision: escapeHtml(formData.precision),
-        postal_code: escapeHtml(formData.postal_code),
-        city: escapeHtml(formData.city),
-        phone: escapeHtml(formData.phone)
+        firstname: DOMPurify.sanitize(formData.firstname),
+        lastname: DOMPurify.sanitize(formData.lastname),
+        entreprise: DOMPurify.sanitize(formData.entreprise),
+        address: DOMPurify.sanitize(formData.address),
+        precision: DOMPurify.sanitize(formData.precision),
+        postal_code: DOMPurify.sanitize(formData.postal_code),
+        city: DOMPurify.sanitize(formData.city),
+        phone: DOMPurify.sanitize(formData.phone)
       };
       dispatch(actionUpdateAddressFromAccount(dataEscaped));
     } else {
       setFormData(initialFormData);
       const dataEscaped = {
         ...formData,
-        firstname: escapeHtml(formData.firstname),
-        lastname: escapeHtml(formData.lastname),
-        entreprise: escapeHtml(formData.entreprise),
-        address: escapeHtml(formData.address),
-        precision: escapeHtml(formData.precision),
-        postal_code: escapeHtml(formData.postal_code),
-        city: escapeHtml(formData.city),
-        phone: escapeHtml(formData.phone)
+        firstname: DOMPurify.sanitize(formData.firstname),
+        lastname: DOMPurify.sanitize(formData.lastname),
+        entreprise: DOMPurify.sanitize(formData.entreprise),
+        address: DOMPurify.sanitize(formData.address),
+        precision: DOMPurify.sanitize(formData.precision),
+        postal_code: DOMPurify.sanitize(formData.postal_code),
+        city: DOMPurify.sanitize(formData.city),
+        phone: DOMPurify.sanitize(formData.phone)
       };
 
       dispatch(actionAddAddressFromAccount(dataEscaped));

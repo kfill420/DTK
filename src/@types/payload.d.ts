@@ -37,6 +37,35 @@ export interface setPriceValuePayload {
   value: number | boolean | string;
 }
 
+export interface actionCheckTokenPayload {
+  valid: boolean;
+  data: {
+    id: number;
+    firstname: string;
+    lastname: string;
+    email: string;
+    addresses: CheckProfileAddressI[];
+    listCountries: CountryI[];
+  }
+
+}
+
+export interface ErrorPayload {
+  message: string;
+  [key: string]: string;
+}
+
+export interface ExpirationPayload {
+  tokenExpired: boolean;
+  message?: string;
+}
+
+export type RejectPayload = ExpirationPayload | ErrorPayload;
+
+
+
+
+
 // export interface stateAnimationPopupPayload {
 //   state: 'close' | 'open' | 'open-active' | 'exit' | 'exit-active' | 'exit-end';
 // }
