@@ -15,3 +15,4 @@ const NonPrivateRoute: React.FC<PrivateRouteProps> = ({ children, isAuthenticate
 };
 
 export {PrivateRoute, NonPrivateRoute};
+
