@@ -3,6 +3,7 @@ import type { RootState } from '..';
 import axiosInstance, { addTokenJwtToAxiosInstance } from '../../axios/axios';
 import { addTokenAndPseudoToLocalStorage, disconnectLocalStorage } from '../../localStorage/localStorage';
 import { AxiosError } from 'axios';
+import { escapeHtml } from "../../utils/escapeHtml";
 
 const actionCheckToken = createAsyncThunk(
   'account/CHECK_TOKEN',
@@ -31,8 +32,8 @@ const actionCheckSignin = createAsyncThunk(
     try {
       const state = thunkAPI.getState() as RootState;
       const response = await axiosInstance.post('/signin', {
-        email: state.account.credentials.email,
-        password: state.account.credentials.passwordSignin,
+        email: escapeHtml(state.account.credentials.email),
+        password: escapeHtml(state.account.credentials.passwordSignin),
       });
 
       const { token } = response.data;
@@ -52,8 +53,8 @@ const actionCheckSignup = createAsyncThunk(
     try {
       const state = thunkAPI.getState() as RootState;
       const response = await axiosInstance.post('/signup', {
-        email: state.account.credentials.email,
-        password: state.account.credentials.password,
+        email: escapeHtml(state.account.credentials.email),
+        password: escapeHtml(state.account.credentials.password),
       });
       return response.data;
     } catch (error) {
@@ -69,7 +70,7 @@ const actionCheckConnexion = createAsyncThunk(
     try {
       const state = thunkAPI.getState() as RootState;
       const response = await axiosInstance.post('/connexion', {
-        email: state.account.credentials.email,
+        email: escapeHtml(state.account.credentials.email),
       });
       return response.data;
     } catch (error) {

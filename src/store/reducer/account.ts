@@ -1,10 +1,22 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { actionCheckConnexion, actionCheckSignin, actionCheckSignup, actionCheckToken } from '../thunks/checkLogin';
+import {
+  actionCheckConnexion,
+  actionCheckSignin,
+  actionCheckSignup,
+  actionCheckToken
+} from '../thunks/checkLogin';
 import { validateEmail, validePassword } from '../../utils/regexValidator';
 import { disconnectLocalStorage } from '../../localStorage/localStorage';
 import { changeCredentialsPayload } from '../../@types/payload';
-import { actionAddAddressFromAccount, actionDeleteAccount, actionDeleteAddressFromAccount, actionUpdateAddressFromAccount, actionUpdateInfosFromAccount } from '../thunks/checkAccount';
+import {
+  actionAddAddressFromAccount,
+  actionDeleteAccount,
+  actionDeleteAddressFromAccount,
+  actionUpdateAddressFromAccount,
+  actionUpdateInfosFromAccount
+} from '../thunks/checkAccount';
 import { CheckProfileAddressI, CountryI } from '../../@types/account';
+import { escapeHtml } from '../../utils/escapeHtml';
 
 export const initialState = {
   id: null,
@@ -61,7 +73,7 @@ const accountSlice = createSlice({
   reducers: {
     actionChangeCredentials: (state, action: PayloadAction<changeCredentialsPayload>) => {
       const { name, value } = action.payload;
-      state.credentials[name] = value;
+      state.credentials[name] = escapeHtml(value);
       if (name === 'email') {
         if (!validateEmail(state.credentials.email)) {
           state.credentials.formConnection = false;
@@ -114,11 +126,32 @@ const accountSlice = createSlice({
       state.token = action.payload.token;
       state.isAuthentificated = true;
       state.account.id = action.payload.data.account.id;
-      state.account.email = action.payload.data.account.email;
-      state.account.firstname = action.payload.data.account.firstname;
-      state.account.lastname = action.payload.data.account.lastname;
-      state.account.listAddress = action.payload.data.account.addresses;
-      state.listCountries = action.payload.data.listCountries;
+      state.account.email = escapeHtml(action.payload.data.account.email);
+      state.account.firstname = escapeHtml(action.payload.data.account.firstname);
+      state.account.lastname = escapeHtml(action.payload.data.account.lastname);
+      state.account.listAddress = action.payload.data.account.addresses.map((address: CheckProfileAddressI) => ({
+        ...address,
+        firstname: escapeHtml(address.firstname),
+        lastname: escapeHtml(address.lastname),
+        entreprise: escapeHtml(address.entreprise),
+        address: escapeHtml(address.address),
+        precision: escapeHtml(address.precision),
+        postal_code: escapeHtml(address.postal_code),
+        city: escapeHtml(address.city),
+        phone: escapeHtml(address.phone),
+        country: {
+          ...address.country,
+          name: escapeHtml(address.country.name),
+          code: escapeHtml(address.country.code),
+          dial_code: escapeHtml(address.country.dial_code)
+        }
+      }));
+      state.listCountries = action.payload.data.listCountries.map((country: CountryI) => ({
+        ...country,
+        name: escapeHtml(country.name),
+        code: escapeHtml(country.code),
+        dial_code: escapeHtml(country.dial_code)
+      }));
       state.credentials.errorSignup = null;
       state.credentials.passwordSignin = '';
       state.credentials.password = '';
@@ -137,13 +170,34 @@ const accountSlice = createSlice({
       state.isAuthentificated = action.payload.valid;
       state.tokenIsLoading = false;
       state.initialCheck = false;
-      if (action.payload.valid === true) {
+      if (action.payload.valid) {
         state.account.id = action.payload.data.id;
-        state.account.email = action.payload.data.email;
-        state.account.firstname = action.payload.data.firstname;
-        state.account.lastname = action.payload.data.lastname;
-        state.account.listAddress = action.payload.data.addresses;
-        state.listCountries = action.payload.data.listCountries;
+        state.account.email = escapeHtml(action.payload.data.email);
+        state.account.firstname = escapeHtml(action.payload.data.firstname);
+        state.account.lastname = escapeHtml(action.payload.data.lastname);
+        state.account.listAddress = action.payload.data.addresses.map((address: CheckProfileAddressI) => ({
+          ...address,
+          firstname: escapeHtml(address.firstname),
+          lastname: escapeHtml(address.lastname),
+          entreprise: escapeHtml(address.entreprise),
+          address: escapeHtml(address.address),
+          precision: escapeHtml(address.precision),
+          postal_code: escapeHtml(address.postal_code),
+          city: escapeHtml(address.city),
+          phone: escapeHtml(address.phone),
+          country: {
+            ...address.country,
+            name: escapeHtml(address.country.name),
+            code: escapeHtml(address.country.code),
+            dial_code: escapeHtml(address.country.dial_code)
+          }
+        }));
+        state.listCountries = action.payload.data.listCountries.map((country: CountryI) => ({
+          ...country,
+          name: escapeHtml(country.name),
+          code: escapeHtml(country.code),
+          dial_code: escapeHtml(country.dial_code)
+        }));
       }
     });
     builder.addCase(actionCheckToken.pending, (state) => {
@@ -155,14 +209,46 @@ const accountSlice = createSlice({
       state.initialCheck = false;
     });
     builder.addCase(actionAddAddressFromAccount.fulfilled, (state, action) => {
-      state.account.listAddress = action.payload;
+      state.account.listAddress = action.payload.map(address => ({
+        ...address,
+        firstname: escapeHtml(address.firstname),
+        lastname: escapeHtml(address.lastname),
+        entreprise: escapeHtml(address.entreprise),
+        address: escapeHtml(address.address),
+        precision: escapeHtml(address.precision),
+        postal_code: escapeHtml(address.postal_code),
+        city: escapeHtml(address.city),
+        phone: escapeHtml(address.phone),
+        country: {
+          ...address.country,
+          name: escapeHtml(address.country.name),
+          code: escapeHtml(address.country.code),
+          dial_code: escapeHtml(address.country.dial_code)
+        }
+      }));
     });
     builder.addCase(actionDeleteAddressFromAccount.fulfilled, (state, action) => {
       const id = action.payload;
       state.account.listAddress = state.account.listAddress.filter((address) => address.id !== id);
     });
     builder.addCase(actionUpdateAddressFromAccount.fulfilled, (state, action) => {
-      state.account.listAddress = action.payload;
+      state.account.listAddress = action.payload.map(address => ({
+        ...address,
+        firstname: escapeHtml(address.firstname),
+        lastname: escapeHtml(address.lastname),
+        entreprise: escapeHtml(address.entreprise),
+        address: escapeHtml(address.address),
+        precision: escapeHtml(address.precision),
+        postal_code: escapeHtml(address.postal_code),
+        city: escapeHtml(address.city),
+        phone: escapeHtml(address.phone),
+        country: {
+          ...address.country,
+          name: escapeHtml(address.country.name),
+          code: escapeHtml(address.country.code),
+          dial_code: escapeHtml(address.country.dial_code)
+        }
+      }));
     });
     builder.addCase(actionUpdateInfosFromAccount.fulfilled, (state, action) => {
       state.account.email = action.payload.email;

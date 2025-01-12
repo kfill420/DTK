@@ -5,12 +5,13 @@ import { FaCcVisa, FaCcMastercard, FaCcAmex } from "react-icons/fa6";
 import { TbMailCheck } from "react-icons/tb";
 import Input from '../App/Input/Input';
 import { ChangeEvent, useState } from "react";
+import { escapeHtml } from "../../utils/escapeHtml";
 
 function Footer() {
   const [email, setEmail] = useState('');
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
+    setEmail(escapeHtml(e.target.value));
   }
   return (
     <div className="footer">

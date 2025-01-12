@@ -10,6 +10,7 @@ import { actionAddAddressFromAccount, actionDeleteAddressFromAccount, actionUpda
 import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
 import ModalInfos from './ModalInfos/ModalInfos';
 import { isNumeric } from '../../../utils/regexValidator';
+import { escapeHtml } from "../../../utils/escapeHtml";
 
 function Infos({ account }: AccountI) {
   const [modalAdressIsOpen, setModalAdressIsOpen] = useState(false);
@@ -161,16 +162,43 @@ function Infos({ account }: AccountI) {
 
     if (modalInfosIsOpen) {
       const data = { ...infosFormData, account_id: account.id };
-      dispatch(actionUpdateInfosFromAccount(data));
+      const escapedEmail = escapeHtml(data.email);
+      const escapedFirstname = escapeHtml(data.firstname);
+      const escapedLastname = escapeHtml(data.lastname);
+      const dataEscaped = { email: escapedEmail, firstname: escapedFirstname, lastname: escapedLastname, account_id: data.account_id };
+      dispatch(actionUpdateInfosFromAccount(dataEscaped));
       setModalInfosIsOpen(!modalInfosIsOpen);
       return;
     }
     if (modalAddressIsEdit) {
       setFormData(initialFormData);
-      dispatch(actionUpdateAddressFromAccount(formData));
+      const dataEscaped = {
+        ...formData,
+        firstname: escapeHtml(formData.firstname),
+        lastname: escapeHtml(formData.lastname),
+        entreprise: escapeHtml(formData.entreprise),
+        address: escapeHtml(formData.address),
+        precision: escapeHtml(formData.precision),
+        postal_code: escapeHtml(formData.postal_code),
+        city: escapeHtml(formData.city),
+        phone: escapeHtml(formData.phone)
+      };
+      dispatch(actionUpdateAddressFromAccount(dataEscaped));
     } else {
       setFormData(initialFormData);
-      dispatch(actionAddAddressFromAccount(formData));
+      const dataEscaped = {
+        ...formData,
+        firstname: escapeHtml(formData.firstname),
+        lastname: escapeHtml(formData.lastname),
+        entreprise: escapeHtml(formData.entreprise),
+        address: escapeHtml(formData.address),
+        precision: escapeHtml(formData.precision),
+        postal_code: escapeHtml(formData.postal_code),
+        city: escapeHtml(formData.city),
+        phone: escapeHtml(formData.phone)
+      };
+
+      dispatch(actionAddAddressFromAccount(dataEscaped));
     }
 
     setModalAdressIsOpen(!modalAdressIsOpen);
