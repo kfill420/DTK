@@ -4,14 +4,13 @@ import HomePage from './HomePage/HomePage';
 import ProductPage from './ProductPage/ProductPage';
 import Header from '../components/Header/Header';
 import Footer from '../components/Footer/Footer';
-import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import ScrollToTop from '../components/App/ScrollToTop/ScrollToTop';
 import LoginPage from './LoginPage/LoginPage';
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { actionCheckToken } from '../store/thunks/checkLogin';
 import { NonPrivateRoute, PrivateRoute } from '../components/App/PrivateRoute/PrivateRoute';
-import ProfilePage from './ProfilePage/ProfilePage';
 import Order from './ProfilePage/Order/Order';
 import Params from './ProfilePage/Params/Params';
 import Infos from './ProfilePage/Infos/Infos';
@@ -22,7 +21,7 @@ import CartPage from "./CartPage/CartPage";
 function App() {
   const location = useLocation();
   const dispatch = useAppDispatch();
-  const noFooterPage = location.pathname === '/login' || location.pathname === '/profile/params' || location.pathname === '/profile/order' || location.pathname === '/profile/infos';
+  const noFooterPage = location.pathname === '/login' || location.pathname === '/params' || location.pathname === '/order' || location.pathname === '/profile';
   const isAuthentificated = useAppSelector((state) => state.account.isAuthentificated);
   const account = useAppSelector((state) => state.account.account);
   const tokenIsLoading = useAppSelector((state) => state.account.tokenIsLoading);
@@ -61,12 +60,9 @@ function App() {
         <Route path="/products/:id" element={<ProductPage />} />
         <Route path="/login" element={<NonPrivateRoute isAuthenticated={isAuthentificated}><LoginPage /></NonPrivateRoute>}></Route>
         <Route path="/cart" element={<CartPage />} />
-        <Route path="/profile" element={<PrivateRoute isAuthenticated={isAuthentificated}><ProfilePage /></PrivateRoute>}>
-          <Route path="" element={<Navigate to="infos" />} />
-          <Route path="params" element={<Params />} />
-          <Route path="order" element={<Order />} />
-          <Route path="infos" element={<Infos account={account} />} />
-        </Route>
+        <Route path="/params" element={<PrivateRoute isAuthenticated={isAuthentificated}><Params /></PrivateRoute>} />
+        <Route path="/order" element={<PrivateRoute isAuthenticated={isAuthentificated}><Order /></PrivateRoute>} />
+        <Route path="/profile" element={<PrivateRoute isAuthenticated={isAuthentificated}>{<Infos account={account} />}</PrivateRoute>} />
       </Routes>
       {!noFooterPage && <Footer />}
 

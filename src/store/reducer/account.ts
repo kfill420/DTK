@@ -203,10 +203,14 @@ const accountSlice = createSlice({
     builder.addCase(actionCheckToken.pending, (state) => {
       state.tokenIsLoading = true;
     });
-    builder.addCase(actionCheckToken.rejected, (state) => {
+    builder.addCase(actionCheckToken.rejected, (state, action) => {
       state.tokenIsLoading = false;
       state.isAuthentificated = false;
       state.initialCheck = false;
+      if (action.payload?.tokenExpired && action.payload?.tokenExpired === true) {
+        state.token = null;
+        disconnectLocalStorage();
+      }
     });
     builder.addCase(actionAddAddressFromAccount.fulfilled, (state, action) => {
       state.account.listAddress = action.payload.map(address => ({
@@ -227,9 +231,27 @@ const accountSlice = createSlice({
         }
       }));
     });
+    builder.addCase(actionAddAddressFromAccount.rejected, (state, action) => {
+      if (action.payload?.tokenExpired && action.payload?.tokenExpired === true) {
+        state.token = null;
+        disconnectLocalStorage();
+        state.tokenIsLoading = false;
+        state.isAuthentificated = false;
+        state.initialCheck = false;
+      }
+    });
     builder.addCase(actionDeleteAddressFromAccount.fulfilled, (state, action) => {
       const id = action.payload;
       state.account.listAddress = state.account.listAddress.filter((address) => address.id !== id);
+    });
+    builder.addCase(actionDeleteAddressFromAccount.rejected, (state, action) => {
+      if (action.payload?.tokenExpired && action.payload?.tokenExpired === true) {
+        state.token = null;
+        disconnectLocalStorage();
+        state.tokenIsLoading = false;
+        state.isAuthentificated = false;
+        state.initialCheck = false;
+      }
     });
     builder.addCase(actionUpdateAddressFromAccount.fulfilled, (state, action) => {
       state.account.listAddress = action.payload.map(address => ({
@@ -250,10 +272,28 @@ const accountSlice = createSlice({
         }
       }));
     });
+    builder.addCase(actionUpdateAddressFromAccount.rejected, (state, action) => {
+      if (action.payload?.tokenExpired && action.payload?.tokenExpired === true) {
+        state.token = null;
+        disconnectLocalStorage();
+        state.tokenIsLoading = false;
+        state.isAuthentificated = false;
+        state.initialCheck = false;
+      }
+    });
     builder.addCase(actionUpdateInfosFromAccount.fulfilled, (state, action) => {
       state.account.email = action.payload.email;
       state.account.firstname = action.payload.firstname;
       state.account.lastname = action.payload.lastname;
+    });
+    builder.addCase(actionUpdateInfosFromAccount.rejected, (state, action) => {
+      if (action.payload?.tokenExpired && action.payload?.tokenExpired === true) {
+        state.token = null;
+        disconnectLocalStorage();
+        state.tokenIsLoading = false;
+        state.isAuthentificated = false;
+        state.initialCheck = false;
+      }
     });
     builder.addCase(actionDeleteAccount.fulfilled, (state) => {
       state.isAuthentificated = false;

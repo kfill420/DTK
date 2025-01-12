@@ -73,7 +73,7 @@ function LoginPage() {
     e.preventDefault();
     const resultSignin = await dispatch(actionCheckSignin());
     if (actionCheckSignin.fulfilled.match(resultSignin)) {
-      navigate('/profile/infos');
+      navigate('/profile');
     }
   }
 

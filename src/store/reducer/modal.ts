@@ -34,6 +34,11 @@ const ModalMenu = createSlice({
     setIsOpen: (state, action: PayloadAction<modal_setIsOpen>) => {
       state[action.payload.modal] = action.payload.value;
     },
+    closeAllModal: (state) => {
+      state.burgerModalIsOpen = false;
+      state.confirmModalIsOpen = false;
+      state.modalCollectionFilterIsOpen = false;
+    },
     setFilterValue: (state, action: PayloadAction<setPriceValuePayload>) => {
       const { name, value } = action.payload;
       if (typeof (value) === "boolean" && (name === 'isDraging' || name === 'filtered' || name === 'available')) {
@@ -50,5 +55,5 @@ const ModalMenu = createSlice({
   }
 })
 
-export const { toggleIsOpen, setIsOpen, setFilterValue } = ModalMenu.actions;
+export const { toggleIsOpen, setIsOpen, setFilterValue, closeAllModal } = ModalMenu.actions;
 export default ModalMenu.reducer;

@@ -13,7 +13,7 @@ import { useState } from 'react';
 import { actionLogOut } from '../../store/reducer/account';
 import ModalConfirm from '../Modal/ModalConfirm/ModalConfirm';
 import { actionDeleteAccount } from '../../store/thunks/checkAccount';
-import { setIsOpen } from '../../store/reducer/modal';
+import { closeAllModal, setIsOpen } from '../../store/reducer/modal';
 
 interface HeaderI {
   isAuthentificated: boolean;
@@ -67,21 +67,25 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
     }
   }
 
+  const mainPageClick = () => {
+    dispatch(closeAllModal());
+  }
+
   // if (test.current)
   //   console.log(window.getComputedStyle(test.current).height);
 
   return (
     <>
       {
-        location.pathname === '/profile/params' || location.pathname === '/profile/order' || location.pathname === '/profile/infos' ?
+        location.pathname === '/params' || location.pathname === '/order' || location.pathname === '/profile' ?
           <div className="header-profile">
             <div className="header-profile_burger">
               <BurgerButton />
             </div>
             <ul className="header-profile_left">
-              <Link to="/" className="header-profile_left_logo">DTK</Link>
+              <Link to="/" className="header-profile_left_logo" onClick={mainPageClick}>DTK</Link>
               <Link to="/" className="header-profile_left_link">Boutique</Link>
-              <NavLink to="/profile/order" className={({ isActive }) => (isActive ? 'header-profile_left_link header-profile_left_link-active' : 'header-profile_left_link')}>Commandes</NavLink>
+              <NavLink to="/order" className={({ isActive }) => (isActive ? 'header-profile_left_link header-profile_left_link-active' : 'header-profile_left_link')}>Commandes</NavLink>
             </ul>
             <div onClick={handlePopupButton} className="header-profile_right">
               <div className="header-profile_right_container">
@@ -97,8 +101,8 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
                   <span className="header-profile_right_popup_header_email">{email}</span>
                 </div>
                 <div className="header-profile_right_popup_content">
-                  <NavLink to="/profile/infos" className={({ isActive }) => (isActive ? 'header-profile_right_popup_content_link header-profile_right_popup_content_link-active' : 'header-profile_right_popup_content_link')}>Profil</NavLink>
-                  <NavLink to="/profile/params" className={({ isActive }) => (isActive ? 'header-profile_right_popup_content_link header-profile_right_popup_content_link-active' : 'header-profile_right_popup_content_link')}>Paramètres</NavLink>
+                  <NavLink to="/profile" className={({ isActive }) => (isActive ? 'header-profile_right_popup_content_link header-profile_right_popup_content_link-active' : 'header-profile_right_popup_content_link')}>Profil</NavLink>
+                  <NavLink to="/params" className={({ isActive }) => (isActive ? 'header-profile_right_popup_content_link header-profile_right_popup_content_link-active' : 'header-profile_right_popup_content_link')}>Paramètres</NavLink>
                   <button onClick={handleDisconnectButton} className="header-profile_right_popup_content_link">Se déconnecter</button>
                 </div>
               </div>
@@ -123,7 +127,7 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
             </ul>
             <div className="header_profile">
               {isAuthentificated ?
-                <Link to="/profile/infos" className={location.pathname === '/' ? "header_profile_links header_profile_links-home" : "header_profile_links"}>
+                <Link to="/profile" className={location.pathname === '/' ? "header_profile_links header_profile_links-home" : "header_profile_links"}>
                   <FaRegUser className="header_profile_links_link" size={20} />
                 </Link>
                 :
@@ -138,9 +142,9 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
             </div>
           </div >
       }
-      {location.pathname === '/profile/params' || location.pathname === '/profile/order' || location.pathname === '/profile/infos' ? <ProfileBurgerMenu isOpen={burgerMenuIsOpen} email={email} /> : <StoreBurgerMenu isOpen={burgerMenuIsOpen} />}
+      {location.pathname === '/params' || location.pathname === '/order' || location.pathname === '/profile' ? <ProfileBurgerMenu isOpen={burgerMenuIsOpen} email={email} /> : <StoreBurgerMenu isOpen={burgerMenuIsOpen} />}
       {
-        isAuthentificated && location.pathname === '/profile/params' && <ModalConfirm isOpen={confirmModalIsOpen} title='Confirmation' content='Cette action est irréversible, souhaitez-vous vraiment supprimer définitivement votre compte ?' acceptFunction={handleDeleteAccountButton} cancelFunction={handleCancelAccounDeletetButton} />
+        isAuthentificated && location.pathname === '/params' && <ModalConfirm isOpen={confirmModalIsOpen} title='Confirmation' content='Cette action est irréversible, souhaitez-vous vraiment supprimer définitivement votre compte ?' acceptFunction={handleDeleteAccountButton} cancelFunction={handleCancelAccounDeletetButton} />
       }
 
 
