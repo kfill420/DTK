@@ -10,10 +10,10 @@ import ProfileBurgerMenu from './BurgerMenu/ProfileBurgerMenu/ProfileBurgerMenu'
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { IoIosArrowUp } from 'react-icons/io';
 import { useState } from 'react';
-import { actionLogOut } from '../../store/reducer/account';
 import ModalConfirm from '../Modal/ModalConfirm/ModalConfirm';
 import { actionDeleteAccount } from '../../store/thunks/checkAccount';
 import { closeAllModal, setIsOpen } from '../../store/reducer/modal';
+import { actionLogout } from "../../store/thunks/checkLogin";
 
 interface HeaderI {
   isAuthentificated: boolean;
@@ -49,7 +49,7 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
   }
 
   const handleDisconnectButton = () => {
-    dispatch(actionLogOut());
+    dispatch(actionLogout());
   }
 
   const handleDeleteAccountButton = () => {

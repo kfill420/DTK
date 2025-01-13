@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import type { RootState } from '..';
-import axiosInstance, { addTokenJwtToAxiosInstance } from '../../axios/axios';
-import { addTokenAndPseudoToLocalStorage, disconnectLocalStorage } from '../../localStorage/localStorage';
+import axiosInstance from '../../axios/axios';
+import { addTokenStorage, deleteLocalStorage } from '../../localStorage/localStorage';
 import { AxiosError } from 'axios';
 import { escapeHtml } from "../../utils/escapeHtml";
 import { checkTokenExpiration } from "../../utils/checkTokenExpiration";
@@ -11,18 +11,14 @@ const actionCheckToken = createAsyncThunk<actionCheckTokenPayload, void, { rejec
   'account/CHECK_TOKEN',
   async (_, thunkAPI) => {
     try {
-      const token = localStorage.getItem('token');
       if (checkTokenExpiration() === false)
         return thunkAPI.rejectWithValue({ tokenExpired: true });
-
-      if (token)
-        addTokenJwtToAxiosInstance(token);
 
       const response = await axiosInstance.post('/valide-token');
       return { valid: response.data.valid, data: response.data };
     } catch (error) {
       console.log(error);
-      disconnectLocalStorage();
+      deleteLocalStorage();
       const axiosError = error as AxiosError;
       return thunkAPI.rejectWithValue(axiosError.response?.data as RejectPayload);
     }
@@ -39,9 +35,8 @@ const actionCheckSignin = createAsyncThunk(
         password: escapeHtml(state.account.credentials.passwordSignin),
       });
 
-      const { token } = response.data;
-      addTokenJwtToAxiosInstance(token);
-      addTokenAndPseudoToLocalStorage(token);
+      const { token, csrfToken, sessionId } = response.data;
+      addTokenStorage(token, csrfToken, sessionId);
       return { token, data: response.data };
     } catch (error) {
       const axiosError = error as AxiosError;
@@ -83,4 +78,17 @@ const actionCheckConnexion = createAsyncThunk(
   }
 );
 
-export { actionCheckSignin, actionCheckConnexion, actionCheckSignup, actionCheckToken };
+const actionLogout = createAsyncThunk(
+  'account/LOGOUT',
+  async (_, thunkAPI) => {
+    try {
+      const response = await axiosInstance.post('/logout');
+      return response.data;
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      return thunkAPI.rejectWithValue(axiosError.response?.data);
+    }
+  }
+);
+
+export { actionCheckSignin, actionCheckConnexion, actionCheckSignup, actionCheckToken, actionLogout };

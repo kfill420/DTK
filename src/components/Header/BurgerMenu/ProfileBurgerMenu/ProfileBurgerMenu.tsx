@@ -5,7 +5,7 @@ import { PiUserCircleThin } from "react-icons/pi";
 import './ProfileBurgerMenu.scss';
 import { useRef } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { actionLogOut } from '../../../../store/reducer/account';
+import { actionLogout } from "../../../../store/thunks/checkLogin";
 
 const HamburgerMenu = ({ isOpen, email }: { isOpen: boolean, email: string }) => {
   const dispatch = useAppDispatch();
@@ -19,7 +19,7 @@ const HamburgerMenu = ({ isOpen, email }: { isOpen: boolean, email: string }) =>
 
   const handleDisconnectButton = () => {
     dispatch(setIsOpen({ modal: 'burgerModalIsOpen', value: false }));
-    dispatch(actionLogOut());
+    dispatch(actionLogout());
     navigate('/');
   }
 
