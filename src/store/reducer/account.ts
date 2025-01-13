@@ -3,10 +3,11 @@ import {
   actionCheckConnexion,
   actionCheckSignin,
   actionCheckSignup,
-  actionCheckToken
+  actionCheckToken,
+  actionLogout
 } from '../thunks/checkLogin';
 import { validateEmail, validePassword } from '../../utils/regexValidator';
-import { disconnectLocalStorage } from '../../localStorage/localStorage';
+import { deleteLocalStorage } from '../../localStorage/localStorage';
 import { changeCredentialsPayload } from '../../@types/payload';
 import {
   actionAddAddressFromAccount,
@@ -109,11 +110,6 @@ const accountSlice = createSlice({
     actionChangeAuthentification: (state, action) => {
       state.isAuthentificated = action.payload;
     },
-    actionLogOut: (state) => {
-      state.isAuthentificated = false;
-      state.token = null;
-      disconnectLocalStorage();
-    },
   },
   extraReducers: (builder) => {
     builder.addCase(actionCheckConnexion.fulfilled, (state, action) => {
@@ -209,7 +205,7 @@ const accountSlice = createSlice({
       state.initialCheck = false;
       if (action.payload?.tokenExpired && action.payload?.tokenExpired === true) {
         state.token = null;
-        disconnectLocalStorage();
+        deleteLocalStorage();
       }
     });
     builder.addCase(actionAddAddressFromAccount.fulfilled, (state, action) => {
@@ -234,7 +230,7 @@ const accountSlice = createSlice({
     builder.addCase(actionAddAddressFromAccount.rejected, (state, action) => {
       if (action.payload?.tokenExpired && action.payload?.tokenExpired === true) {
         state.token = null;
-        disconnectLocalStorage();
+        deleteLocalStorage();
         state.tokenIsLoading = false;
         state.isAuthentificated = false;
         state.initialCheck = false;
@@ -247,7 +243,7 @@ const accountSlice = createSlice({
     builder.addCase(actionDeleteAddressFromAccount.rejected, (state, action) => {
       if (action.payload?.tokenExpired && action.payload?.tokenExpired === true) {
         state.token = null;
-        disconnectLocalStorage();
+        deleteLocalStorage();
         state.tokenIsLoading = false;
         state.isAuthentificated = false;
         state.initialCheck = false;
@@ -275,7 +271,7 @@ const accountSlice = createSlice({
     builder.addCase(actionUpdateAddressFromAccount.rejected, (state, action) => {
       if (action.payload?.tokenExpired && action.payload?.tokenExpired === true) {
         state.token = null;
-        disconnectLocalStorage();
+        deleteLocalStorage();
         state.tokenIsLoading = false;
         state.isAuthentificated = false;
         state.initialCheck = false;
@@ -289,7 +285,7 @@ const accountSlice = createSlice({
     builder.addCase(actionUpdateInfosFromAccount.rejected, (state, action) => {
       if (action.payload?.tokenExpired && action.payload?.tokenExpired === true) {
         state.token = null;
-        disconnectLocalStorage();
+        deleteLocalStorage();
         state.tokenIsLoading = false;
         state.isAuthentificated = false;
         state.initialCheck = false;
@@ -298,11 +294,16 @@ const accountSlice = createSlice({
     builder.addCase(actionDeleteAccount.fulfilled, (state) => {
       state.isAuthentificated = false;
       state.token = null;
-      disconnectLocalStorage();
+      deleteLocalStorage();
+    });
+    builder.addCase(actionLogout.fulfilled, (state) => {
+      state.isAuthentificated = false;
+      state.token = null;
+      deleteLocalStorage();
     });
   },
 });
 
 
-export const { actionChangeCredentials, actionChangeConnection, actionChangeAuthentification, actionLogOut } = accountSlice.actions;
+export const { actionChangeCredentials, actionChangeConnection, actionChangeAuthentification } = accountSlice.actions;
 export default accountSlice.reducer;

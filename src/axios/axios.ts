@@ -2,14 +2,37 @@ import axios from 'axios';
 
 const axoiosInstance = axios.create({
   baseURL: import.meta.env.VITE_APP_API_URL,
+  timeout: 5000,
 });
 
-export function addTokenJwtToAxiosInstance(token: string) {
-  axoiosInstance.defaults.headers.common.Authorization = `Bearer ${token}`;
-}
+axoiosInstance.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  const sessionId = localStorage.getItem('sessionId');
+  const csrfToken = localStorage.getItem('csrf');
 
-export function removeTokenJwtToAxiosInstance() {
-  axoiosInstance.defaults.headers.common.Accept = '';
-}
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  if (sessionId) {
+    config.headers['x-session-id'] = sessionId;
+  }
+
+  if (csrfToken) {
+    config.headers['x-csrf-token'] = csrfToken;
+  }
+
+  return config;
+}, (error) => {
+  return Promise.reject(error);
+});
+
+// export function addTokenJwtToAxiosInstance(token: string) {
+//   axoiosInstance.defaults.headers.common.Authorization = `Bearer ${token}`;
+// }
+
+// export function removeTokenJwtToAxiosInstance() {
+//   axoiosInstance.defaults.headers.common.Accept = '';
+// }
 
 export default axoiosInstance;

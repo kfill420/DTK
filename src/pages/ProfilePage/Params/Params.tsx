@@ -1,7 +1,7 @@
 
 import { useAppDispatch } from '../../../hooks/redux';
-import { actionLogOut } from '../../../store/reducer/account';
 import { setIsOpen } from '../../../store/reducer/modal';
+import { actionLogout } from "../../../store/thunks/checkLogin";
 import './Params.scss'
 import { IoMdLock } from "react-icons/io";
 import { MdDeleteSweep } from "react-icons/md";
@@ -10,7 +10,7 @@ function Params() {
   const dispatch = useAppDispatch();
 
   const handleLogOutButton = () => {
-    dispatch(actionLogOut());
+    dispatch(actionLogout());
   }
 
   const handleOpenModalButton = () => {

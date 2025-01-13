@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import { checkTokenExpiration } from "../../../utils/checkTokenExpiration";
 import { useAppDispatch } from "../../../hooks/redux";
-import { actionLogOut } from "../../../store/reducer/account";
+import { actionLogout } from "../../../store/thunks/checkLogin";
 
 interface PrivateRouteProps {
     children: JSX.Element;
@@ -15,7 +15,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, isAuthenticated }
 
     useEffect(() => {
         if (checkTokenExpiration() === false) {
-            dispatch(actionLogOut());
+            dispatch(actionLogout());
             setShouldRedirect(true);
         }
     }, [dispatch]);
