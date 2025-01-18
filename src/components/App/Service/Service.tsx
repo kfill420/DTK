@@ -2,14 +2,17 @@ import React, { useState, useRef } from 'react';
 import { useInView } from 'react-intersection-observer';
 import './Service.scss';
 import { ServiceI } from '../../../@types/service';
-import * as FaIcons from 'react-icons/fa';
-import * as TiIcons from 'react-icons/ti';
-import * as TbIcons from 'react-icons/tb';
 
-const iconPackages = {
-  Fa: FaIcons,
-  Ti: TiIcons,
-  Tb: TbIcons,
+// Importations directes des icônes
+import { FaApple, FaTools } from 'react-icons/fa';
+import { TiTime } from 'react-icons/ti';
+import { TbTruckDelivery } from 'react-icons/tb';
+
+const iconMap = {
+  FaApple,
+  FaTools,
+  TiTime,
+  TbTruckDelivery,
 };
 
 interface ServiceCardProps {
@@ -25,8 +28,7 @@ interface ServiceCardProps {
 }
 
 const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, setActiveIndex, isNavigatingRef }) => {
-  const IconPackage = iconPackages[service.iconPackage];
-  const IconComponent = IconPackage ? IconPackage[service.icon as keyof typeof IconPackage] : null;
+  const IconComponent = iconMap[service.icon as keyof typeof iconMap];
   const { ref } = useInView({
     threshold: 0.5,
     triggerOnce: false,
@@ -40,7 +42,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ service, index, setActiveInde
   return (
     <div ref={ref} id={`service-${index}`} className="service_card">
       <div className="service_card_icon">
-        {IconComponent && React.createElement(IconComponent, { size: 32 })}
+        {IconComponent && <IconComponent size={32} />}
       </div>
       <div className="service_card_content">
         <span className="service_card_content_title">{service.title}</span>
