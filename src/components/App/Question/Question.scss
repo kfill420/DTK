@@ -27,6 +27,7 @@
     padding: 0 1rem;
     font-size: 0.9rem;
     font-weight: 500;
+    color: v.$textColor-colorDark;
   }
 
   &_list {
@@ -52,7 +53,7 @@
         &_text {
           display: flex;
           align-items: center;
-          font-size: 0.7rem;
+          font-size: 0.8rem;
           font-weight: 700;
           width: 90%;
         }
@@ -76,7 +77,7 @@
         }
 
         &_item {
-          font-size: 0.7rem;
+          font-size: 0.8rem;
           color: v.$textColor-colorDark;
           margin-top: 1rem;
           white-space: pre-line;
