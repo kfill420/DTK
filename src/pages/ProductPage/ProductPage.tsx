@@ -11,6 +11,9 @@ import questions from '../../data/questions';
 import ColorRadio from '../../components/App/ColorRadio/ColorRadio';
 import TextRadio from '../../components/App/TextRadio/TextRadio';
 import Store from '../../components/App/Store/Store';
+import { actionAddToCart } from "../../store/thunks/checkCart";
+import { actionAddToCartOffline } from "../../store/reducer/cart";
+import { setIsOpen } from "../../store/reducer/modal";
 
 type ProductPageParams = {
   id: string;
@@ -27,6 +30,7 @@ function ProductPage() {
 
   const list = useAppSelector((state) => state.product.list);
   const stateProduct = useAppSelector((state) => state.product.stateProduct);
+  const isLogin = useAppSelector((state) => state.account.isAuthentificated);
 
   const dispatch = useAppDispatch();
 
@@ -38,6 +42,7 @@ function ProductPage() {
 
 
   const product = list.find((product) => product.id === Number(id));
+
 
   if (!product) return <h1>Produit introuvable</h1>
 
@@ -91,6 +96,14 @@ function ProductPage() {
     return stars;
   }
 
+  const addToCart = () => {
+    if (isLogin)
+      dispatch(actionAddToCart({ productId: product.id, quantity, price: priceSel2[0].price, color: selectorSelected, state: stateProduct[stateSelected], stockage: stockageProduct[stockageSelected] }));
+    else
+      dispatch(actionAddToCartOffline({ productId: product.id, quantity, price: priceSel2[0].price, color: selectorSelected, state: stateProduct[stateSelected], stockage: stockageProduct[stockageSelected], product: product }));
+    dispatch(setIsOpen({ modal: "modalCartIsOpen", value: true }))
+  }
+
   return (
     <div className="product">
       <form>
@@ -109,14 +122,14 @@ function ProductPage() {
           <h2 className="product_infos_title">{product.name}</h2>
           <span className="product_infos_price">{`€${quantity * priceSel2[0].price},00`}</span>
           <div className="product_infos_item">
-            <span>Couleur: {product.color_name[selectorSelected]}</span>
+            <span className="product_infos_item_text">Couleur: <span className="product_infos_item_text_select">{product.color_name[selectorSelected]}</span></span>
             <div className="product_colors">
               <ColorRadio selected={selectorSelected} setSelected={handleSelectorChange} colors={product.color_code} product={true} productName={product.id.toString()} />
             </div>
           </div>
 
           <div className="product_infos_item">
-            <span>Etats: {stateProduct[stateSelected]}</span>
+            <span className="product_infos_item_text">Etats: <span className="product_infos_item_text_select">{stateProduct[stateSelected]}</span></span>
             <TextRadio datas={stateProduct} stateSelected={stateSelected} setSelected={handleStateChange} />
           </div>
 
@@ -125,12 +138,12 @@ function ProductPage() {
           </div>
 
           <div className="product_infos_item">
-            <span>Stockage: {stockageProduct[stockageSelected]}</span>
+            <span className="product_infos_item_text">Stockage: <span className="product_infos_item_text_select">{stockageProduct[stockageSelected]}</span></span>
             <TextRadio datas={stockageProduct} stateSelected={stockageSelected} setSelected={handleStockageChange} />
           </div>
 
           <div className="product_infos_item">
-            <span>Quantité:</span>
+            <span className="product_infos_item_text">Quantité:</span>
             <div className="product_infos_item_quantity">
               <button className="product_infos_item_quantity_button" onClick={handleQuantityMenos}><FaMinus /></button>
               <span>{quantity}</span>
@@ -139,7 +152,7 @@ function ProductPage() {
           </div>
 
           <div className="product_infos_buttons">
-            <button type="button" className="product_infos_button product_infos_button-submit">Ajouter au panier</button>
+            <button type="button" className="product_infos_button product_infos_button-submit" onClick={addToCart}>Ajouter au panier</button>
             <button type="submit" className="product_infos_button">Acheter maintenant</button>
           </div>
 

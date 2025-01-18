@@ -71,7 +71,12 @@ function LoginPage() {
 
   const handleSiginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const resultSignin = await dispatch(actionCheckSignin());
+    const ls = JSON.parse(localStorage.getItem('cartVisitor') || '[]');
+    let resultSignin;
+    if (ls && ls.length > 0)
+      resultSignin = await dispatch(actionCheckSignin(ls));
+    else
+      resultSignin = await dispatch(actionCheckSignin());
     if (actionCheckSignin.fulfilled.match(resultSignin)) {
       navigate('/profile');
     }

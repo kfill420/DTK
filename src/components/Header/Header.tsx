@@ -12,8 +12,9 @@ import { IoIosArrowUp } from 'react-icons/io';
 import { useState } from 'react';
 import ModalConfirm from '../Modal/ModalConfirm/ModalConfirm';
 import { actionDeleteAccount } from '../../store/thunks/checkAccount';
-import { closeAllModal, setIsOpen } from '../../store/reducer/modal';
+import { closeAllModal, setIsOpen, toggleIsOpen } from '../../store/reducer/modal';
 import { actionLogout } from "../../store/thunks/checkLogin";
+import ModalCart from "../Modal/ModalCart/ModalCart";
 
 interface HeaderI {
   isAuthentificated: boolean;
@@ -26,6 +27,7 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
   const dispatch = useAppDispatch();
   const burgerMenuIsOpen = useAppSelector((state) => state.ModalMenu.burgerModalIsOpen);
   const confirmModalIsOpen = useAppSelector((state) => state.ModalMenu.confirmModalIsOpen);
+  const cartModalIsOpen = useAppSelector((state) => state.ModalMenu.modalCartIsOpen);
   const [stateAnimationPopup, setstateAnimationPopup] = useState<string>('close');
 
   const handlePopupButton = () => {
@@ -57,6 +59,14 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
     dispatch(actionDeleteAccount(account_id));
   }
 
+  const exitCartModal = () => {
+    dispatch(setIsOpen({ modal: 'modalCartIsOpen', value: false }));
+  }
+
+  const toggleCartModal = () => {
+    dispatch(toggleIsOpen('modalCartIsOpen'));
+  }
+
   const handleCancelAccounDeletetButton = () => {
     dispatch(setIsOpen({ modal: 'confirmModalIsOpen', value: false }));
   }
@@ -85,6 +95,7 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
             <ul className="header-profile_left">
               <Link to="/" className="header-profile_left_logo" onClick={mainPageClick}>DTK</Link>
               <Link to="/" className="header-profile_left_link">Boutique</Link>
+              <button className="header-profile_left_link header-profile_left_link-cart" onClick={toggleCartModal}>Panier</button>
               <NavLink to="/order" className={({ isActive }) => (isActive ? 'header-profile_left_link header-profile_left_link-active' : 'header-profile_left_link')}>Commandes</NavLink>
             </ul>
             <div onClick={handlePopupButton} className="header-profile_right">
@@ -136,9 +147,9 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
                 </Link>
               }
 
-              <Link to="/cart" className={location.pathname === '/' ? "header_profile_links header_profile_links-home" : "header_profile_links"}>
+              <button className={location.pathname === '/' ? "header_profile_links header_profile_links-home" : "header_profile_links"} onClick={toggleCartModal}>
                 <BiBasket className="header_profile_links_link" size={20} />
-              </Link>
+              </button>
             </div>
           </div >
       }
@@ -146,6 +157,7 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
       {
         isAuthentificated && location.pathname === '/params' && <ModalConfirm isOpen={confirmModalIsOpen} title='Confirmation' content='Cette action est irréversible, souhaitez-vous vraiment supprimer définitivement votre compte ?' acceptFunction={handleDeleteAccountButton} cancelFunction={handleCancelAccounDeletetButton} />
       }
+      <ModalCart isOpen={cartModalIsOpen} cancelFunction={exitCartModal} />
 
 
     </>

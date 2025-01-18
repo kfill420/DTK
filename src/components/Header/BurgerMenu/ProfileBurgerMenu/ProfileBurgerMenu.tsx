@@ -39,6 +39,7 @@ const HamburgerMenu = ({ isOpen, email }: { isOpen: boolean, email: string }) =>
               </div>
               <ul className="pburgerMenu_list">
                 <NavLink to="/" onClick={handleOpen} className={({ isActive }) => (isActive ? 'pburgerMenu_list_link pburgerMenu_list_link-active' : 'pburgerMenu_list_link')}>Boutique</NavLink>
+                <NavLink to="/cart" onClick={handleOpen} className={({ isActive }) => (isActive ? 'pburgerMenu_list_link pburgerMenu_list_link-active' : 'pburgerMenu_list_link')}>Panier</NavLink>
                 <NavLink to="/order" onClick={handleOpen} className={({ isActive }) => (isActive ? 'pburgerMenu_list_link pburgerMenu_list_link-active' : 'pburgerMenu_list_link')}>Commandes</NavLink>
               </ul>
             </div>

@@ -5,7 +5,8 @@ import { addTokenStorage, deleteLocalStorage } from '../../localStorage/localSto
 import { AxiosError } from 'axios';
 import { escapeHtml } from "../../utils/escapeHtml";
 import { checkTokenExpiration } from "../../utils/checkTokenExpiration";
-import { actionCheckTokenPayload, RejectPayload } from "../../@types/payload";
+import { actionCheckSigninResult, actionCheckTokenPayload, RejectPayload } from "../../@types/payload";
+import { actionAddToCartPayloadI } from "../../@types/cart";
 
 const actionCheckToken = createAsyncThunk<actionCheckTokenPayload, void, { rejectValue: RejectPayload }>(
   'account/CHECK_TOKEN',
@@ -13,11 +14,9 @@ const actionCheckToken = createAsyncThunk<actionCheckTokenPayload, void, { rejec
     try {
       if (checkTokenExpiration() === false)
         return thunkAPI.rejectWithValue({ tokenExpired: true });
-
       const response = await axiosInstance.post('/valide-token');
       return { valid: response.data.valid, data: response.data };
     } catch (error) {
-      console.log(error);
       deleteLocalStorage();
       const axiosError = error as AxiosError;
       return thunkAPI.rejectWithValue(axiosError.response?.data as RejectPayload);
@@ -25,16 +24,23 @@ const actionCheckToken = createAsyncThunk<actionCheckTokenPayload, void, { rejec
   }
 );
 
-const actionCheckSignin = createAsyncThunk(
+const actionCheckSignin = createAsyncThunk<actionCheckSigninResult, actionAddToCartPayloadI[]>(
   'account/CHECK_LOGIN',
-  async (_, thunkAPI) => {
+  async (payload, thunkAPI) => {
     try {
       const state = thunkAPI.getState() as RootState;
-      const response = await axiosInstance.post('/signin', {
-        email: escapeHtml(state.account.credentials.email),
-        password: escapeHtml(state.account.credentials.passwordSignin),
-      });
-
+      let response;
+      if (payload && payload.length > 0)
+        response = await axiosInstance.post('/signin', {
+          email: escapeHtml(state.account.credentials.email),
+          password: escapeHtml(state.account.credentials.passwordSignin),
+          cartVisitor: payload,
+        });
+      else
+        response = await axiosInstance.post('/signin', {
+          email: escapeHtml(state.account.credentials.email),
+          password: escapeHtml(state.account.credentials.passwordSignin),
+        });
       const { token, csrfToken, sessionId } = response.data;
       addTokenStorage(token, csrfToken, sessionId);
       return { token, data: response.data };
