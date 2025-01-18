@@ -2,12 +2,13 @@ import './HomePage.scss'
 import Carousel from '../../components/App/Carousel/Carousel';
 import { slides } from '../../components/App/Carousel/carouselData.json';
 import { data } from '../../components/App/Service/serviceData.json';
-import Service from '../../components/App/Service/Service';
 import Store from '../../components/App/Store/Store';
 import Questions from '../../components/App/Questions/Questions';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { useEffect } from 'react';
+import { lazy, useEffect } from 'react';
 import { actionCheckProduct } from '../../store/thunks/checkProduct';
+
+const Service = lazy(() => import('../../components/App/Service/Service.tsx'));
 
 function HomePage() {
   const dispatch = useAppDispatch();

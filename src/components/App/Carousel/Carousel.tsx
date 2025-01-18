@@ -49,13 +49,13 @@ function Carousel({ slides, arrows, indicators, interval }: CarouselI) {
             : "carousel_slide-hidden"
             }`}
         >
-          <img src={slide.src} alt={slide.alt} loading="lazy" className={`carousel_slide ${index === slideState
+          <img src={slide.src} alt={slide.alt} className={`carousel_slide ${index === slideState
             ? `carousel_slide-${transitionState}`
             : index === nextSlide
               ? 'carousel_slide-entering'
               : 'carousel_slide-hidden'
             }`} />
-          <img src={slides[nextSlide].src} alt={slides[nextSlide].alt} loading="lazy" />
+          <img src={slides[nextSlide].src} alt={slides[nextSlide].alt} />
           <div className="carousel_content">
             {slide.title && <span className={`carousel_content_title ${index === slideState
               ? `transi-ft-${transitionState}`
