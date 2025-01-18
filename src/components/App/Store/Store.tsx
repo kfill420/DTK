@@ -11,7 +11,6 @@ function Store({ title, subtitle, amount, list }: { title: string, subtitle: str
         <h3 className="store_title">{title}</h3>
       </div>
       <Collection amount={amount} list={list} />
-
     </div >
   )
 }
