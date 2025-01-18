@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { ProductI, ProductInCartI } from '../../@types/product';
+import { ProductInCartI } from '../../@types/product';
 import { CartStateI } from '../../@types/cart';
 import { escapeHtml } from "../../utils/escapeHtml";
 import { actionAddToCart, actionDeleteOneFromCart, actionGetCart } from "../thunks/checkCart";
