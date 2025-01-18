@@ -13,6 +13,15 @@ export interface AccountI {
   }
 }
 
+export interface AccountSigninI {
+  id: null | number;
+  email: string;
+  firstname: string;
+  lastname: string;
+  address: CheckProfileAddressI;
+  addresses: CheckProfileAddressI[];
+}
+
 export type AddressI = {
   default: boolean,
   firstname: string,
