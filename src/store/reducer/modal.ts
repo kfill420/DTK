@@ -1,9 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { initialStateModal, modal_setIsOpen, setPriceValuePayload } from '../../@types/payload';
+import { actionDeleteOneFromCart } from "../thunks/checkCart";
 
 export const initialState: initialStateModal = {
   burgerModalIsOpen: false,
   confirmModalIsOpen: false,
+  modalCartIsOpen: false,
   modalCollectionFilterIsOpen: false,
   modalCollectionFilter: {
     available: true,
@@ -28,7 +30,7 @@ const ModalMenu = createSlice({
   name: 'modalMenu',
   initialState,
   reducers: {
-    toggleIsOpen: (state, action: PayloadAction<'burgerModalIsOpen' | 'confirmModalIsOpen' | 'modalCollectionFilterIsOpen'>) => {
+    toggleIsOpen: (state, action: PayloadAction<'burgerModalIsOpen' | 'confirmModalIsOpen' | 'modalCollectionFilterIsOpen' | 'modalCartIsOpen'>) => {
       state[action.payload] = !state[action.payload];
     },
     setIsOpen: (state, action: PayloadAction<modal_setIsOpen>) => {
@@ -52,6 +54,16 @@ const ModalMenu = createSlice({
         state.modalCollectionFilter[name] = value;
       }
     }
+  },
+  extraReducers: (builder) => {
+    builder.addCase(actionDeleteOneFromCart.rejected, (state, action) => {
+      if (action.payload?.tokenExpired && action.payload?.tokenExpired === true) {
+        state.modalCartIsOpen = false;
+        state.burgerModalIsOpen = false;
+        state.confirmModalIsOpen = false;
+        state.modalCollectionFilterIsOpen = false;
+      }
+    });
   }
 })
 

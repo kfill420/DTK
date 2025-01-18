@@ -10,10 +10,9 @@ export const initialState: ProductStateI = {
 };
 
 const productSlice = createSlice({
-  name: 'account',
+  name: 'product',
   initialState,
   reducers: {
-
   },
   extraReducers: (builder) => {
     builder.addCase(actionCheckProduct.fulfilled, (state, action) => {

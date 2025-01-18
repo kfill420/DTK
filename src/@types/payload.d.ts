@@ -1,10 +1,12 @@
+import { AccountI } from "./account";
+
 export interface changeCredentialsPayload {
   name: 'email' | 'password' | 'passwordConfirm' | 'passwordSignin';
   value: string;
 }
 
 export interface modal_setIsOpen {
-  modal: 'burgerModalIsOpen' | 'confirmModalIsOpen' | 'modalCollectionFilterIsOpen';
+  modal: 'burgerModalIsOpen' | 'confirmModalIsOpen' | 'modalCollectionFilterIsOpen' | 'modalCartIsOpen';
   value: boolean;
 }
 
@@ -28,6 +30,7 @@ export interface PriceRangeModal {
 export interface initialStateModal {
   burgerModalIsOpen: boolean;
   confirmModalIsOpen: boolean;
+  modalCartIsOpen: boolean;
   modalCollectionFilterIsOpen: boolean;
   modalCollectionFilter: PriceRangeModal;
 }
@@ -46,8 +49,14 @@ export interface actionCheckTokenPayload {
     email: string;
     addresses: CheckProfileAddressI[];
     listCountries: CountryI[];
+    cart: {
+      productsCart: actionAddToCartPayloadI[];
+    };
   }
+}
 
+export interface actionAddRemovetoCartPayload {
+  productCarts: actionAddToCartPayloadI[];
 }
 
 export interface ErrorPayload {
@@ -61,6 +70,17 @@ export interface ExpirationPayload {
 }
 
 export type RejectPayload = ExpirationPayload | ErrorPayload;
+
+export interface actionCheckSigninResult {
+  data: {
+    account: AccountI;
+    cart: cartResponseI;
+    listCountries: CountryI[];
+    token: string;
+    csrfToken: string;
+    sessionId: string;
+  }
+}
 
 
 

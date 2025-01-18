@@ -22,6 +22,13 @@ export type ProductI = {
   }[];
 };
 
+export type ProductInCartI = {
+  product: ProductI;
+  color: number;
+  state: string;
+  stockage: string;
+};
+
 export type PriceI = {
   state: string;
   stockage: string;

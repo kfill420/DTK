@@ -6,8 +6,10 @@ import { TbMailCheck } from "react-icons/tb";
 import Input from '../App/Input/Input';
 import { ChangeEvent, useState } from "react";
 import { escapeHtml } from "../../utils/escapeHtml";
+import { useLocation } from "react-router-dom";
 
 function Footer() {
+  const location = useLocation();
   const [email, setEmail] = useState('');
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -15,17 +17,20 @@ function Footer() {
   }
   return (
     <div className="footer">
-      <div className="footer_newsletter">
-        <span className="footer_newsletter_title">Restez connecté avec les meilleures offres !</span>
-        <span className="footer_newsletter_content">Inscrivez-vous à notre newsletter et soyez le premier à
-          découvrir nos promotions exclusives sur les derniers téléphones.</span>
-        <div className="footer_newsletter_form">
-          <Input name="newsletter" type="email" text="Adresse mail" value={email} handleChange={handleChange} />
-          <button className="footer_newsletter_form_button"><TbMailCheck size={22} />S'inscrire</button>
-        </div>
+      {location.pathname !== '/cart' &&
 
-      </div>
-      <div className="footer_links">
+        <div className="footer_newsletter">
+          <span className="footer_newsletter_title">Restez connecté avec les meilleures offres !</span>
+          <span className="footer_newsletter_content">Inscrivez-vous à notre newsletter et soyez le premier à
+            découvrir nos promotions exclusives sur les derniers téléphones.</span>
+          <div className="footer_newsletter_form">
+            <Input name="newsletter" type="email" text="Adresse mail" value={email} handleChange={handleChange} />
+            <button className="footer_newsletter_form_button"><TbMailCheck size={22} />S'inscrire</button>
+          </div>
+        </div>
+      }
+
+      <div className={location.pathname !== '/cart' ? "footer_links" : "footer_links footer_links-cart"}>
         <div className="footer_links_information">
           <span className="footer_links_information_title">Informations utiles</span>
           <div className="footer_links_information_content">

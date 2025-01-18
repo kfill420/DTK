@@ -74,6 +74,11 @@
     gap: 2rem;
     width: 100%;
 
+    &-cart {
+      border-top: none;
+      padding: 0;
+    }
+
     @include breakpoint.media(tablet_xl_mini) {
       padding: 4% 0 0 0;
     }

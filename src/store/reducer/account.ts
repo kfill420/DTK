@@ -18,6 +18,7 @@ import {
 } from '../thunks/checkAccount';
 import { CheckProfileAddressI, CountryI } from '../../@types/account';
 import { escapeHtml } from '../../utils/escapeHtml';
+import { actionAddToCart, actionDeleteOneFromCart } from "../thunks/checkCart";
 
 export const initialState = {
   id: null,
@@ -123,8 +124,8 @@ const accountSlice = createSlice({
       state.isAuthentificated = true;
       state.account.id = action.payload.data.account.id;
       state.account.email = escapeHtml(action.payload.data.account.email);
-      state.account.firstname = escapeHtml(action.payload.data.account.firstname);
-      state.account.lastname = escapeHtml(action.payload.data.account.lastname);
+      if (action.payload.data.account.firstname) state.account.firstname = escapeHtml(action.payload.data.account.firstname);
+      if (action.payload.data.account.lastname) state.account.lastname = escapeHtml(action.payload.data.account.lastname);
       state.account.listAddress = action.payload.data.account.addresses.map((address: CheckProfileAddressI) => ({
         ...address,
         firstname: escapeHtml(address.firstname),
@@ -169,8 +170,8 @@ const accountSlice = createSlice({
       if (action.payload.valid) {
         state.account.id = action.payload.data.id;
         state.account.email = escapeHtml(action.payload.data.email);
-        state.account.firstname = escapeHtml(action.payload.data.firstname);
-        state.account.lastname = escapeHtml(action.payload.data.lastname);
+        if (action.payload.data.firstname) state.account.firstname = escapeHtml(action.payload.data.firstname);
+        if (action.payload.data.lastname) state.account.lastname = escapeHtml(action.payload.data.lastname);
         state.account.listAddress = action.payload.data.addresses.map((address: CheckProfileAddressI) => ({
           ...address,
           firstname: escapeHtml(address.firstname),
@@ -300,6 +301,24 @@ const accountSlice = createSlice({
       state.isAuthentificated = false;
       state.token = null;
       deleteLocalStorage();
+    });
+    builder.addCase(actionAddToCart.rejected, (state, action) => {
+      if (action.payload?.tokenExpired && action.payload?.tokenExpired === true) {
+        state.token = null;
+        deleteLocalStorage();
+        state.tokenIsLoading = false;
+        state.isAuthentificated = false;
+        state.initialCheck = false;
+      }
+    });
+    builder.addCase(actionDeleteOneFromCart.rejected, (state, action) => {
+      if (action.payload?.tokenExpired && action.payload?.tokenExpired === true) {
+        state.token = null;
+        deleteLocalStorage();
+        state.tokenIsLoading = false;
+        state.isAuthentificated = false;
+        state.initialCheck = false;
+      }
     });
   },
 });
