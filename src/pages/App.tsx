@@ -52,10 +52,10 @@ function App() {
     <div className="app">
 
       {/* <SpinnerSquare isOpen={tokenIsLoading || initialCheck} /> */}
-
-      <Header isAuthentificated={isAuthentificated} email={account.email} account_id={account.id} />
-      <ScrollToTop />
       <Suspense fallback={<SpinnerSquare isOpen={true} />}>
+        <Header isAuthentificated={isAuthentificated} email={account.email} account_id={account.id} />
+        <ScrollToTop />
+
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/collection/:brand" element={<CollectionPage />} />
@@ -66,8 +66,9 @@ function App() {
           <Route path="/order" element={<PrivateRoute isAuthenticated={isAuthentificated}><Order /></PrivateRoute>} />
           <Route path="/profile" element={<PrivateRoute isAuthenticated={isAuthentificated}>{<Infos account={account} />}</PrivateRoute>} />
         </Routes>
+
+        {!noFooterPage && <Footer />}
       </Suspense>
-      {!noFooterPage && <Footer />}
 
     </div>
   )
