@@ -76,7 +76,7 @@ function LoginPage() {
     if (ls && ls.length > 0)
       resultSignin = await dispatch(actionCheckSignin(ls));
     else
-      resultSignin = await dispatch(actionCheckSignin());
+      resultSignin = await dispatch(actionCheckSignin(null));
     if (actionCheckSignin.fulfilled.match(resultSignin)) {
       navigate('/profile');
     }

@@ -24,9 +24,9 @@ const actionCheckToken = createAsyncThunk<actionCheckTokenPayload, void, { rejec
   }
 );
 
-const actionCheckSignin = createAsyncThunk<actionCheckSigninResult, actionAddToCartPayloadI[]>(
+const actionCheckSignin = createAsyncThunk<actionCheckSigninResult, actionAddToCartPayloadI[] | null>(
   'account/CHECK_LOGIN',
-  async (payload, thunkAPI) => {
+  async (payload: actionAddToCartPayloadI[] | null, thunkAPI) => {
     try {
       const state = thunkAPI.getState() as RootState;
       let response;
