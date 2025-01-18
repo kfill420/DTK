@@ -1,5 +1,3 @@
-import { AccountI } from "./account";
-
 export interface changeCredentialsPayload {
   name: 'email' | 'password' | 'passwordConfirm' | 'passwordSignin';
   value: string;
@@ -73,7 +71,7 @@ export type RejectPayload = ExpirationPayload | ErrorPayload;
 
 export interface actionCheckSigninResult {
   data: {
-    account: AccountI;
+    account: AccountSigninI;
     cart: cartResponseI;
     listCountries: CountryI[];
     token: string;

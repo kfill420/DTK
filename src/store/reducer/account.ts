@@ -120,7 +120,7 @@ const accountSlice = createSlice({
         state.connection = 'login';
     });
     builder.addCase(actionCheckSignin.fulfilled, (state, action) => {
-      state.token = action.payload.token;
+      state.token = action.payload.data.token;
       state.isAuthentificated = true;
       state.account.id = action.payload.data.account.id;
       state.account.email = escapeHtml(action.payload.data.account.email);
