@@ -93,12 +93,12 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
               <BurgerButton />
             </div>
             <ul className="header-profile_left">
-              <Link to="/" className="header-profile_left_logo" onClick={mainPageClick}>DTK</Link>
-              <Link to="/" className="header-profile_left_link">Boutique</Link>
-              <button className="header-profile_left_link header-profile_left_link-cart" onClick={toggleCartModal}>Panier</button>
-              <NavLink to="/order" className={({ isActive }) => (isActive ? 'header-profile_left_link header-profile_left_link-active' : 'header-profile_left_link')}>Commandes</NavLink>
+              <li><Link to="/" aria-label="Accueil" className="header-profile_left_logo" onClick={mainPageClick}>DTK</Link></li>
+              <li><Link to="/" aria-label="Accueil" className="header-profile_left_link">Boutique</Link></li>
+              <li><button aria-label="Panier" className="header-profile_left_link header-profile_left_link-cart" onClick={toggleCartModal}>Panier</button></li>
+              <li><NavLink to="/order" aria-label="Commandes" className={({ isActive }) => (isActive ? 'header-profile_left_link header-profile_left_link-active' : 'header-profile_left_link')}>Commandes</NavLink></li>
             </ul>
-            <div onClick={handlePopupButton} className="header-profile_right">
+            <div onClick={handlePopupButton} className="header-profile_right" aria-label="Ouverture du menu de profil">
               <div className="header-profile_right_container">
                 <PiUserCircleThin size={30} />
                 <div className={stateAnimationPopup === 'open-active' ? "header-profile_right_container_icon header-profile_right_container_icon-open" : "header-profile_right_container_icon"}>
@@ -112,8 +112,8 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
                   <span className="header-profile_right_popup_header_email">{email}</span>
                 </div>
                 <div className="header-profile_right_popup_content">
-                  <NavLink to="/profile" className={({ isActive }) => (isActive ? 'header-profile_right_popup_content_link header-profile_right_popup_content_link-active' : 'header-profile_right_popup_content_link')}>Profil</NavLink>
-                  <NavLink to="/params" className={({ isActive }) => (isActive ? 'header-profile_right_popup_content_link header-profile_right_popup_content_link-active' : 'header-profile_right_popup_content_link')}>Paramètres</NavLink>
+                  <NavLink to="/profile" aria-label="Profil" className={({ isActive }) => (isActive ? 'header-profile_right_popup_content_link header-profile_right_popup_content_link-active' : 'header-profile_right_popup_content_link')}>Profil</NavLink>
+                  <NavLink to="/params" aria-label="Paramètres" className={({ isActive }) => (isActive ? 'header-profile_right_popup_content_link header-profile_right_popup_content_link-active' : 'header-profile_right_popup_content_link')}>Paramètres</NavLink>
                   <button onClick={handleDisconnectButton} className="header-profile_right_popup_content_link">Se déconnecter</button>
                 </div>
               </div>
@@ -121,33 +121,33 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
           </div>
           :
           <div className={`${location.pathname === '/' ? 'header header-home' : 'header'}`}>
-            <div className="header_burger">
+            <div className="header_burger" aria-label="Burger bouton">
               <BurgerButton />
             </div>
             <div className="header_logo">
-              <Link to="/" className="header_logo_link">
+              <Link to="/" className="header_logo_link" aria-label="Accueil">
                 <span className={`${location.pathname === '/' ? 'header_logo_link_text header_logo_link_text-home' : 'header_logo_link_text'}`}>DTK</span>
               </Link>
             </div>
             <ul className="header_navbar">
-              <NavLink to="/" className={({ isActive }) => (isActive ? 'header_navbar_link header_navbar_link-active' : location.pathname === '/' ? 'header_navbar_link header_navbar_link-home' : 'header_navbar_link')}>Accueil</NavLink>
-              <NavLink to="/collection/iPhone" className={({ isActive }) => (isActive ? 'header_navbar_link header_navbar_link-active' : location.pathname === '/' ? 'header_navbar_link header_navbar_link-home' : 'header_navbar_link')}>iPhone</NavLink>
-              <NavLink to="/collection/Samsung" className={({ isActive }) => (isActive ? 'header_navbar_link header_navbar_link-active' : location.pathname === '/' ? 'header_navbar_link header_navbar_link-home' : 'header_navbar_link')}>Smasung</NavLink>
-              <NavLink to="/contact" className={({ isActive }) => (isActive ? 'header_navbar_link header_navbar_link-active' : location.pathname === '/' ? 'header_navbar_link header_navbar_link-home' : 'header_navbar_link')}>Contact</NavLink>
-              <NavLink to="/faq" className={({ isActive }) => (isActive ? 'header_navbar_link header_navbar_link-active' : location.pathname === '/' ? 'header_navbar_link header_navbar_link-home' : 'header_navbar_link')}>FAQ</NavLink>
+              <NavLink to="/" aria-label="Accueil" className={({ isActive }) => (isActive ? 'header_navbar_link header_navbar_link-active' : location.pathname === '/' ? 'header_navbar_link header_navbar_link-home' : 'header_navbar_link')}>Accueil</NavLink>
+              <NavLink to="/collection/iPhone" aria-label="Collection iPhone" className={({ isActive }) => (isActive ? 'header_navbar_link header_navbar_link-active' : location.pathname === '/' ? 'header_navbar_link header_navbar_link-home' : 'header_navbar_link')}>iPhone</NavLink>
+              <NavLink to="/collection/Samsung" aria-label="Collection Samsung" className={({ isActive }) => (isActive ? 'header_navbar_link header_navbar_link-active' : location.pathname === '/' ? 'header_navbar_link header_navbar_link-home' : 'header_navbar_link')}>Smasung</NavLink>
+              <NavLink to="/contact" aria-label="Contact" className={({ isActive }) => (isActive ? 'header_navbar_link header_navbar_link-active' : location.pathname === '/' ? 'header_navbar_link header_navbar_link-home' : 'header_navbar_link')}>Contact</NavLink>
+              <NavLink to="/faq" aria-label="FAQ" className={({ isActive }) => (isActive ? 'header_navbar_link header_navbar_link-active' : location.pathname === '/' ? 'header_navbar_link header_navbar_link-home' : 'header_navbar_link')}>FAQ</NavLink>
             </ul>
             <div className="header_profile">
               {isAuthentificated ?
-                <Link to="/profile" className={location.pathname === '/' ? "header_profile_links header_profile_links-home" : "header_profile_links"}>
+                <Link to="/profile" className={location.pathname === '/' ? "header_profile_links header_profile_links-home" : "header_profile_links"} aria-label="Profil">
                   <FaRegUser className="header_profile_links_link" size={20} />
                 </Link>
                 :
-                <Link to="/login" className={location.pathname === '/' ? "header_profile_links header_profile_links-home" : "header_profile_links"}>
+                <Link to="/login" className={location.pathname === '/' ? "header_profile_links header_profile_links-home" : "header_profile_links"} aria-label="Connection">
                   <PiSignInFill className="header_profile_links_link" size={20} />
                 </Link>
               }
 
-              <button className={location.pathname === '/' ? "header_profile_links header_profile_links-home" : "header_profile_links"} onClick={toggleCartModal}>
+              <button className={location.pathname === '/' ? "header_profile_links header_profile_links-home" : "header_profile_links"} onClick={toggleCartModal} aria-label="Panier">
                 <BiBasket className="header_profile_links_link" size={20} />
               </button>
             </div>

@@ -80,6 +80,7 @@ function Carousel({ slides, arrows, indicators, interval }: CarouselI) {
             <button
               key={index}
               onClick={() => setSlide(index)}
+              aria-label="Indicateur de slide"
               className={`carousel_indicators_indicator ${nextSlide === index ? 'carousel_indicators_indicator-active' : 'carousel_indicators_indicator-inactive'
                 }`}
             />
