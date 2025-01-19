@@ -4,7 +4,7 @@ export interface changeCredentialsPayload {
 }
 
 export interface modal_setIsOpen {
-  modal: 'burgerModalIsOpen' | 'confirmModalIsOpen' | 'modalCollectionFilterIsOpen' | 'modalCartIsOpen';
+  modal: keyof modalsIsOpenState;
   value: boolean;
 }
 
@@ -26,11 +26,18 @@ export interface PriceRangeModal {
 }
 
 export interface initialStateModal {
+  modals: modalsIsOpenState;
+  modalCollectionFilter: PriceRangeModal;
+}
+
+export interface modalsIsOpenState {
   burgerModalIsOpen: boolean;
   confirmModalIsOpen: boolean;
   modalCartIsOpen: boolean;
+  modalAdressIsOpen: boolean;
+  modalAddressIsEdit: boolean;
+  modalInfosIsOpen: boolean;
   modalCollectionFilterIsOpen: boolean;
-  modalCollectionFilter: PriceRangeModal;
 }
 
 export interface setPriceValuePayload {

@@ -4,7 +4,7 @@ import './BurgerButton.scss';
 
 const HamburgerMenuButton = () => {
   const dispatch = useAppDispatch();
-  const burgerMenuIsOpen = useAppSelector((state) => state.ModalMenu.burgerModalIsOpen);
+  const burgerMenuIsOpen = useAppSelector((state) => state.ModalMenu.modals.burgerModalIsOpen);
 
   const handleOpen = () => {
     dispatch(toggleIsOpen('burgerModalIsOpen'));

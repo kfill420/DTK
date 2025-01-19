@@ -142,6 +142,7 @@
       &_logo {
         position: absolute;
         left: 50%;
+        top: 0;
         transform: translateX(-50%);
         font-family: "Wallpoet", sans-serif;
         font-weight: 400;
@@ -149,6 +150,11 @@
         font-size: 3rem;
         text-decoration: none;
         color: v.$textColor-header;
+
+        a {
+          text-decoration: none;
+          color: v.$textColor-header;
+        }
 
         @include breakpoint.media(tablet_xl_mini) {
           left: 0;

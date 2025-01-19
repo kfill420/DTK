@@ -1,12 +1,18 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { initialStateModal, modal_setIsOpen, setPriceValuePayload } from '../../@types/payload';
+import { initialStateModal, modal_setIsOpen, modalsIsOpenState, setPriceValuePayload } from '../../@types/payload';
 import { actionDeleteOneFromCart } from "../thunks/checkCart";
 
 export const initialState: initialStateModal = {
-  burgerModalIsOpen: false,
-  confirmModalIsOpen: false,
-  modalCartIsOpen: false,
-  modalCollectionFilterIsOpen: false,
+  modals: {
+    burgerModalIsOpen: false,
+    confirmModalIsOpen: false,
+    modalCartIsOpen: false,
+    modalAdressIsOpen: false,
+    modalAddressIsEdit: false,
+    modalInfosIsOpen: false,
+    modalCollectionFilterIsOpen: false,
+  },
+
   modalCollectionFilter: {
     available: true,
 
@@ -30,16 +36,19 @@ const ModalMenu = createSlice({
   name: 'modalMenu',
   initialState,
   reducers: {
-    toggleIsOpen: (state, action: PayloadAction<'burgerModalIsOpen' | 'confirmModalIsOpen' | 'modalCollectionFilterIsOpen' | 'modalCartIsOpen'>) => {
-      state[action.payload] = !state[action.payload];
+    toggleIsOpen: (state, action: PayloadAction<keyof modalsIsOpenState>) => {
+      state.modals[action.payload] = !state.modals[action.payload];
     },
     setIsOpen: (state, action: PayloadAction<modal_setIsOpen>) => {
-      state[action.payload.modal] = action.payload.value;
+      state.modals[action.payload.modal] = action.payload.value;
     },
     closeAllModal: (state) => {
-      state.burgerModalIsOpen = false;
-      state.confirmModalIsOpen = false;
-      state.modalCollectionFilterIsOpen = false;
+      state.modals.burgerModalIsOpen = false;
+      state.modals.confirmModalIsOpen = false;
+      state.modals.modalCollectionFilterIsOpen = false;
+      state.modals.modalCartIsOpen = false;
+      state.modals.modalAdressIsOpen = false;
+      state.modals.modalInfosIsOpen = false;
     },
     setFilterValue: (state, action: PayloadAction<setPriceValuePayload>) => {
       const { name, value } = action.payload;
@@ -58,10 +67,10 @@ const ModalMenu = createSlice({
   extraReducers: (builder) => {
     builder.addCase(actionDeleteOneFromCart.rejected, (state, action) => {
       if (action.payload?.tokenExpired && action.payload?.tokenExpired === true) {
-        state.modalCartIsOpen = false;
-        state.burgerModalIsOpen = false;
-        state.confirmModalIsOpen = false;
-        state.modalCollectionFilterIsOpen = false;
+        state.modals.modalCartIsOpen = false;
+        state.modals.burgerModalIsOpen = false;
+        state.modals.confirmModalIsOpen = false;
+        state.modals.modalCollectionFilterIsOpen = false;
       }
     });
   }

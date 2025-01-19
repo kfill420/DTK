@@ -9,6 +9,7 @@ import { actionCheckToken } from '../store/thunks/checkLogin';
 import { NonPrivateRoute, PrivateRoute } from '../components/App/PrivateRoute/PrivateRoute';
 import SpinnerSquare from '../components/App/SpinnerSquare/SpinnerSquare';
 import { lazy } from "react";
+import { useModalsWithBackButton } from "../hooks/useModalsWithBackButton.ts";
 
 const HomePage = lazy(() => import('./HomePage/HomePage.tsx'));
 const ProductPage = lazy(() => import('./ProductPage/ProductPage.tsx'));
@@ -27,18 +28,20 @@ function App() {
   const account = useAppSelector((state) => state.account.account);
   // const tokenIsLoading = useAppSelector((state) => state.account.tokenIsLoading);
   // const initialCheck = useAppSelector((state) => state.account.initialCheck);
-  const modalIsOpen = useAppSelector((state) => state.ModalMenu.burgerModalIsOpen);
+  const burgerMenuIsOpen = useAppSelector((state) => state.ModalMenu.modals.burgerModalIsOpen);
+
+  useModalsWithBackButton();
 
   useEffect(() => {
     dispatch(actionCheckToken())
   }, [dispatch]);
 
   useEffect(() => {
-    if (modalIsOpen)
+    if (burgerMenuIsOpen)
       document.body.style.overflow = 'hidden';
     else
       document.body.style.overflow = 'auto';
-  }, [modalIsOpen]);
+  }, [burgerMenuIsOpen]);
 
   // if (tokenIsLoading || initialCheck) {
   //   return (
