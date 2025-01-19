@@ -29,6 +29,11 @@ $textColor-error: red;
 $shadowColor: 2px 2px 2px 0px rgba(255, 255, 255, 0.5);
 $shadowColorWhite: 1px 0px 5px 1px white;
 
+// loader
+$loader-block: #e7e7e7;
+$loader-backgrouond: white;
+$loader-active: 110deg, rgba(227, 227, 227, 0) 0%, rgba(227, 227, 227, 0) 40%, rgba(227, 227, 227, 0.5) 50%, rgba(227, 227, 227, 0) 60%, rgba(227, 227, 227, 0) 100%;
+
 // font
 @font-face {
   font-family: 'Wallpoet';
