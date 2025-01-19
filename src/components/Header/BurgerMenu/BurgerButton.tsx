@@ -13,7 +13,7 @@ const HamburgerMenuButton = () => {
   };
 
   return (
-    <button className={`${location.pathname === '/' ? 'burgerMenuButton burgerMenuButton-home' : 'burgerMenuButton'}`} onClick={() => handleOpen()}>
+    <button className={`${location.pathname === '/' ? 'burgerMenuButton burgerMenuButton-home' : 'burgerMenuButton'}`} onClick={() => handleOpen()} aria-label="Ouvrir burger menu">
       <svg
         width="40"
         height="40"
