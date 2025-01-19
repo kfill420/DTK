@@ -15,7 +15,6 @@ const actionCheckToken = createAsyncThunk<actionCheckTokenPayload, void, { rejec
       if (checkTokenExpiration() === false)
         return thunkAPI.rejectWithValue({ tokenExpired: true });
       const response = await axiosInstance.post('/valide-token');
-      console.log(response.data);
 
       return { valid: response.data.valid, data: response.data };
     } catch (error) {
