@@ -25,6 +25,7 @@
 
   &_burger {
     order: 1;
+    width: 4rem;
 
     @include breakpoint.media(tablet_xl_mini) {
       display: none;
@@ -97,6 +98,7 @@
     flex-direction: row;
     align-items: center;
     gap: 0.5rem;
+    width: 4rem;
 
     &_links {
       color: v.$textColor-header;

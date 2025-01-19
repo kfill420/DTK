@@ -55,7 +55,7 @@ function Carousel({ slides, arrows, indicators, interval }: CarouselI) {
               ? 'carousel_slide-entering'
               : 'carousel_slide-hidden'
             }`} />
-          <img src={slides[nextSlide].src} alt={slides[nextSlide].alt} loading="lazy" />
+          <img src={slides[nextSlide].src} alt={slides[nextSlide].alt} />
           <div className="carousel_content">
             {slide.title && <span className={`carousel_content_title ${index === slideState
               ? `transi-ft-${transitionState}`

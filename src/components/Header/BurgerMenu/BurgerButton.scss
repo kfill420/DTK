@@ -1,5 +1,15 @@
+@use '../../../styles/variables' as v;
+@use '../../../styles/breakpoint.scss';
+
 .burgerMenuButton {
   cursor: pointer;
+  border: none;
+  background-color: transparent;
+  color: v.$textColor-header;
+
+  &-home {
+    color: v.$textColor-header-Home;
+  }
 }
 
 .line {
