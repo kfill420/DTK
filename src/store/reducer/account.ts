@@ -64,8 +64,6 @@ export const initialState = {
   },
   connection: 'checking',
   token: null as null | string,
-  tokenIsLoading: false,
-  initialCheck: true,
   listCountries: [] as CountryI[],
 };
 
@@ -165,8 +163,6 @@ const accountSlice = createSlice({
     });
     builder.addCase(actionCheckToken.fulfilled, (state, action) => {
       state.isAuthentificated = action.payload.valid;
-      state.tokenIsLoading = false;
-      state.initialCheck = false;
       if (action.payload.valid) {
         state.account.id = action.payload.data.id;
         state.account.email = escapeHtml(action.payload.data.email);
@@ -197,13 +193,8 @@ const accountSlice = createSlice({
         }));
       }
     });
-    builder.addCase(actionCheckToken.pending, (state) => {
-      state.tokenIsLoading = true;
-    });
     builder.addCase(actionCheckToken.rejected, (state, action) => {
-      state.tokenIsLoading = false;
       state.isAuthentificated = false;
-      state.initialCheck = false;
       if (action.payload?.tokenExpired && action.payload?.tokenExpired === true) {
         state.token = null;
         deleteLocalStorage();
@@ -232,9 +223,7 @@ const accountSlice = createSlice({
       if (action.payload?.tokenExpired && action.payload?.tokenExpired === true) {
         state.token = null;
         deleteLocalStorage();
-        state.tokenIsLoading = false;
         state.isAuthentificated = false;
-        state.initialCheck = false;
       }
     });
     builder.addCase(actionDeleteAddressFromAccount.fulfilled, (state, action) => {
@@ -245,9 +234,7 @@ const accountSlice = createSlice({
       if (action.payload?.tokenExpired && action.payload?.tokenExpired === true) {
         state.token = null;
         deleteLocalStorage();
-        state.tokenIsLoading = false;
         state.isAuthentificated = false;
-        state.initialCheck = false;
       }
     });
     builder.addCase(actionUpdateAddressFromAccount.fulfilled, (state, action) => {
@@ -273,9 +260,7 @@ const accountSlice = createSlice({
       if (action.payload?.tokenExpired && action.payload?.tokenExpired === true) {
         state.token = null;
         deleteLocalStorage();
-        state.tokenIsLoading = false;
         state.isAuthentificated = false;
-        state.initialCheck = false;
       }
     });
     builder.addCase(actionUpdateInfosFromAccount.fulfilled, (state, action) => {
@@ -287,9 +272,7 @@ const accountSlice = createSlice({
       if (action.payload?.tokenExpired && action.payload?.tokenExpired === true) {
         state.token = null;
         deleteLocalStorage();
-        state.tokenIsLoading = false;
         state.isAuthentificated = false;
-        state.initialCheck = false;
       }
     });
     builder.addCase(actionDeleteAccount.fulfilled, (state) => {
@@ -306,18 +289,14 @@ const accountSlice = createSlice({
       if (action.payload?.tokenExpired && action.payload?.tokenExpired === true) {
         state.token = null;
         deleteLocalStorage();
-        state.tokenIsLoading = false;
         state.isAuthentificated = false;
-        state.initialCheck = false;
       }
     });
     builder.addCase(actionDeleteOneFromCart.rejected, (state, action) => {
       if (action.payload?.tokenExpired && action.payload?.tokenExpired === true) {
         state.token = null;
         deleteLocalStorage();
-        state.tokenIsLoading = false;
         state.isAuthentificated = false;
-        state.initialCheck = false;
       }
     });
   },

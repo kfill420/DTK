@@ -26,8 +26,6 @@ function App() {
   const noFooterPage = location.pathname === '/login' || location.pathname === '/params' || location.pathname === '/order' || location.pathname === '/profile';
   const isAuthentificated = useAppSelector((state) => state.account.isAuthentificated);
   const account = useAppSelector((state) => state.account.account);
-  // const tokenIsLoading = useAppSelector((state) => state.account.tokenIsLoading);
-  // const initialCheck = useAppSelector((state) => state.account.initialCheck);
   const burgerMenuIsOpen = useAppSelector((state) => state.ModalMenu.modals.burgerModalIsOpen);
 
   useModalsWithBackButton();
@@ -43,18 +41,9 @@ function App() {
       document.body.style.overflow = 'auto';
   }, [burgerMenuIsOpen]);
 
-  // if (tokenIsLoading || initialCheck) {
-  //   return (
-  //     <div className="loader">
-  //       <SpinnerSquare isOpen={tokenIsLoading || initialCheck} />
-  //     </div>
-  //   )
-  // }
-
   return (
     <div className="app">
 
-      {/* <SpinnerSquare isOpen={tokenIsLoading || initialCheck} /> */}
       <Suspense fallback={<SpinnerSquare isOpen={true} />}>
         <Header isAuthentificated={isAuthentificated} email={account.email} account_id={account.id} />
         <ScrollToTop />

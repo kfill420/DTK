@@ -2,6 +2,7 @@ export interface ProductStateI {
   list: ProductI[];
   stateProduct: string[];
   stockageProduct: string[];
+  getAllProductsPending: boolean;
 }
 
 export type ProductI = {

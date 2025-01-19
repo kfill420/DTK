@@ -7,6 +7,7 @@ export const initialState: ProductStateI = {
   list: [],
   stateProduct: ["Imparfait", "Correct", "Très bon", "Parfait"],
   stockageProduct: ["64Go", "128Go", "256Go", "512Go", "1To"],
+  getAllProductsPending: true
 };
 
 const productSlice = createSlice({
@@ -37,7 +38,7 @@ const productSlice = createSlice({
           date: escapeHtml(review.date),
         })),
       }));
-
+      state.getAllProductsPending = false;
       state.list = escapedProducts;
     });
     // builder.addCase(actionGetOneProduct.fulfilled, (state, action) => {
