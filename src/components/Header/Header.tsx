@@ -126,7 +126,7 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
           </div>
           :
           <div className={`${location.pathname === '/' ? 'header header-home' : 'header'}`}>
-            <div className="header_burger" aria-label="Burger bouton">
+            <div className="header_burger">
               <BurgerButton />
             </div>
             <div className="header_logo">

@@ -1,9 +1,11 @@
+import { useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
 import { toggleIsOpen } from '../../../store/reducer/modal';
 import './BurgerButton.scss';
 
 const HamburgerMenuButton = () => {
   const dispatch = useAppDispatch();
+  const location = useLocation();
   const burgerMenuIsOpen = useAppSelector((state) => state.ModalMenu.modals.burgerModalIsOpen);
 
   const handleOpen = () => {
@@ -11,7 +13,7 @@ const HamburgerMenuButton = () => {
   };
 
   return (
-    <div className="burgerMenuButton" onClick={() => handleOpen()}>
+    <button className={`${location.pathname === '/' ? 'burgerMenuButton burgerMenuButton-home' : 'burgerMenuButton'}`} onClick={() => handleOpen()}>
       <svg
         width="40"
         height="40"
@@ -46,7 +48,7 @@ const HamburgerMenuButton = () => {
           strokeWidth="2"
         />
       </svg>
-    </div>
+    </button>
   );
 };
 
