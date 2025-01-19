@@ -9,12 +9,12 @@ import StoreBurgerMenu from './BurgerMenu/StoreBurgerMenu/BurgerMenu';
 import ProfileBurgerMenu from './BurgerMenu/ProfileBurgerMenu/ProfileBurgerMenu';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { IoIosArrowUp } from 'react-icons/io';
-import { useState } from 'react';
 import ModalConfirm from '../Modal/ModalConfirm/ModalConfirm';
 import { actionDeleteAccount } from '../../store/thunks/checkAccount';
 import { closeAllModal, setIsOpen, toggleIsOpen } from '../../store/reducer/modal';
 import { actionLogout } from "../../store/thunks/checkLogin";
 import ModalCart from "../Modal/ModalCart/ModalCart";
+import { useState } from "react";
 
 interface HeaderI {
   isAuthentificated: boolean;
@@ -25,10 +25,13 @@ interface HeaderI {
 function Header({ isAuthentificated, email, account_id }: HeaderI) {
   const location = useLocation();
   const dispatch = useAppDispatch();
-  const burgerMenuIsOpen = useAppSelector((state) => state.ModalMenu.burgerModalIsOpen);
-  const confirmModalIsOpen = useAppSelector((state) => state.ModalMenu.confirmModalIsOpen);
-  const cartModalIsOpen = useAppSelector((state) => state.ModalMenu.modalCartIsOpen);
+  const burgerMenuIsOpen = useAppSelector((state) => state.ModalMenu.modals.burgerModalIsOpen);
+  const confirmModalIsOpen = useAppSelector((state) => state.ModalMenu.modals.confirmModalIsOpen);
+  const cartModalIsOpen = useAppSelector((state) => state.ModalMenu.modals.modalCartIsOpen);
   const [stateAnimationPopup, setstateAnimationPopup] = useState<string>('close');
+
+  // useModalsWithBackButton([burgerMenuIsOpen, confirmModalIsOpen, cartModalIsOpen]);
+
 
   const handlePopupButton = () => {
     switch (stateAnimationPopup) {
@@ -81,6 +84,8 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
     dispatch(closeAllModal());
   }
 
+
+
   // if (test.current)
   //   console.log(window.getComputedStyle(test.current).height);
 
@@ -93,7 +98,7 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
               <BurgerButton />
             </div>
             <ul className="header-profile_left">
-              <li><Link to="/" aria-label="Accueil" className="header-profile_left_logo" onClick={mainPageClick}>DTK</Link></li>
+              <li className="header-profile_left_logo" onClick={mainPageClick}><Link to="/" aria-label="Accueil">DTK</Link></li>
               <li><Link to="/" aria-label="Accueil" className="header-profile_left_link">Boutique</Link></li>
               <li><button aria-label="Panier" className="header-profile_left_link header-profile_left_link-cart" onClick={toggleCartModal}>Panier</button></li>
               <li><NavLink to="/order" aria-label="Commandes" className={({ isActive }) => (isActive ? 'header-profile_left_link header-profile_left_link-active' : 'header-profile_left_link')}>Commandes</NavLink></li>

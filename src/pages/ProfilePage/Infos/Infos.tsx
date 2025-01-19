@@ -11,14 +11,22 @@ import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
 import ModalInfos from './ModalInfos/ModalInfos';
 import { isNumeric } from '../../../utils/regexValidator';
 import DOMPurify from 'dompurify';
+import { setIsOpen, toggleIsOpen } from "../../../store/reducer/modal";
 
 function Infos({ account }: AccountI) {
-  const [modalAdressIsOpen, setModalAdressIsOpen] = useState(false);
-  const [modalInfosIsOpen, setModalInfosIsOpen] = useState(false);
-  const [modalAddressIsEdit, setModalAddressIsEdit] = useState(false);
   const dispatch = useAppDispatch();
 
+  // const [modalAdressIsOpen, setModalAdressIsOpen] = useState(false);
+  // const [modalInfosIsOpen, setModalInfosIsOpen] = useState(false);
+  // const [modalAddressIsEdit, setModalAddressIsEdit] = useState(false);
+
+  const modalAdressIsOpen = useAppSelector((state) => state.ModalMenu.modals.modalAdressIsOpen);
+  const modalInfosIsOpen = useAppSelector((state) => state.ModalMenu.modals.modalInfosIsOpen);
+  const modalAddressIsEdit = useAppSelector((state) => state.ModalMenu.modals.modalAddressIsEdit);
+
   const countries = useAppSelector((state) => state.account.listCountries);
+
+  // useModalsWithBackButton([modalAdressIsOpen, modalInfosIsOpen]);
 
   const initialFormData = {
     id: null as null | number,
@@ -49,14 +57,14 @@ function Infos({ account }: AccountI) {
   const [infosFormData, setInfosFormData] = useState(initialInfosFormData);
 
   const handleOpen = () => {
-    setModalAdressIsOpen(!modalAdressIsOpen);
-    setModalAddressIsEdit(false);
+    dispatch(toggleIsOpen('modalAdressIsOpen'));
+    dispatch(setIsOpen({ modal: 'modalAddressIsEdit', value: false }));
   };
 
   const handleModify = (args?: { address?: CheckProfileAddressI; infos?: CheckProfileInfosI }) => {
     const { address, infos } = args || {};
     if (address) {
-      setModalAddressIsEdit(true);
+      dispatch(setIsOpen({ modal: 'modalAddressIsEdit', value: true }));
       setFormData({
         id: address.id,
         account_id: account.id,
@@ -76,10 +84,10 @@ function Infos({ account }: AccountI) {
         },
         phone: address.phone,
       });
-      setModalAdressIsOpen(!modalAdressIsOpen);
+      dispatch(toggleIsOpen('modalAdressIsOpen'));
     }
     if (infos) {
-      setModalInfosIsOpen(!modalInfosIsOpen);
+      dispatch(toggleIsOpen('modalInfosIsOpen'));
       setInfosFormData({
         email: account.email,
         firstname: account.firstname,
@@ -126,7 +134,7 @@ function Infos({ account }: AccountI) {
 
   const handleDelete = () => {
     dispatch(actionDeleteAddressFromAccount({ account_id: account.id, address_id: formData.id }));
-    setModalAdressIsOpen(!modalAdressIsOpen);
+    dispatch(toggleIsOpen('modalAdressIsOpen'));
   }
 
   const getPrimaryAddressFirst = () => {
@@ -147,11 +155,11 @@ function Infos({ account }: AccountI) {
   const handleReset = (e: React.FormEvent) => {
     e.preventDefault();
     if (modalAdressIsOpen) {
-      setModalAdressIsOpen(!modalAdressIsOpen);
+      dispatch(toggleIsOpen('modalAdressIsOpen'));
       setFormData(initialFormData);
     }
     if (modalInfosIsOpen) {
-      setModalInfosIsOpen(!modalInfosIsOpen);
+      dispatch(toggleIsOpen('modalInfosIsOpen'));
       setInfosFormData(initialInfosFormData);
     }
 
@@ -167,7 +175,7 @@ function Infos({ account }: AccountI) {
       const escapedLastname = DOMPurify.sanitize(data.lastname);
       const dataEscaped = { email: escapedEmail, firstname: escapedFirstname, lastname: escapedLastname, account_id: data.account_id };
       dispatch(actionUpdateInfosFromAccount(dataEscaped));
-      setModalInfosIsOpen(!modalInfosIsOpen);
+      dispatch(toggleIsOpen('modalInfosIsOpen'));
       return;
     }
     if (modalAddressIsEdit) {
@@ -201,7 +209,7 @@ function Infos({ account }: AccountI) {
       dispatch(actionAddAddressFromAccount(dataEscaped));
     }
 
-    setModalAdressIsOpen(!modalAdressIsOpen);
+    dispatch(toggleIsOpen('modalAdressIsOpen'));
     return;
   }
 

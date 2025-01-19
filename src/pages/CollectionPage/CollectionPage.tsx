@@ -22,7 +22,7 @@ function CollectionPage() {
   const [priceSectionIsopen, setPriceSectionIsOpen] = useState(false);
 
   const available = useAppSelector((state) => state.ModalMenu.modalCollectionFilter.available);
-  const modalCollectionFilterIsOpen = useAppSelector((state) => state.ModalMenu.modalCollectionFilterIsOpen);
+  const modalCollectionFilterIsOpen = useAppSelector((state) => state.ModalMenu.modals.modalCollectionFilterIsOpen);
   const minPrice = useAppSelector((state) => state.ModalMenu.modalCollectionFilter.minVal);
   const maxPrice = useAppSelector((state) => state.ModalMenu.modalCollectionFilter.maxVal);
   const selectedMinPrice = useAppSelector((state) => state.ModalMenu.modalCollectionFilter.selectedMinPrice);
