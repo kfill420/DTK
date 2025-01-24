@@ -28,7 +28,7 @@ const HamburgerMenu = ({ isOpen }: { isOpen: boolean }) => {
             <ul className="burgerMenu_list">
               <NavLink to="/" onClick={handleOpen} className={({ isActive }) => (isActive ? 'burgerMenu_list_link burgerMenu_list_link-active' : 'burgerMenu_list_link')}>Accueil</NavLink>
               <NavLink to="/collection/iPhone" onClick={handleOpen} className={({ isActive }) => (isActive ? 'burgerMenu_list_link burgerMenu_list_link-active' : 'burgerMenu_list_link')}>iPhone</NavLink>
-              <NavLink to="/collection/Samsung" onClick={handleOpen} className={({ isActive }) => (isActive ? 'burgerMenu_list_link burgerMenu_list_link-active' : 'burgerMenu_list_link')}>Smasung</NavLink>
+              <NavLink to="/collection/Samsung" onClick={handleOpen} className={({ isActive }) => (isActive ? 'burgerMenu_list_link burgerMenu_list_link-active' : 'burgerMenu_list_link')}>Samsung</NavLink>
               <NavLink to="/contact" onClick={handleOpen} className={({ isActive }) => (isActive ? 'burgerMenu_list_link burgerMenu_list_link-active' : 'burgerMenu_list_link')}>Contact</NavLink>
               <NavLink to="/faq" onClick={handleOpen} className={({ isActive }) => (isActive ? 'burgerMenu_list_link burgerMenu_list_link-active' : 'burgerMenu_list_link')}>FAQ</NavLink>
             </ul>
