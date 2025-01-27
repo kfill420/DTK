@@ -28,10 +28,10 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
   const burgerMenuIsOpen = useAppSelector((state) => state.ModalMenu.modals.burgerModalIsOpen);
   const confirmModalIsOpen = useAppSelector((state) => state.ModalMenu.modals.confirmModalIsOpen);
   const cartModalIsOpen = useAppSelector((state) => state.ModalMenu.modals.modalCartIsOpen);
+  const isLogin = useAppSelector((state) => state.account.isAuthentificated);
+  const cartCount = useAppSelector((state) => state.cart.cartConnected.length);
+  const cartCountOffline = useAppSelector((state) => state.cart.cartVisitor.length);
   const [stateAnimationPopup, setstateAnimationPopup] = useState<string>('close');
-
-  // useModalsWithBackButton([burgerMenuIsOpen, confirmModalIsOpen, cartModalIsOpen]);
-
 
   const handlePopupButton = () => {
     switch (stateAnimationPopup) {
@@ -144,16 +144,17 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
             <div className="header_profile">
               {isAuthentificated ?
                 <Link to="/profile" className={location.pathname === '/' ? "header_profile_links header_profile_links-home" : "header_profile_links"} aria-label="Profil">
-                  <FaRegUser className="header_profile_links_link" size={20} />
+                  <FaRegUser className="header_profile_links_link" size={40} />
                 </Link>
                 :
                 <Link to="/login" className={location.pathname === '/' ? "header_profile_links header_profile_links-home" : "header_profile_links"} aria-label="Connection">
-                  <PiSignInFill className="header_profile_links_link" size={20} />
+                  <PiSignInFill className="header_profile_links_link" size={40} />
                 </Link>
               }
 
               <button className={location.pathname === '/' ? "header_profile_links header_profile_links-home" : "header_profile_links"} onClick={toggleCartModal} aria-label="Panier">
-                <BiBasket className="header_profile_links_link" size={20} />
+                <BiBasket className="header_profile_links_link" size={40} />
+                <span className="header_profile_links_cartcount">{isLogin ? cartCount : cartCountOffline}</span>
               </button>
             </div>
           </div >

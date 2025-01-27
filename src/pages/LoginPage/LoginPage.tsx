@@ -75,7 +75,6 @@ function LoginPage() {
   const handleTransitionEntered = (arg: RefObject<HTMLInputElement>) => {
     arg.current?.focus();
   }
-  console.log(pending.checking);
 
   return (
     <div className="container">

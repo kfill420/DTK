@@ -101,10 +101,21 @@
     width: 4rem;
 
     &_links {
+      position: relative;
       color: v.$textColor-header;
       border: none;
       background-color: transparent;
       cursor: pointer;
+
+      &_cartcount {
+        position: absolute;
+        top: 0;
+        background-color: v.$textColor-colorDark;
+        color: v.$bgColor-White;
+        border-radius: 50%;
+        padding: 0rem 0.3rem;
+        font-size: 0.6rem;
+      }
 
       &-home {
         color: v.$textColor-header-Home;

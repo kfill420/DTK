@@ -32,6 +32,8 @@ function CartPage({ cancelFunction }: { cancelFunction?: () => void }) {
   }, [isLogin, cartConnected, cartVisitor]);
 
   const handleDeleteButton = (id: number) => {
+    console.log(isLogin);
+
     if (isLogin)
       dispatch(actionDeleteOneFromCart(id));
     else dispatch(actionDeleteFromCartOffline(id))
