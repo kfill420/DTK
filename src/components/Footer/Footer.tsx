@@ -65,7 +65,7 @@ function Footer() {
           <FaCcAmex size={30} />
         </div>
         <div className="footer_links_credit">
-          &copy; 2024 DTK. Site conçu et développé par <a href="https://votresite.com" target="_blank" rel="noopener noreferrer" className="footer_links_credit_link">Alexis Vignot</a>.
+          &copy; 2024 DTK. Site conçu et développé par <a href="https://alexis-vignot.vercel.app" target="_blank" rel="noopener noreferrer" className="footer_links_credit_link">Alexis Vignot</a>.
         </div>
       </div>
     </div >
