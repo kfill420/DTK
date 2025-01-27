@@ -55,7 +55,7 @@
     font-weight: 400;
     color: v.$textColor-colorWhite;
     padding: 0 1rem;
-    transition: all 0.1s ease-in;
+    transition: all 0.2s ease-in-out;
     z-index: 0;
   }
 }
@@ -104,6 +104,14 @@
     color: v.$textColor-colorDark;
   }
 
+  &_input:focus~&_label-textarea,
+  &_input:not(:placeholder-shown)~&_label-textarea {
+    top: 4%;
+    transform: translateY(0);
+    font-size: 0.7rem;
+    color: v.$textColor-colorDark;
+  }
+
   &_label {
     position: absolute;
     left: 0;
@@ -113,7 +121,12 @@
     font-weight: 400;
     color: v.$textColor-colorDarkTrans2;
     padding: 0 1rem;
-    transition: all 0.1s ease-in;
+    transition: all 0.2s ease-in-out;
     z-index: 0;
+
+    &-textarea {
+      top: 12%;
+      transform: translateY(0);
+    }
   }
 }

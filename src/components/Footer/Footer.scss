@@ -11,7 +11,7 @@
   margin-top: 4rem;
 
   @include breakpoint.media(tablet_xl_mini) {
-    padding-top: 4%;
+    padding: 4% 0;
   }
 
   &_newsletter {
@@ -80,7 +80,7 @@
     }
 
     @include breakpoint.media(tablet_xl_mini) {
-      padding: 4% 0 0 0;
+      padding: 1% 0;
     }
 
     @include breakpoint.media(tablet_xl_mini) {
@@ -96,17 +96,26 @@
         font-size: 1rem;
         font-weight: 700;
         margin-bottom: 1rem;
+
+        @include breakpoint.media(tablet_xl_mini) {
+          margin-bottom: 2rem;
+        }
       }
 
       &_content {
         display: flex;
         flex-direction: column;
 
+        @include breakpoint.media(tablet_xl_mini) {
+          gap: 1.5rem;
+        }
+
         &_item {
           font-size: 0.9rem;
           font-weight: 500;
           margin-bottom: 0.5rem;
           color: v.$textColor-colorLightGrayTrans2;
+          text-decoration: underline;
         }
       }
     }
@@ -119,11 +128,19 @@
         font-size: 1rem;
         font-weight: 700;
         margin-bottom: 1rem;
+
+        @include breakpoint.media(tablet_xl_mini) {
+          margin-bottom: 2rem;
+        }
       }
 
       &_content {
         display: flex;
         flex-direction: column;
+
+        @include breakpoint.media(tablet_xl_mini) {
+          gap: 1.5rem;
+        }
 
         &_item {
           font-size: 0.9rem;

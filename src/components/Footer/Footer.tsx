@@ -6,18 +6,23 @@ import { TbMailCheck } from "react-icons/tb";
 import Input from '../App/Input/Input';
 import { ChangeEvent, useState } from "react";
 import { escapeHtml } from "../../utils/escapeHtml";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 function Footer() {
   const location = useLocation();
   const [email, setEmail] = useState('');
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setEmail(escapeHtml(e.target.value));
   }
+
+  const newsletterNeeded = () => {
+    return location.pathname !== '/cart' && location.pathname !== '/faq' && location.pathname !== '/contact';
+  }
+
   return (
     <div className="footer">
-      {location.pathname !== '/cart' &&
+      {newsletterNeeded() &&
 
         <div className="footer_newsletter">
           <span className="footer_newsletter_title">Restez connecté avec les meilleures offres !</span>
@@ -30,11 +35,11 @@ function Footer() {
         </div>
       }
 
-      <div className={location.pathname !== '/cart' ? "footer_links" : "footer_links footer_links-cart"}>
+      <div className={newsletterNeeded() ? "footer_links" : "footer_links footer_links-cart"}>
         <div className="footer_links_information">
           <span className="footer_links_information_title">Informations utiles</span>
           <div className="footer_links_information_content">
-            <span className="footer_links_information_content_item">FAQ</span>
+            <Link to="/contact" className="footer_links_information_content_item">FAQ</Link>
             <span className="footer_links_information_content_item">Mentions légales</span>
             <span className="footer_links_information_content_item">Politique d'expédition</span>
             <span className="footer_links_information_content_item">Politique de remboursement</span>
