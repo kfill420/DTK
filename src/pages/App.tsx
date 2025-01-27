@@ -10,6 +10,8 @@ import { NonPrivateRoute, PrivateRoute } from '../components/App/PrivateRoute/Pr
 import SpinnerSquare from '../components/App/SpinnerSquare/SpinnerSquare';
 import { lazy } from "react";
 import { useModalsWithBackButton } from "../hooks/useModalsWithBackButton.ts";
+import ContactPage from "./ContactPage/ContactPage.tsx";
+import FaqPage from "./FaqPage/FaqPage.tsx";
 
 const HomePage = lazy(() => import('./HomePage/HomePage.tsx'));
 const ProductPage = lazy(() => import('./ProductPage/ProductPage.tsx'));
@@ -51,6 +53,8 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/collection/:brand" element={<CollectionPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/faq" element={<FaqPage />} />
           <Route path="/products/:id" element={<ProductPage />} />
           <Route path="/login" element={<NonPrivateRoute isAuthenticated={isAuthentificated}><LoginPage /></NonPrivateRoute>}></Route>
           <Route path="/cart" element={<CartPage />} />
