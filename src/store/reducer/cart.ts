@@ -28,9 +28,11 @@ const cartSlice = createSlice({
     },
     actionDeleteFromCartOffline: (state, action) => {
       const ls = JSON.parse(localStorage.getItem('cartVisitor') || '[]');
+
       if (ls.length === 0)
         return;
-      const newCart = ls.filter((index: number) => index !== action.payload);
+      const newCart = ls.filter((product: ProductInCartI, index: number) => index !== action.payload);
+      console.log(newCart);
       state.cartVisitor = newCart;
       localStorage.setItem('cartVisitor', JSON.stringify(newCart));
     },
