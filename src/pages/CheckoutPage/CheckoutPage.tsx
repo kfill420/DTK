@@ -1,5 +1,6 @@
 import './CheckoutPage.scss'
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { MdOutlineKeyboardArrowUp } from "react-icons/md";
 import { PiLockKeyBold } from "react-icons/pi";
@@ -37,6 +38,8 @@ function CheckoutPage() {
   const defaultAddressRef = useRef<HTMLDivElement>(null);
   const listAddressRef = useRef<HTMLDivElement>(null);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     let st = 0;
     cart.forEach((product) => {
@@ -52,6 +55,11 @@ function CheckoutPage() {
     }
   }, [cart]);
 
+  useEffect(() => {
+    if (listAddress === null) {
+      navigate('/profile');
+    }
+  }, []);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -90,16 +98,28 @@ function CheckoutPage() {
                 classNames="extend-400">
                 {state ? (
                   <div ref={defaultAddressRef} className="checkoutPage_infos_address_default">
-                    <span className="checkoutPage_infos_address_value">{`${defaultAdress?.firstname} ${defaultAdress?.lastname} ${defaultAdress?.entreprise} ${defaultAdress?.address} ${defaultAdress?.postal_code} ${defaultAdress?.city}`}</span>
+                    {
+                      defaultAdress ?
+                        <span className="checkoutPage_infos_address_value">{`${defaultAdress?.firstname} ${defaultAdress?.lastname} ${defaultAdress?.entreprise} ${defaultAdress?.address} ${defaultAdress?.postal_code} ${defaultAdress?.city}`}</span>
+                        :
+                        <span className="checkoutPage_infos_address_value">{`${listAddress[0].firstname} ${listAddress[0].lastname} ${listAddress[0].entreprise} ${listAddress[0].address} ${listAddress[0].postal_code} ${listAddress[0].city}`}</span>
+                    }
+
                   </div>
                 )
                   :
                   (
                     <div ref={listAddressRef} className="checkoutPage_infos_address_addresses">
-                      {listAddress?.map((address: CheckProfileAddressI) => (
-                        address.id && expeditionAddress &&
+                      {listAddress && listAddress.map((address: CheckProfileAddressI) => (
+                        address.id &&
                         <div key={address.id} className="checkoutPage_infos_address_addresses_element">
-                          <RadioInput name="expeditionAddress" id={address.id} checked={expeditionAddress.toString() === address.id?.toString()} text={`${address.firstname} ${address.lastname} ${address.entreprise} ${address.address} ${address.precision} ${address.postal_code} ${address.city}`} handleChange={handleChange} />
+                          {
+                            expeditionAddress ?
+                              <RadioInput name="expeditionAddress" id={address.id} checked={expeditionAddress.toString() === address.id?.toString()} text={`${address.firstname} ${address.lastname} ${address.entreprise} ${address.address} ${address.precision} ${address.postal_code} ${address.city}`} handleChange={handleChange} />
+                              :
+                              <RadioInput name="expeditionAddress" id={address.id} checked={listAddress[0].id === address.id} text={`${address.firstname} ${address.lastname} ${address.entreprise} ${address.address} ${address.precision} ${address.postal_code} ${address.city}`} handleChange={handleChange} />
+                          }
+
                         </div>
                       ))}
                     </div>
