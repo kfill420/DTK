@@ -30,7 +30,7 @@ const cartSlice = createSlice({
       const ls = JSON.parse(localStorage.getItem('cartVisitor') || '[]');
       if (ls.length === 0)
         return;
-      const newCart = ls.filter((product: ProductInCartI, index: number) => index !== action.payload);
+      const newCart = ls.filter((_: ProductInCartI, index: number) => index !== action.payload);
       state.cartVisitor = newCart;
       localStorage.setItem('cartVisitor', JSON.stringify(newCart));
     },
