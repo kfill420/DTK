@@ -7,6 +7,7 @@ import { IoCloseSharp } from "react-icons/io5";
 import { useEffect, useState } from "react";
 import { actionAddToCartPayloadI } from "../../@types/cart";
 import { actionCheckCartOffline, actionDeleteFromCartOffline } from "../../store/reducer/cart";
+import { toggleIsOpen } from "../../store/reducer/modal";
 
 
 function CartPage({ cancelFunction }: { cancelFunction?: () => void }) {
@@ -32,8 +33,6 @@ function CartPage({ cancelFunction }: { cancelFunction?: () => void }) {
   }, [isLogin, cartConnected, cartVisitor]);
 
   const handleDeleteButton = (id: number) => {
-    console.log(isLogin);
-
     if (isLogin)
       dispatch(actionDeleteOneFromCart(id));
     else dispatch(actionDeleteFromCartOffline(id))
@@ -76,7 +75,7 @@ function CartPage({ cancelFunction }: { cancelFunction?: () => void }) {
           </div>
           <span className="cartPage_total_taxes">Taxes incluses.</span>
           <textarea className="cartPage_total_note" name="note" id="note" placeholder="Note de la commande"></textarea>
-          <button className="cartPage_total_btn">Commander</button>
+          <Link onClick={() => dispatch(toggleIsOpen('modalCartIsOpen'))} to="/checkout" className="cartPage_total_btn">Commander</Link>
         </div>
         <div className="cartPage_payment">
           <span className="cartPage_payment_title">Nous acceptons</span>

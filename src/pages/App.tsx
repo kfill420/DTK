@@ -12,6 +12,7 @@ import { lazy } from "react";
 import { useModalsWithBackButton } from "../hooks/useModalsWithBackButton.ts";
 import ContactPage from "./ContactPage/ContactPage.tsx";
 import FaqPage from "./FaqPage/FaqPage.tsx";
+import CheckoutPage from "./CheckoutPage/CheckoutPage.tsx";
 
 const HomePage = lazy(() => import('./HomePage/HomePage.tsx'));
 const ProductPage = lazy(() => import('./ProductPage/ProductPage.tsx'));
@@ -25,7 +26,7 @@ const CartPage = lazy(() => import('./CartPage/CartPage.tsx'));
 function App() {
   const location = useLocation();
   const dispatch = useAppDispatch();
-  const noFooterPage = location.pathname === '/login' || location.pathname === '/params' || location.pathname === '/order' || location.pathname === '/profile';
+  const noFooterPage = location.pathname === '/login' || location.pathname === '/params' || location.pathname === '/order' || location.pathname === '/profile' || location.pathname === '/checkout';
   const isAuthentificated = useAppSelector((state) => state.account.isAuthentificated);
   const account = useAppSelector((state) => state.account.account);
   const burgerMenuIsOpen = useAppSelector((state) => state.ModalMenu.modals.burgerModalIsOpen);
@@ -58,6 +59,7 @@ function App() {
           <Route path="/products/:id" element={<ProductPage />} />
           <Route path="/login" element={<NonPrivateRoute isAuthenticated={isAuthentificated}><LoginPage /></NonPrivateRoute>}></Route>
           <Route path="/cart" element={<CartPage />} />
+          <Route path="/checkout" element={<PrivateRoute isAuthenticated={isAuthentificated}><CheckoutPage /></PrivateRoute>} />
           <Route path="/params" element={<PrivateRoute isAuthenticated={isAuthentificated}><Params /></PrivateRoute>} />
           <Route path="/order" element={<PrivateRoute isAuthenticated={isAuthentificated}><Order /></PrivateRoute>} />
           <Route path="/profile" element={<PrivateRoute isAuthenticated={isAuthentificated}>{<Infos account={account} />}</PrivateRoute>} />

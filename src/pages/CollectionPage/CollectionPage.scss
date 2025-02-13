@@ -81,14 +81,13 @@
             transform: rotate(0deg);
             cursor: pointer;
             border-radius: 50px;
-            transition: background-color 0.3s;
 
             &:hover {
               background-color: v.$textColor-colorDarkTrans3;
             }
 
             &-open {
-              transform: rotate(180deg);
+              transform: rotate(-180deg);
             }
           }
         }

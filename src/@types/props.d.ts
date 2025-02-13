@@ -10,4 +10,5 @@ export interface inputI {
   disabled?: boolean;
   rows?: number;
   columns?: number;
+  backgroundColor?: string;
 }
