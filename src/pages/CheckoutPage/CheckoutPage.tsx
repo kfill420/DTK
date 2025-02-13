@@ -172,7 +172,7 @@ function CheckoutPage() {
             <CSSTransition nodeRef={addressFacturationRef} in={newAdressOpen} timeout={200} classNames="extend-p05-200" unmountOnExit>
               <div ref={addressFacturationRef} className="checkoutPage_infos_paiement_payment_facturation">
                 <h3>Adresse de facturation</h3>
-                {expeditionAddress &&
+                {listAddress &&
                   <select defaultValue="default" className="checkoutPage_infos_paiement_payment_facturation_addressesSelect" name="listAddresses" id="listAddresses">
                     {
                       listAddress.map((address) => (
