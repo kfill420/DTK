@@ -18,6 +18,7 @@
     &+.checkbox_label {
       position: relative;
       padding: 0;
+      cursor: pointer;
     }
 
     &+.checkbox_label:before {
@@ -34,9 +35,14 @@
       transition: background-color 0.3s ease-in-out, border 0.3s ease-in-out;
     }
 
+    &+.checkbox_label-whitebg:before {
+      background-color: white;
+    }
+
     &:checked+.checkbox_label:before {
       background-color: v.$bgColor-primary;
       border: solid 1px transparent;
+      cursor: pointer;
     }
 
     &:checked+.checkbox_label:after {
@@ -57,6 +63,4 @@
       transform: rotate(45deg);
     }
   }
-
-
 }

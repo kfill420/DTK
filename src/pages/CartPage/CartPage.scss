@@ -172,6 +172,12 @@
       border: 1px solid v.$textColor-colorDarkTrans1;
       border-radius: 5px;
       padding: 1rem;
+      outline: solid 1px transparent;
+      transition: outline 0.3s;
+
+      &:focus {
+        outline: solid 1px v.$bgColor-primary;
+      }
     }
 
     &_btn {
@@ -180,6 +186,8 @@
       padding: 0.8rem 0;
       color: v.$textColor-colorWhite;
       border-radius: 25px;
+      text-decoration: none;
+      text-align: center;
     }
   }
 

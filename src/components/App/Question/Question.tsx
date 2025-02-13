@@ -1,5 +1,5 @@
 import './Question.scss';
-import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import { IoIosArrowDown } from "react-icons/io";
 import React, { useState, useRef, useEffect, MutableRefObject } from 'react';
 
 interface QuestionProps {
@@ -29,8 +29,8 @@ const Question: React.FC<QuestionProps> = ({ title, content }) => {
     <div className="questions_list_item">
       <div className="questions_list_item_title" onClick={toggle}>
         <span className="questions_list_item_title_text">{title}</span>
-        <div className={`questions_list_item_title_icon ${isOpen ? 'questions_list_item_title_icon_open' : ''}`}>
-          {isOpen ? <IoIosArrowUp size={30} /> : <IoIosArrowDown size={30} />}
+        <div className={`questions_list_item_title_icon ${isOpen && 'questions_list_item_title_icon-open'}`}>
+          <IoIosArrowDown size={25} />
         </div>
       </div>
       <div ref={contentRef} className={`questions_list_item_text ${isOpen ? 'open' : ''}`}>

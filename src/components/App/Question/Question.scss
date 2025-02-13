@@ -49,6 +49,8 @@
         flex-direction: row;
         justify-content: space-between;
         cursor: pointer;
+        outline: none;
+        -webkit-tap-highlight-color: transparent;
 
         &_text {
           display: flex;
@@ -59,8 +61,15 @@
         }
 
         &_icon {
+          display: flex;
+          justify-content: center;
+          align-items: center;
           margin-left: 1rem;
-          transition: transform 0.3s ease-in;
+          transition: transform 0.2s ease-in;
+
+          &-open {
+            transform: rotate(180deg);
+          }
         }
 
       }

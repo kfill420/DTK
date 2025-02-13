@@ -3,10 +3,11 @@
 
 .header {
   position: relative;
-  width: 100%;
+  width: 90%;
   top: 0;
   display: flex;
   flex-direction: row;
+  justify-self: center;
   padding: 1rem;
   align-items: center;
   justify-content: space-between;
@@ -20,7 +21,11 @@
   }
 
   @include breakpoint.media(tablet_xl_mini) {
-    justify-content: space-evenly;
+    justify-content: space-between;
+  }
+
+  @include breakpoint.media(desktop) {
+    max-width: 1300px;
   }
 
   &_burger {
@@ -130,9 +135,10 @@
     align-self: center;
     width: 90%;
     height: 4.5rem;
+    justify-self: center;
 
     @include breakpoint.media(tablet_mini) {
-      max-width: 1000px;
+      max-width: 1300px;
     }
 
     &_burger {

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import { checkTokenExpiration } from "../../../utils/checkTokenExpiration";
-import { useAppDispatch } from "../../../hooks/redux";
+import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
 import { actionLogout } from "../../../store/thunks/checkLogin";
 
 interface PrivateRouteProps {
@@ -12,6 +12,7 @@ interface PrivateRouteProps {
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, isAuthenticated }) => {
     const dispatch = useAppDispatch();
     const [shouldRedirect, setShouldRedirect] = React.useState(false);
+    const pending = useAppSelector((state) => state.account.pending.checkToken);
 
     useEffect(() => {
         if (checkTokenExpiration() === false) {
@@ -20,7 +21,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, isAuthenticated }
         }
     }, [dispatch]);
 
-    if (shouldRedirect || !isAuthenticated) {
+    if (shouldRedirect || (!isAuthenticated && pending)) {
         return <Navigate to="/login" />;
     }
 

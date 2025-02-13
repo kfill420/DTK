@@ -38,12 +38,25 @@ export const valideName = (name: string): boolean => {
 };
 
 export const validePostalCode = (postalCode: string): boolean => {
-  console.log(postalCodeRegex.test(postalCode));
-
   return postalCodeRegex.test(postalCode);
 }
 
 export const isNumeric = (text: string): boolean => {
   const regex = /^\d+$/;
   return regex.test(text);
+}
+
+export const isCreditCard = (text: string): boolean => {
+  const creditCardRegex = /^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35\d{3})\d{11})$/;
+  return creditCardRegex.test(text);
+}
+
+export const isExpirationDate = (text: string): boolean => {
+  const expirationDateRegex = /^(0[1-9]|1[0-2])\/?([0-9]{2})$/;
+  return expirationDateRegex.test(text);
+}
+
+export const isCvv = (text: string): boolean => {
+  const cvvRegex = /^[0-9]{3,4}$/;
+  return cvvRegex.test(text);
 }

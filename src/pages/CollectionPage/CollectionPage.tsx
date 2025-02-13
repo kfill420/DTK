@@ -146,7 +146,6 @@ function CollectionPage() {
               <div className={priceSectionIsopen ? "collectionPage_container_filter_price_container_icon collectionPage_container_filter_price_container_icon-open" : "collectionPage_container_filter_price_container_icon"} onClick={handlePriceSectionClick}>
                 <MdOutlineKeyboardArrowUp size={25} />
               </div>
-
             </div>
             <PriceSelector isOpen={priceSectionIsopen} min={minPrice} max={maxPrice} direct={true} />
           </div>

@@ -42,7 +42,6 @@ const actionCheckSignin = createAsyncThunk<actionCheckSigninResult, actionAddToC
           email: escapeHtml(state.account.credentials.email),
           password: escapeHtml(state.account.credentials.passwordSignin),
         });
-
       const { token, csrfToken, sessionId } = response.data;
       addTokenStorage(token, csrfToken, sessionId);
       return { data: response.data };

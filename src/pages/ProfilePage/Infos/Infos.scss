@@ -9,9 +9,10 @@
   align-self: center;
   width: 100vw;
   overflow: hidden;
+  justify-self: center;
 
   @include breakpoint.media(tablet_mini) {
-    max-width: 1000px;
+    max-width: 1300px;
   }
 
   &_title {

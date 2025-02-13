@@ -84,11 +84,6 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
     dispatch(closeAllModal());
   }
 
-
-
-  // if (test.current)
-  //   console.log(window.getComputedStyle(test.current).height);
-
   return (
     <>
       {
@@ -144,16 +139,16 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
             <div className="header_profile">
               {isAuthentificated ?
                 <Link to="/profile" className={location.pathname === '/' ? "header_profile_links header_profile_links-home" : "header_profile_links"} aria-label="Profil">
-                  <FaRegUser className="header_profile_links_link" size={40} />
+                  <FaRegUser className="header_profile_links_link" size={22} />
                 </Link>
                 :
                 <Link to="/login" className={location.pathname === '/' ? "header_profile_links header_profile_links-home" : "header_profile_links"} aria-label="Connection">
-                  <PiSignInFill className="header_profile_links_link" size={40} />
+                  <PiSignInFill className="header_profile_links_link" size={22} />
                 </Link>
               }
 
               <button className={location.pathname === '/' ? "header_profile_links header_profile_links-home" : "header_profile_links"} onClick={toggleCartModal} aria-label="Panier">
-                <BiBasket className="header_profile_links_link" size={40} />
+                <BiBasket className="header_profile_links_link" size={25} />
                 <span className="header_profile_links_cartcount">{isLogin ? cartCount : cartCountOffline}</span>
               </button>
             </div>

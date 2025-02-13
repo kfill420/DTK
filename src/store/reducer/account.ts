@@ -6,7 +6,7 @@ import {
   actionCheckToken,
   actionLogout
 } from '../thunks/checkLogin';
-import { validateEmail, validePassword } from '../../utils/regexValidator';
+import { isNumeric, validateEmail, validePassword } from '../../utils/regexValidator';
 import { deleteLocalStorage } from '../../localStorage/localStorage';
 import { changeCredentialsPayload } from '../../@types/payload';
 import {
@@ -26,7 +26,8 @@ export const initialState = {
   pending: {
     checking: false,
     login: false,
-    signup: false
+    signup: false,
+    checkToken: false,
   },
   credentials: {
     email: '',
@@ -39,6 +40,25 @@ export const initialState = {
     formSignup2: false,
     errorSignup: null as string | string[] | null,
     errorSigin: null as string | string[] | null,
+    address: {
+      id: null,
+      account_id: null,
+      default: false,
+      firstname: '',
+      lastname: '',
+      entreprise: '',
+      address: '',
+      precision: '',
+      postal_code: '',
+      city: '',
+      country_id: '',
+    },
+    card: {
+      card_number: '',
+      expiration_date: '',
+      cvc: '',
+      card_name: '',
+    }
   },
   account: {
     id: null as null | number,
@@ -56,12 +76,12 @@ export const initialState = {
       precision: '',
       postal_code: '',
       city: '',
-      country_id: '',
+      country_id: null as null | number,
       country: {
-        id: null as null | number,
-        name: '',
-        code: '',
-        dial_code: '',
+        id: 73 as null | number,
+        name: 'France',
+        code: 'FR',
+        dial_code: '+33',
       },
       phone: '',
     },
@@ -113,6 +133,120 @@ const accountSlice = createSlice({
     },
     actionChangeAuthentification: (state, action) => {
       state.isAuthentificated = action.payload;
+    },
+    actionChangeAddressOneInfo: (state, action) => {
+      const { name, value } = action.payload;
+      switch (name) {
+        case 'default':
+          state.account.address = {
+            ...state.account.address,
+            [name]: !state.account.address.default
+          }
+          return;
+        case 'country': {
+          const country = state.listCountries.find(country => country.code === value);
+          if (!country) return;
+          const newFormData = { ...state.account.address, country_id: country.id, country: country };
+          state.account.address = newFormData;
+          return;
+        }
+        case 'postal_code':
+          if (value.length > 5 || !isNumeric(value)) {
+            return;
+          } else state.account.address = { ...state.account.address, [name]: value };
+          break;
+        case 'phone':
+          if (value.length > 14 || !isNumeric(value)) {
+            return;
+          } else state.account.address = { ...state.account.address, [name]: value };
+          break;
+        default:
+          state.account.address = { ...state.account.address, [name]: value };
+          break;
+      }
+    },
+    actionChangePaymentInfo: (state, action) => {
+      const { name, value } = action.payload;
+      switch (name) {
+        case 'card_number': {
+          let valueFormated = value.replace(/\s/g, '').replace(/[^0-9]/gi, '');
+          const matches = valueFormated.match(/\d{4,19}/g);
+          const match = (matches && matches[0]) || '';
+          const parts = [];
+
+          for (let i = 0, len = match.length; i < len; i += 4) {
+            parts.push(match.substring(i, i + 4));
+          }
+
+          if (parts.length)
+            valueFormated = parts.join(' ');
+
+          state.credentials.card = {
+            ...state.credentials.card,
+            card_number: valueFormated
+          }
+          return;
+        }
+        case 'expiration_date': {
+          let valueFormated = value.replace(/[^0-9]/g, '');
+          if (valueFormated.length > 4)
+            valueFormated = valueFormated.substring(0, 4);
+
+          if (valueFormated.length > 2)
+            valueFormated = valueFormated.substring(0, 2) + '/' + valueFormated.substring(2);
+
+          state.credentials.card = {
+            ...state.credentials.card,
+            expiration_date: valueFormated
+          }
+          return;
+        }
+        case 'cvc': {
+          const valueFormated = value.replace(/[^0-9]/g, '');
+          if (valueFormated.length > 4)
+            return;
+
+          state.credentials.card = {
+            ...state.credentials.card,
+            cvc: valueFormated
+          }
+          return;
+        }
+        case 'card_name': {
+          const valueFormated = value.replace(/[^A-Za-zÀ-ÖØ-öø-ÿ\s]+$/g, '');
+
+          state.credentials.card = {
+            ...state.credentials.card,
+            card_name: valueFormated
+          }
+          return;
+        }
+      }
+    },
+    actionChangeAddressAllInfos: (state, action) => {
+      state.account.address = action.payload;
+    },
+    actionResetAddress: (state) => {
+      state.account.address = {
+        id: null,
+        account_id: null,
+        default: false,
+        firstname: '',
+        lastname: '',
+        entreprise: '',
+        address: '',
+        precision: '',
+        postal_code: '',
+        city: '',
+        country_id: null as null | number,
+        country: {
+          id: null as null | number,
+          name: '',
+          code: '',
+          dial_code: '',
+        },
+        phone: '',
+      };
     },
   },
   extraReducers: (builder) => {
@@ -220,7 +354,11 @@ const accountSlice = createSlice({
           code: escapeHtml(country.code),
           dial_code: escapeHtml(country.dial_code)
         }));
+        state.pending.checkToken = false;
       }
+    });
+    builder.addCase(actionCheckToken.pending, (state) => {
+      state.pending.checkToken = true;
     });
     builder.addCase(actionCheckToken.rejected, (state, action) => {
       state.isAuthentificated = false;
@@ -228,6 +366,7 @@ const accountSlice = createSlice({
         state.token = null;
         deleteLocalStorage();
       }
+      state.pending.checkToken = false;
     });
     builder.addCase(actionAddAddressFromAccount.fulfilled, (state, action) => {
       state.account.listAddress = action.payload.map(address => ({
@@ -332,5 +471,11 @@ const accountSlice = createSlice({
 });
 
 
-export const { actionChangeCredentials, actionChangeConnection, actionChangeAuthentification } = accountSlice.actions;
+export const { actionChangeCredentials,
+  actionChangeConnection,
+  actionChangeAuthentification,
+  actionChangeAddressOneInfo,
+  actionChangeAddressAllInfos,
+  actionResetAddress,
+  actionChangePaymentInfo } = accountSlice.actions;
 export default accountSlice.reducer;
