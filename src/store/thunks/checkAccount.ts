@@ -17,7 +17,6 @@ const actionAddAddressFromAccount = createAsyncThunk<CheckProfileAddressI[], Che
     try {
       if (checkTokenExpiration() === false)
         return thunkAPI.rejectWithValue({ tokenExpired: true });
-      console.log(payload);
       const response = await axiosInstance.post(`/account/addAddress/${payload.account_id}`, payload);
 
 
