@@ -8,13 +8,33 @@
     transition: opacity 300ms;
   }
 
-  &fade-exit {
+  &-exit {
     opacity: 1;
   }
 
-  &fade-exit-active {
+  &-exit-active {
     opacity: 0;
     transition: opacity 300ms;
+  }
+}
+
+.fade1000 {
+  &-enter {
+    opacity: 0;
+  }
+
+  &-enter-active {
+    opacity: 1;
+    transition: opacity 1000ms;
+  }
+
+  &-exit {
+    opacity: 1;
+  }
+
+  &-exit-active {
+    opacity: 0;
+    transition: opacity 1000ms;
   }
 }
 

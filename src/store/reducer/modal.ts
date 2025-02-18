@@ -11,6 +11,7 @@ export const initialState: initialStateModal = {
     modalAddressIsEdit: false,
     modalInfosIsOpen: false,
     modalCollectionFilterIsOpen: false,
+    popupIsOpen: false,
   },
 
   modalCollectionFilter: {
@@ -29,6 +30,10 @@ export const initialState: initialStateModal = {
     isDraging: false,
     filtered: false,
     minGap: 5,
+  },
+
+  popup: {
+    text: '',
   }
 }
 
@@ -41,6 +46,10 @@ const ModalMenu = createSlice({
     },
     setIsOpen: (state, action: PayloadAction<modal_setIsOpen>) => {
       state.modals[action.payload.modal] = action.payload.value;
+    },
+    setPopup: (state, action) => {
+      state.popup.text = action.payload;
+      state.modals.popupIsOpen = true;
     },
     closeAllModal: (state) => {
       state.modals.burgerModalIsOpen = false;
@@ -76,5 +85,5 @@ const ModalMenu = createSlice({
   }
 })
 
-export const { toggleIsOpen, setIsOpen, setFilterValue, closeAllModal } = ModalMenu.actions;
+export const { toggleIsOpen, setIsOpen, setFilterValue, closeAllModal, setPopup } = ModalMenu.actions;
 export default ModalMenu.reducer;

@@ -57,7 +57,7 @@ function CheckoutPage() {
 
   useEffect(() => {
     if (listAddress === null || listAddress.length === 0) {
-      navigate('/profile');
+      navigate('/profile?warning=true');
     }
   });
 

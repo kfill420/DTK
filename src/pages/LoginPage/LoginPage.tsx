@@ -4,15 +4,16 @@ import { actionCheckConnexion, actionCheckSignin, actionCheckSignup } from '../.
 import { TbArrowBackUpDouble } from "react-icons/tb";
 
 import './LoginPage.scss'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { RefObject, useEffect, useRef } from "react";
 import { CSSTransition } from "react-transition-group";
 import ButtonLoader from "../../components/App/ButtonLoader/ButtonLoader";
+import axios from "axios";
 
 function LoginPage() {
   const dispatch = useAppDispatch();
-  const pending = useAppSelector((state) => state.account.pending);
 
+  const pending = useAppSelector((state) => state.account.pending);
   const connection = useAppSelector((state) => state.account.connection);
   const mailValue = useAppSelector((state) => state.account.credentials.email);
   const passwordSigninValue = useAppSelector((state) => state.account.credentials.passwordSignin);
@@ -32,11 +33,43 @@ function LoginPage() {
   const loginRef = useRef<HTMLInputElement>(null);
   const signupRef = useRef<HTMLInputElement>(null);
 
+  const [searchParams] = useSearchParams();
+
   const navigate = useNavigate();
 
   useEffect(() => {
     if (connection === 'checking' && connectionFocusRef.current)
       connectionFocusRef.current.focus();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // useEffect(() => {
+  //   const email = searchParams.get('user');
+  //   if (searchParams.get('confirmed') === 'true' && email !== null) {
+
+  //     setMessage('Votre addresse email a bien été confirmée');
+  //     dispatch(actionChangeCredentials({ name: "email", value: email }));
+  //   }
+  //   else if (searchParams.get('confirmed') === 'false')
+  //     setMessage('Votre addresse email a bien été confirmée');
+  // }, [searchParams, dispatch])
+
+  useEffect(() => {
+    const token = searchParams.get('token');
+
+    if (!token) {
+      return;
+    }
+
+    axios
+      .post(`${import.meta.env.VITE_APP_API_URL}/confirmation/${token}`)
+      .then((res) => {
+        navigate(res.data.redirectUrl);
+      })
+      .catch((err) => {
+        console.log(err);
+        navigate('/login?confirmed=false');
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -89,6 +122,12 @@ function LoginPage() {
           <div className="checking_bottom">
             <span className="checking_bottom_conf">Confidentialité</span>
           </div>
+          {/* {message && message.length > 0 &&
+            <div className="checking_popup">
+              <span>{message}</span>
+            </div>
+          } */}
+
         </div>
       </CSSTransition>
 

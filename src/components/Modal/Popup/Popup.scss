@@ -1,0 +1,19 @@
+@use '../../../styles/breakpoint.scss';
+@use '../../../styles/variables' as v;
+
+.popup {
+  position: absolute;
+  bottom: 2%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 1rem 1.5rem;
+  background-color: v.$bgColor-primary;
+  color: v.$textColor-colorwhite;
+  border-radius: 10px;
+  cursor: pointer;
+
+
+  &:hover {
+    background-color: v.$bgColor-primary-light;
+  }
+}

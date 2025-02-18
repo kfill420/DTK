@@ -1,4 +1,4 @@
-
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from '../../../hooks/redux';
 import { setIsOpen } from '../../../store/reducer/modal';
 import { actionLogout } from "../../../store/thunks/checkLogin";
@@ -8,9 +8,11 @@ import { MdDeleteSweep } from "react-icons/md";
 
 function Params() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const handleLogOutButton = () => {
     dispatch(actionLogout());
+    navigate('/');
   }
 
   const handleOpenModalButton = () => {

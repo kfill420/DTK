@@ -23,27 +23,6 @@ function Infos({ account }: AccountI) {
   const address = useAppSelector((state) => state.account.account.address);
   const countries = useAppSelector((state) => state.account.listCountries);
 
-  // const initialFormData = {
-  //   id: null as null | number,
-  //   account_id: account.id as number | null,
-  //   default: false,
-  //   firstname: '',
-  //   lastname: '',
-  //   entreprise: '',
-  //   address: '',
-  //   precision: '',
-  //   postal_code: '',
-  //   city: '',
-  //   country: {
-  //     id: 73 as null | number,
-  //     name: 'France',
-  //     code: 'FR',
-  //     dial_code: '+33',
-  //   } as CountryI,
-  //   phone: '',
-  // }
-  // const [formData, setFormData] = useState(initialFormData);
-
   const initialInfosFormData = {
     email: account.email,
     firstname: '',
@@ -103,7 +82,6 @@ function Infos({ account }: AccountI) {
 
     return listAddresses;
   }
-
 
   const handleReset = (e: FormEvent) => {
     e.preventDefault();
