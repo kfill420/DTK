@@ -258,5 +258,19 @@
     }
   }
 
+  &_popup {
+    position: absolute;
+    bottom: 2%;
+    background-color: v.$bgColor-primary;
+    color: v.$textColor-colorWhite;
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    width: 90%;
+
+    @include breakpoint.media('tablet_mini') {
+      position: relative;
+      margin-top: 2rem;
+    }
+  }
 
 }

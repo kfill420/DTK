@@ -452,6 +452,7 @@ const accountSlice = createSlice({
       state.isAuthentificated = false;
       state.token = null;
       deleteLocalStorage();
+      state.connection = 'checking';
     });
     builder.addCase(actionAddToCart.rejected, (state, action) => {
       if (action.payload?.tokenExpired && action.payload?.tokenExpired === true) {

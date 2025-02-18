@@ -28,6 +28,9 @@ export interface PriceRangeModal {
 export interface initialStateModal {
   modals: modalsIsOpenState;
   modalCollectionFilter: PriceRangeModal;
+  popup: {
+    text: string;
+  }
 }
 
 export interface modalsIsOpenState {
@@ -38,6 +41,7 @@ export interface modalsIsOpenState {
   modalAddressIsEdit: boolean;
   modalInfosIsOpen: boolean;
   modalCollectionFilterIsOpen: boolean;
+  popupIsOpen: boolean;
 }
 
 export interface setPriceValuePayload {

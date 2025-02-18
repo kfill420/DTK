@@ -7,14 +7,16 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import BurgerButton from './BurgerMenu/BurgerButton';
 import StoreBurgerMenu from './BurgerMenu/StoreBurgerMenu/BurgerMenu';
 import ProfileBurgerMenu from './BurgerMenu/ProfileBurgerMenu/ProfileBurgerMenu';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { IoIosArrowUp } from 'react-icons/io';
 import ModalConfirm from '../Modal/ModalConfirm/ModalConfirm';
 import { actionDeleteAccount } from '../../store/thunks/checkAccount';
-import { closeAllModal, setIsOpen, toggleIsOpen } from '../../store/reducer/modal';
+import { closeAllModal, setIsOpen, setPopup, toggleIsOpen } from '../../store/reducer/modal';
 import { actionLogout } from "../../store/thunks/checkLogin";
 import ModalCart from "../Modal/ModalCart/ModalCart";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Popup from "../Modal/Popup/Popup";
+import { actionChangeCredentials } from "../../store/reducer/account";
 
 interface HeaderI {
   isAuthentificated: boolean;
@@ -24,14 +26,60 @@ interface HeaderI {
 
 function Header({ isAuthentificated, email, account_id }: HeaderI) {
   const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
   const burgerMenuIsOpen = useAppSelector((state) => state.ModalMenu.modals.burgerModalIsOpen);
   const confirmModalIsOpen = useAppSelector((state) => state.ModalMenu.modals.confirmModalIsOpen);
   const cartModalIsOpen = useAppSelector((state) => state.ModalMenu.modals.modalCartIsOpen);
+  const popupIsOpen = useAppSelector((state) => state.ModalMenu.modals.popupIsOpen);
   const isLogin = useAppSelector((state) => state.account.isAuthentificated);
   const cartCount = useAppSelector((state) => state.cart.cartConnected.length);
   const cartCountOffline = useAppSelector((state) => state.cart.cartVisitor.length);
+
   const [stateAnimationPopup, setstateAnimationPopup] = useState<string>('close');
+  const [timerPopup, setTimerPopup] = useState<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    const email = searchParams.get('user');
+    const warning = searchParams.get('warning');
+
+    switch (true) {
+      case location.pathname.includes("/profile") && warning === 'true':
+        {
+          dispatch(setPopup("Merci de renseigner vos informations avant de procéder à la commande"));
+          const timeout = setTimeout(() => {
+            dispatch(setIsOpen({ modal: "popupIsOpen", value: false }));
+          }, 3000);
+          setTimerPopup(timeout);
+
+          return () => {
+            if (timeout) {
+              clearTimeout(timeout);
+            }
+          }
+        }
+      case location.pathname.includes("/login") && searchParams.get('confirmed') === 'true' && email !== null:
+        {
+          dispatch(actionChangeCredentials({ name: "email", value: email }));
+          if (searchParams.get('confirmed') === 'true')
+            dispatch(setPopup("Votre addresse email a bien été confirmée"));
+          else if (searchParams.get('confirmed') === 'false')
+            dispatch(setPopup("Erreur lors de la validation de l'adresse mail"));
+          const timeout = setTimeout(() => {
+            dispatch(setIsOpen({ modal: "popupIsOpen", value: false }));
+          }, 3000);
+          setTimerPopup(timeout);
+
+          return () => {
+            if (timeout) {
+              clearTimeout(timeout);
+            }
+          }
+        }
+    }
+  }, [searchParams, location.pathname, dispatch])
 
   const handlePopupButton = () => {
     switch (stateAnimationPopup) {
@@ -55,6 +103,7 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
 
   const handleDisconnectButton = () => {
     dispatch(actionLogout());
+    navigate('/')
   }
 
   const handleDeleteAccountButton = () => {
@@ -82,6 +131,12 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
 
   const mainPageClick = () => {
     dispatch(closeAllModal());
+  }
+
+  const handleClickPopup = () => {
+    if (timerPopup)
+      clearTimeout(timerPopup);
+    dispatch(setIsOpen({ modal: 'popupIsOpen', value: false }));
   }
 
   return (
@@ -154,13 +209,18 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
             </div>
           </div >
       }
-      {location.pathname === '/params' || location.pathname === '/order' || location.pathname === '/profile' ? <ProfileBurgerMenu isOpen={burgerMenuIsOpen} email={email} /> : <StoreBurgerMenu isOpen={burgerMenuIsOpen} />}
+
+      {
+        location.pathname === '/params' || location.pathname === '/order' || location.pathname === '/profile' ? <ProfileBurgerMenu isOpen={burgerMenuIsOpen} email={email} /> : <StoreBurgerMenu isOpen={burgerMenuIsOpen} />
+      }
+
       {
         isAuthentificated && location.pathname === '/params' && <ModalConfirm isOpen={confirmModalIsOpen} title='Confirmation' content='Cette action est irréversible, souhaitez-vous vraiment supprimer définitivement votre compte ?' acceptFunction={handleDeleteAccountButton} cancelFunction={handleCancelAccounDeletetButton} />
       }
+
       <ModalCart isOpen={cartModalIsOpen} cancelFunction={exitCartModal} />
 
-
+      <Popup isOpen={popupIsOpen} clearPopup={handleClickPopup} />
     </>
   )
 }

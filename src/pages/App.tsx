@@ -13,6 +13,7 @@ import { useModalsWithBackButton } from "../hooks/useModalsWithBackButton.ts";
 import ContactPage from "./ContactPage/ContactPage.tsx";
 import FaqPage from "./FaqPage/FaqPage.tsx";
 import CheckoutPage from "./CheckoutPage/CheckoutPage.tsx";
+import ConfirmationPage from "./ConfirmationPage/ConfirmationPage.tsx";
 
 const HomePage = lazy(() => import('./HomePage/HomePage.tsx'));
 const ProductPage = lazy(() => import('./ProductPage/ProductPage.tsx'));
@@ -63,6 +64,7 @@ function App() {
           <Route path="/params" element={<PrivateRoute isAuthenticated={isAuthentificated}><Params /></PrivateRoute>} />
           <Route path="/order" element={<PrivateRoute isAuthenticated={isAuthentificated}><Order /></PrivateRoute>} />
           <Route path="/profile" element={<PrivateRoute isAuthenticated={isAuthentificated}>{<Infos account={account} />}</PrivateRoute>} />
+          <Route path="/confirmation" element={<ConfirmationPage />} />
         </Routes>
 
         {!noFooterPage && <Footer />}
