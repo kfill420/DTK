@@ -449,6 +449,8 @@ const accountSlice = createSlice({
       state.isAuthentificated = false;
       state.token = null;
       deleteLocalStorage();
+      console.log('delete account');
+
     });
     builder.addCase(actionLogout.fulfilled, (state) => {
       state.isAuthentificated = false;
