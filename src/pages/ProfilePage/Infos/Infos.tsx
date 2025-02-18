@@ -3,155 +3,37 @@ import './Infos.scss'
 import { CiEdit } from "react-icons/ci";
 import { FaPlus } from "react-icons/fa6";
 import { IoInformationCircleOutline } from "react-icons/io5";
-import { AccountI, CheckProfileAddressI, CheckProfileInfosI } from '../../../@types/account';
-import ModalAddAddress from './ModalAddAddress/ModalAddAddress';
-import { ChangeEvent, FormEvent, useState } from 'react';
-import { actionAddAddressFromAccount, actionDeleteAddressFromAccount, actionUpdateAddressFromAccount, actionUpdateInfosFromAccount } from '../../../store/thunks/checkAccount';
+import { ModalAddAddress } from './ModalAddAddress/ModalAddAddress';
 import { useAppDispatch, useAppSelector } from '../../../hooks/redux';
 import ModalInfos from './ModalInfos/ModalInfos';
-import DOMPurify from 'dompurify';
 import { setIsOpen, toggleIsOpen } from "../../../store/reducer/modal";
-import { actionChangeAddressAllInfos, actionChangeAddressOneInfo, actionResetAddress } from "../../../store/reducer/account";
+import { useAddressHelper } from "../../../utils/addressFunction";
 
-function Infos({ account }: AccountI) {
+function Infos() {
   const dispatch = useAppDispatch();
 
+  const account = useAppSelector((state) => state.account.account);
   const modalAdressIsOpen = useAppSelector((state) => state.ModalMenu.modals.modalAdressIsOpen);
   const modalInfosIsOpen = useAppSelector((state) => state.ModalMenu.modals.modalInfosIsOpen);
   const modalAddressIsEdit = useAppSelector((state) => state.ModalMenu.modals.modalAddressIsEdit);
+  const infos = useAppSelector((state) => state.account.account.infos);
 
-  const address = useAppSelector((state) => state.account.account.address);
-  const countries = useAppSelector((state) => state.account.listCountries);
-
-  const initialInfosFormData = {
-    email: account.email,
-    firstname: '',
-    lastname: '',
-  }
-  const [infosFormData, setInfosFormData] = useState(initialInfosFormData);
+  const { handleModify, getPrimaryAddressFirst } = useAddressHelper();
 
   const handleOpen = () => {
     dispatch(toggleIsOpen('modalAdressIsOpen'));
     dispatch(setIsOpen({ modal: 'modalAddressIsEdit', value: false }));
   };
 
-  const handleModify = (args?: { address?: CheckProfileAddressI; infos?: CheckProfileInfosI }) => {
-    const { address, infos } = args || {};
-    if (address) {
-      dispatch(setIsOpen({ modal: 'modalAddressIsEdit', value: true }));
-      dispatch(actionChangeAddressAllInfos(address));
-      dispatch(toggleIsOpen('modalAdressIsOpen'));
-    }
-    if (infos) {
-      dispatch(toggleIsOpen('modalInfosIsOpen'));
-      setInfosFormData({
-        email: account.email,
-        firstname: account.firstname,
-        lastname: account.lastname,
-      });
-    }
-
-  };
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | ChangeEvent<HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    if (modalAdressIsOpen) {
-      dispatch(actionChangeAddressOneInfo({ name, value }));
-    }
-    if
-      (modalInfosIsOpen) {
-      setInfosFormData({ ...infosFormData, [name]: value });
-    }
-  }
-
-  const handleDelete = () => {
-    dispatch(actionDeleteAddressFromAccount({ account_id: account.id, address_id: address.id }));
-    dispatch(toggleIsOpen('modalAdressIsOpen'));
-  }
-
-  const getPrimaryAddressFirst = () => {
-    const listAddresses = [...account.listAddress];
-    const indexDefault = listAddresses.findIndex((address) => address.default);
-
-    if (indexDefault === -1) {
-      return listAddresses;
-    }
-
-    const [defaultAddress] = listAddresses.splice(indexDefault, 1);
-    listAddresses.unshift(defaultAddress);
-
-    return listAddresses;
-  }
-
-  const handleReset = (e: FormEvent) => {
-    e.preventDefault();
-    if (modalAdressIsOpen) {
-      dispatch(toggleIsOpen('modalAdressIsOpen'));
-      dispatch(actionResetAddress());
-    }
-    if (modalInfosIsOpen) {
-      dispatch(toggleIsOpen('modalInfosIsOpen'));
-      setInfosFormData(initialInfosFormData);
-    }
-
-  }
-
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-
-    if (modalInfosIsOpen) {
-      const data = { ...infosFormData, account_id: account.id };
-      const escapedEmail = DOMPurify.sanitize(data.email);
-      const escapedFirstname = DOMPurify.sanitize(data.firstname);
-      const escapedLastname = DOMPurify.sanitize(data.lastname);
-      const dataEscaped = { email: escapedEmail, firstname: escapedFirstname, lastname: escapedLastname, account_id: data.account_id };
-      dispatch(actionUpdateInfosFromAccount(dataEscaped));
-      dispatch(toggleIsOpen('modalInfosIsOpen'));
-      return;
-    }
-    if (modalAddressIsEdit) {
-      dispatch(actionResetAddress());
-      const dataEscaped = {
-        ...address,
-        firstname: DOMPurify.sanitize(address.firstname),
-        lastname: DOMPurify.sanitize(address.lastname),
-        entreprise: DOMPurify.sanitize(address.entreprise),
-        address: DOMPurify.sanitize(address.address),
-        precision: DOMPurify.sanitize(address.precision),
-        postal_code: DOMPurify.sanitize(address.postal_code),
-        city: DOMPurify.sanitize(address.city),
-        phone: DOMPurify.sanitize(address.phone)
-      };
-      dispatch(actionUpdateAddressFromAccount(dataEscaped));
-    } else {
-      dispatch(actionResetAddress());
-      const dataEscaped = {
-        ...address,
-        account_id: account.id,
-        firstname: DOMPurify.sanitize(address.firstname),
-        lastname: DOMPurify.sanitize(address.lastname),
-        entreprise: DOMPurify.sanitize(address.entreprise),
-        address: DOMPurify.sanitize(address.address),
-        precision: DOMPurify.sanitize(address.precision),
-        postal_code: DOMPurify.sanitize(address.postal_code),
-        city: DOMPurify.sanitize(address.city),
-        phone: DOMPurify.sanitize(address.phone)
-      };
-      dispatch(actionAddAddressFromAccount(dataEscaped));
-    }
-    dispatch(toggleIsOpen('modalAdressIsOpen'));
-    return;
-  }
-
   return (
     <div className="infos">
       <h2 className="infos_title">Profil</h2>
       <div className="infos_infos">
         <span className="infos_infos_name">Nom</span>
-        <span className="infos_infos_value">{account.firstname} {account.lastname}</span>
+        <span className="infos_infos_value">{infos.firstname} {infos.lastname}</span>
         <span className="infos_infos_name">E-mail</span>
         <span className="infos_infos_value">{account.email}</span>
-        <span className="infos_infos_button" onClick={() => handleModify({ infos: infosFormData })}><CiEdit size={20} /></span>
+        <span className="infos_infos_button" onClick={() => handleModify({ infos: infos })}><CiEdit size={20} /></span>
       </div>
       <div className="infos_address">
         <div className="infos_address_header">
@@ -183,10 +65,8 @@ function Infos({ account }: AccountI) {
         }
 
       </div>
-      <ModalAddAddress isOpen={modalAdressIsOpen} formData={address} modalAddressIsEdit={modalAddressIsEdit} countries={countries}
-        handleChange={handleChange} handleDelete={handleDelete} handleReset={handleReset} handleSubmit={handleSubmit} />
-      <ModalInfos isOpen={modalInfosIsOpen} formData={infosFormData}
-        handleChange={handleChange} handleReset={handleReset} handleSubmit={handleSubmit} />
+      <ModalAddAddress isOpen={modalAdressIsOpen} modalAddressIsEdit={modalAddressIsEdit} />
+      <ModalInfos isOpen={modalInfosIsOpen} />
     </div>
   )
 }

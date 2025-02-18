@@ -68,7 +68,7 @@
   &-enter-active {
     opacity: 1;
     max-height: 2000px;
-    transition: opacity 0.4s ease, max-height 0.4s ease;
+    transition: opacity 0.2s ease, max-height 0.2s ease;
   }
 
   &-exit {
@@ -80,7 +80,7 @@
   &-exit-active {
     opacity: 0;
     max-height: 0;
-    transition: opacity 0.4s ease, max-height 0.4s ease;
+    transition: opacity 0.2s ease, max-height 0.2s ease;
   }
 }
 

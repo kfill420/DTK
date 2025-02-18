@@ -59,13 +59,15 @@ export const initialState = {
       expiration_date: '',
       cvc: '',
       card_name: '',
-    }
+    },
   },
   account: {
     id: null as null | number,
     email: '',
-    firstname: '',
-    lastname: '',
+    infos: {
+      firstname: '',
+      lastname: '',
+    },
     address: {
       id: null,
       account_id: null,
@@ -241,12 +243,18 @@ const accountSlice = createSlice({
         city: '',
         country_id: null as null | number,
         country: {
-          id: null as null | number,
-          name: '',
-          code: '',
-          dial_code: '',
+          id: 73 as null | number,
+          name: 'France',
+          code: 'FR',
+          dial_code: '+33',
         },
         phone: '',
+      };
+    },
+    actionSetInfos: (state, action) => {
+      state.account.infos = {
+        ...state.account.infos,
+        ...action.payload,
       };
     },
   },
@@ -274,8 +282,8 @@ const accountSlice = createSlice({
       state.isAuthentificated = true;
       state.account.id = action.payload.data.account.id;
       state.account.email = escapeHtml(action.payload.data.account.email);
-      if (action.payload.data.account.firstname) state.account.firstname = escapeHtml(action.payload.data.account.firstname);
-      if (action.payload.data.account.lastname) state.account.lastname = escapeHtml(action.payload.data.account.lastname);
+      if (action.payload.data.account.firstname) state.account.infos.firstname = escapeHtml(action.payload.data.account.firstname);
+      if (action.payload.data.account.lastname) state.account.infos.lastname = escapeHtml(action.payload.data.account.lastname);
       state.account.listAddress = action.payload.data.account.addresses.map((address: CheckProfileAddressI) => ({
         ...address,
         firstname: escapeHtml(address.firstname),
@@ -331,8 +339,8 @@ const accountSlice = createSlice({
       if (action.payload.valid) {
         state.account.id = action.payload.data.id;
         state.account.email = escapeHtml(action.payload.data.email);
-        if (action.payload.data.firstname) state.account.firstname = escapeHtml(action.payload.data.firstname);
-        if (action.payload.data.lastname) state.account.lastname = escapeHtml(action.payload.data.lastname);
+        if (action.payload.data.firstname) state.account.infos.firstname = escapeHtml(action.payload.data.firstname);
+        if (action.payload.data.lastname) state.account.infos.lastname = escapeHtml(action.payload.data.lastname);
         state.account.listAddress = action.payload.data.addresses.map((address: CheckProfileAddressI) => ({
           ...address,
           firstname: escapeHtml(address.firstname),
@@ -435,8 +443,8 @@ const accountSlice = createSlice({
     });
     builder.addCase(actionUpdateInfosFromAccount.fulfilled, (state, action) => {
       state.account.email = action.payload.email;
-      state.account.firstname = action.payload.firstname;
-      state.account.lastname = action.payload.lastname;
+      state.account.infos.firstname = action.payload.firstname;
+      state.account.infos.lastname = action.payload.lastname;
     });
     builder.addCase(actionUpdateInfosFromAccount.rejected, (state, action) => {
       if (action.payload?.tokenExpired && action.payload?.tokenExpired === true) {
@@ -491,5 +499,7 @@ export const { actionChangeCredentials,
   actionChangeAddressOneInfo,
   actionChangeAddressAllInfos,
   actionResetAddress,
-  actionChangePaymentInfo } = accountSlice.actions;
+  actionChangePaymentInfo,
+  actionSetInfos
+} = accountSlice.actions;
 export default accountSlice.reducer;

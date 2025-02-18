@@ -63,7 +63,7 @@ function App() {
           <Route path="/checkout" element={<PrivateRoute isAuthenticated={isAuthentificated}><CheckoutPage /></PrivateRoute>} />
           <Route path="/params" element={<PrivateRoute isAuthenticated={isAuthentificated}><Params /></PrivateRoute>} />
           <Route path="/order" element={<PrivateRoute isAuthenticated={isAuthentificated}><Order /></PrivateRoute>} />
-          <Route path="/profile" element={<PrivateRoute isAuthenticated={isAuthentificated}>{<Infos account={account} />}</PrivateRoute>} />
+          <Route path="/profile" element={<PrivateRoute isAuthenticated={isAuthentificated}>{<Infos />}</PrivateRoute>} />
           <Route path="/confirmation" element={<ConfirmationPage />} />
         </Routes>
 

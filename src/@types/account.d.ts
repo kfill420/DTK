@@ -2,17 +2,6 @@ export interface ProductStateI {
   address: AddressI[];
 }
 
-export interface AccountI {
-  account: {
-    id: null | number;
-    email: string;
-    firstname: string;
-    lastname: string;
-    address: CheckProfileAddressI;
-    listAddress: CheckProfileAddressI[];
-  }
-}
-
 export interface AccountSigninI {
   id: null | number;
   email: string;
@@ -77,7 +66,6 @@ export type CheckProfileAddressHandleModifyI = {
 };
 
 export type CheckProfileInfosI = {
-  email: string,
   firstname: string,
   lastname: string,
 };
@@ -88,11 +76,6 @@ export type updateInfosPayload = {
   lastname: string,
   account_id: number | null,
 };
-
-// export type addAddressToAccountResultI = {
-//   newAddress: CheckProfileAddressI;
-//   country: CountryI;
-// };
 
 export type updateMailFormAccountResultI = {
   account_id: number;
