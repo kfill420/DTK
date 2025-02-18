@@ -86,12 +86,14 @@ const actionDeleteAccount = createAsyncThunk<number, number | undefined | null, 
   'account/DELETE_ACCOUNT',
   async (payload, thunkAPI) => {
     try {
+      console.log("1");
+
       if (checkTokenExpiration() === false)
         return thunkAPI.rejectWithValue({ tokenExpired: true });
-
+      console.log("2");
       if (payload === null)
         return thunkAPI.rejectWithValue({ message: 'No account id' });
-
+      console.log("3");
       const response = await axiosInstance.delete(`/account/deleteAccount/${payload}`);
       return response.data;
     } catch (error) {
