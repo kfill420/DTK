@@ -11,7 +11,7 @@ import { deleteLocalStorage } from '../../localStorage/localStorage';
 import { changeCredentialsPayload } from '../../@types/payload';
 import {
   actionAddAddressFromAccount,
-  actionDeleteAccount,
+
   actionDeleteAddressFromAccount,
   actionUpdateAddressFromAccount,
   actionUpdateInfosFromAccount
