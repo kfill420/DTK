@@ -43,17 +43,6 @@ function LoginPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // useEffect(() => {
-  //   const email = searchParams.get('user');
-  //   if (searchParams.get('confirmed') === 'true' && email !== null) {
-
-  //     setMessage('Votre addresse email a bien été confirmée');
-  //     dispatch(actionChangeCredentials({ name: "email", value: email }));
-  //   }
-  //   else if (searchParams.get('confirmed') === 'false')
-  //     setMessage('Votre addresse email a bien été confirmée');
-  // }, [searchParams, dispatch])
-
   useEffect(() => {
     const token = searchParams.get('token');
 
@@ -122,12 +111,6 @@ function LoginPage() {
           <div className="checking_bottom">
             <span className="checking_bottom_conf">Confidentialité</span>
           </div>
-          {/* {message && message.length > 0 &&
-            <div className="checking_popup">
-              <span>{message}</span>
-            </div>
-          } */}
-
         </div>
       </CSSTransition>
 

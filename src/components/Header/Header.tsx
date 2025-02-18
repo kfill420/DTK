@@ -37,49 +37,43 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
   const isLogin = useAppSelector((state) => state.account.isAuthentificated);
   const cartCount = useAppSelector((state) => state.cart.cartConnected.length);
   const cartCountOffline = useAppSelector((state) => state.cart.cartVisitor.length);
+  const mailSended = useAppSelector((state) => state.account.pending.mailSended);
 
   const [stateAnimationPopup, setstateAnimationPopup] = useState<string>('close');
   const [timerPopup, setTimerPopup] = useState<NodeJS.Timeout | null>(null);
+
+  const handlePopup = (message: string) => {
+    dispatch(setPopup(message));
+    const timeout = setTimeout(() => {
+      dispatch(setIsOpen({ modal: "popupIsOpen", value: false }));
+    }, 6000);
+    setTimerPopup(timeout);
+
+    return () => {
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+    }
+  }
 
   useEffect(() => {
     const email = searchParams.get('user');
     const warning = searchParams.get('warning');
 
-    switch (true) {
-      case location.pathname.includes("/profile") && warning === 'true':
-        {
-          dispatch(setPopup("Merci de renseigner vos informations avant de procéder à la commande"));
-          const timeout = setTimeout(() => {
-            dispatch(setIsOpen({ modal: "popupIsOpen", value: false }));
-          }, 3000);
-          setTimerPopup(timeout);
-
-          return () => {
-            if (timeout) {
-              clearTimeout(timeout);
-            }
-          }
-        }
-      case location.pathname.includes("/login") && searchParams.get('confirmed') === 'true' && email !== null:
-        {
-          dispatch(actionChangeCredentials({ name: "email", value: email }));
-          if (searchParams.get('confirmed') === 'true')
-            dispatch(setPopup("Votre addresse email a bien été confirmée"));
-          else if (searchParams.get('confirmed') === 'false')
-            dispatch(setPopup("Erreur lors de la validation de l'adresse mail"));
-          const timeout = setTimeout(() => {
-            dispatch(setIsOpen({ modal: "popupIsOpen", value: false }));
-          }, 3000);
-          setTimerPopup(timeout);
-
-          return () => {
-            if (timeout) {
-              clearTimeout(timeout);
-            }
-          }
-        }
+    if (location.pathname.includes("/profile") && warning === 'true') {
+      return handlePopup("Merci de renseigner vos informations avant de procéder à la commande");
+    } else if (location.pathname.includes("/login") && searchParams.get('confirmed') === 'true' && email !== null) {
+      dispatch(actionChangeCredentials({ name: "email", value: email }));
+      if (searchParams.get('confirmed') === 'true')
+        return handlePopup("Votre addresse email a bien été confirmée");
+      else if (searchParams.get('confirmed') === 'false')
+        return handlePopup("Erreur lors de la validation de l'adresse mail");
+    } else if (mailSended) {
+      return handlePopup("Merci de confirmer votre adresse mail avec le mail envoyé");
     }
-  }, [searchParams, location.pathname, dispatch])
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams, location.pathname, mailSended, dispatch])
 
   const handlePopupButton = () => {
     switch (stateAnimationPopup) {
