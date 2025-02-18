@@ -24,6 +24,7 @@
 
   &-nonModal {
     position: relative;
+    padding: 0;
   }
 
   @include breakpoint.media('tablet_mini') {
