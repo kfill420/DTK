@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { CarouselI } from '../../../@types/carousel';
 import './Carousel.scss'
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { Link } from "react-router-dom";
 
 function Carousel({ slides, arrows, indicators, interval }: CarouselI) {
   const [slideState, setSlideState] = useState(0);
@@ -65,10 +66,10 @@ function Carousel({ slides, arrows, indicators, interval }: CarouselI) {
               ? `transi-f-${transitionState}`
               : 'transi-f-hidden'
               }`}>{slide.description}</span>}
-            {slide.button && <button className={`carousel_content_button ${index === slideState
+            {slide.button && <Link to="/collection/iPhone" className={`carousel_content_button ${index === slideState
               ? `transi-f-${transitionState}`
               : 'transi-f-hidden'
-              }`}>{slide.button}</button>}
+              }`}>{slide.button}</Link>}
           </div>
         </div>
 
