@@ -11,7 +11,7 @@
   color: v.$textColor-colorwhite;
   border-radius: 10px;
   cursor: pointer;
-
+  z-index: 100;
 
   &:hover {
     background-color: v.$bgColor-primary-light;

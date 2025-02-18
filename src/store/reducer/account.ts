@@ -28,6 +28,7 @@ export const initialState = {
     login: false,
     signup: false,
     checkToken: false,
+    mailSended: false,
   },
   credentials: {
     email: '',
@@ -317,6 +318,7 @@ const accountSlice = createSlice({
       state.pending.signup = false;
       state.connection = 'checking';
       state.credentials.errorSignup = null;
+      state.pending.mailSended = true;
     });
     builder.addCase(actionCheckSignup.pending, (state) => {
       state.pending.signup = true;
