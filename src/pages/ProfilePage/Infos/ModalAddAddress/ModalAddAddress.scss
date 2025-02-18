@@ -22,6 +22,10 @@
   padding: 1rem;
   border-radius: 5px;
 
+  &-nonModal {
+    position: relative;
+  }
+
   @include breakpoint.media('tablet_mini') {
     display: flex;
     width: auto;
@@ -29,12 +33,21 @@
     bottom: 50%;
     transform: translate(-50%, 50%);
     padding: 1.5rem;
+
+    &-nonModal {
+      left: 0;
+      bottom: 0;
+      transform: translate(0);
+      padding: 0;
+    }
   }
 
   &_form {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+
+    width: 100%;
 
     @include breakpoint.media('tablet_mini') {
       gap: 0.8rem;
@@ -100,6 +113,7 @@
         background-color: transparent;
         border: none;
         color: v.$textColor-primary;
+        cursor: pointer;
       }
 
       &_submit {
@@ -109,6 +123,7 @@
         border-radius: 5px;
         color: v.$textColor-colorWhite;
         background-color: v.$textColor-primary;
+        cursor: pointer;
       }
     }
 
