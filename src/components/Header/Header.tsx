@@ -103,7 +103,6 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
   const handleDeleteAccountButton = () => {
     dispatch(setIsOpen({ modal: 'confirmModalIsOpen', value: false }));
     dispatch(actionDeleteAccount(account_id));
-    // navigate('/');
   }
 
   const exitCartModal = () => {
