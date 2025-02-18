@@ -10,7 +10,7 @@ import ProfileBurgerMenu from './BurgerMenu/ProfileBurgerMenu/ProfileBurgerMenu'
 import { Link, NavLink, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { IoIosArrowUp } from 'react-icons/io';
 import ModalConfirm from '../Modal/ModalConfirm/ModalConfirm';
-import { actionDeleteAccount } from '../../store/thunks/checkAccount';
+// import { actionDeleteAccount } from '../../store/thunks/checkAccount';
 import { closeAllModal, setIsOpen, setPopup, toggleIsOpen } from '../../store/reducer/modal';
 import { actionLogout } from "../../store/thunks/checkLogin";
 import ModalCart from "../Modal/ModalCart/ModalCart";
