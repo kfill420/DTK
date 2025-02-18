@@ -14,6 +14,7 @@ import Store from '../../components/App/Store/Store';
 import { actionAddToCart } from "../../store/thunks/checkCart";
 import { actionAddToCartOffline } from "../../store/reducer/cart";
 import { setIsOpen } from "../../store/reducer/modal";
+import { decodeHtmlEntities } from "../../utils/decodeHtmlEntities";
 
 type ProductPageParams = {
   id: string;
@@ -158,7 +159,7 @@ function ProductPage() {
 
 
           <div>
-            <Question title="Description de l'article" content={product.description} />
+            <Question title="Description de l'article" content={decodeHtmlEntities(product.description)} />
           </div>
 
           <div className="reviews">
