@@ -11,7 +11,7 @@ import { deleteLocalStorage } from '../../localStorage/localStorage';
 import { changeCredentialsPayload } from '../../@types/payload';
 import {
   actionAddAddressFromAccount,
-
+  actionDeleteAccount,
   actionDeleteAddressFromAccount,
   actionUpdateAddressFromAccount,
   actionUpdateInfosFromAccount
@@ -445,16 +445,22 @@ const accountSlice = createSlice({
         state.isAuthentificated = false;
       }
     });
-    // builder.addCase(actionDeleteAccount.fulfilled, (state) => {
-    //   state.isAuthentificated = false;
-    //   state.token = null;
-    //   deleteLocalStorage();
-    // });
-    // builder.addCase(actionDeleteAccount.rejected, (state) => {
-    //   state.isAuthentificated = false;
-    //   state.token = null;
-    //   deleteLocalStorage();
-    // });
+    builder.addCase(actionDeleteAccount.fulfilled, (state) => {
+      state.isAuthentificated = false;
+      state.token = null;
+      deleteLocalStorage();
+    });
+    builder.addCase(actionDeleteAccount.rejected, (state, action) => {
+      state.isAuthentificated = false;
+      if (action.payload?.tokenExpired && action.payload?.tokenExpired === true) {
+        state.token = null;
+        deleteLocalStorage();
+      }
+      if (action.payload?.message && action.payload?.message === 'No account id') {
+        state.token = null;
+        deleteLocalStorage();
+      }
+    });
     builder.addCase(actionLogout.fulfilled, (state) => {
       state.isAuthentificated = false;
       state.token = null;
