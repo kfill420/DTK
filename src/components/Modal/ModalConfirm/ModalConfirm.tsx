@@ -22,7 +22,6 @@ function ModalConfirm({ isOpen, title, content, acceptFunction, cancelFunction }
                 <button type="reset" className="modalConfirm_buttons_right_cancel">Annuler</button>
                 <button type="submit" className="modalConfirm_buttons_right_submit">Confirmer</button>
               </div>
-
             </div>
           </form>
         </div>
