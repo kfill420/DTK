@@ -445,16 +445,16 @@ const accountSlice = createSlice({
         state.isAuthentificated = false;
       }
     });
-    builder.addCase(actionDeleteAccount.fulfilled, (state) => {
-      state.isAuthentificated = false;
-      state.token = null;
-      deleteLocalStorage();
-    });
-    builder.addCase(actionDeleteAccount.rejected, (state) => {
-      state.isAuthentificated = false;
-      state.token = null;
-      deleteLocalStorage();
-    });
+    // builder.addCase(actionDeleteAccount.fulfilled, (state) => {
+    //   state.isAuthentificated = false;
+    //   state.token = null;
+    //   deleteLocalStorage();
+    // });
+    // builder.addCase(actionDeleteAccount.rejected, (state) => {
+    //   state.isAuthentificated = false;
+    //   state.token = null;
+    //   deleteLocalStorage();
+    // });
     builder.addCase(actionLogout.fulfilled, (state) => {
       state.isAuthentificated = false;
       state.token = null;
