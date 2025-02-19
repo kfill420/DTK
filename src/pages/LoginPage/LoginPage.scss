@@ -140,6 +140,8 @@
 
     &_errors {
       position: relative;
+      display: flex;
+      flex-direction: column;
       width: 90%;
 
       &_error {
@@ -150,7 +152,16 @@
         color: v.$textColor-error;
 
         &-signup {
-          color: v.$textColor-warning;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          gap: 1rem;
+          position: relative;
+          color: v.$textColor-error;
+
+          &-ok {
+            color: v.$textColor-success;
+          }
         }
       }
 
@@ -224,6 +235,18 @@
 
         &:focus {
           border: solid 2px v.$bgColor-primary;
+        }
+      }
+
+      &_error {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 1rem;
+        color: v.$textColor-error;
+
+        &-ok {
+          color: v.$textColor-success;
         }
       }
     }
