@@ -113,11 +113,13 @@ const accountSlice = createSlice({
       }
       if (name === 'password') {
         const testPassword = validePassword(state.credentials.password);
+        console.log(testPassword);
+
         if (Object.values(testPassword).every(value => value === true)) {
-          state.credentials.formSignup1 = false;
-        } else {
           state.credentials.formSignup1 = true;
           state.credentials.errorSignup = null;
+        } else {
+          state.credentials.formSignup1 = false;
         }
       }
       if (name === 'passwordConfirm') {
