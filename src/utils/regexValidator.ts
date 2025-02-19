@@ -7,30 +7,66 @@ export const validateEmail = (email: string): boolean => {
   return emailRegex.test(email);
 };
 
-export const validePassword = (password: string): string[] => {
-  const errors: string[] = [];
+interface validePasswordI {
+  caractMini8: boolean,
+  minuscule: boolean,
+  majuscule: boolean,
+  chiffre: boolean,
+  special: boolean,
+}
 
-  if (!/(?=.*[a-z])/.test(password)) {
-    errors.push("Le mot de passe doit contenir au moins une lettre minuscule.");
+export const validePassword = (password: string): validePasswordI => {
+  // const errors: string[] = [];
+  const errorsSignup = {
+    caractMini8: false,
+    minuscule: false,
+    majuscule: false,
+    chiffre: false,
+    special: false,
   }
 
-  if (!/(?=.*[A-Z])/.test(password)) {
-    errors.push("Le mot de passe doit contenir au moins une lettre majuscule.");
-  }
+  if (/[A-Za-z\d\W_]{8,}/.test(password))
+    errorsSignup.caractMini8 = true;
+  else errorsSignup.caractMini8 = false;
 
-  if (!/(?=.*\d)/.test(password)) {
-    errors.push("Le mot de passe doit contenir au moins un chiffre.");
-  }
+  if (/(?=.*[a-z])/.test(password))
+    errorsSignup.minuscule = true;
+  else errorsSignup.minuscule = false;
 
-  if (!/(?=.*[\W_])/.test(password)) {
-    errors.push("Le mot de passe doit contenir au moins un caractère spécial.");
-  }
+  if (/(?=.*[A-Z])/.test(password))
+    errorsSignup.majuscule = true;
+  else errorsSignup.majuscule = false;
 
-  if (!/[A-Za-z\d\W_]{8,}/.test(password)) {
-    errors.push("Le mot de passe doit contenir au moins 8 caractères.");
-  }
+  if (/(?=.*\d)/.test(password))
+    errorsSignup.chiffre = true;
+  else errorsSignup.chiffre = false;
 
-  return errors;
+  if (/(?=.*[\W_])/.test(password))
+    errorsSignup.special = true;
+  else errorsSignup.special = false;
+
+  // if (!/(?=.*[a-z])/.test(password)) {
+  //   errors.push("Le mot de passe doit contenir au moins une lettre minuscule.");
+  // }
+
+  // if (!/(?=.*[A-Z])/.test(password)) {
+  //   errors.push("Le mot de passe doit contenir au moins une lettre majuscule.");
+  // }
+
+  // if (!/(?=.*\d)/.test(password)) {
+  //   errors.push("Le mot de passe doit contenir au moins un chiffre.");
+  // }
+
+  // if (!/(?=.*[\W_])/.test(password)) {
+  //   errors.push("Le mot de passe doit contenir au moins un caractère spécial.");
+  // }
+
+  // if (!/[A-Za-z\d\W_]{8,}/.test(password)) {
+  //   errors.push("Le mot de passe doit contenir au moins 8 caractères.");
+  // }
+  // return errors;
+
+  return errorsSignup;
 };
 
 export const valideName = (name: string): boolean => {

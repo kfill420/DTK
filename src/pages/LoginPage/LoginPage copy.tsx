@@ -145,6 +145,7 @@ function LoginPage() {
   const handleTransitionEntered = (arg: RefObject<HTMLInputElement>) => {
     arg.current?.focus();
   }
+  console.log(passwordSignupFocus);
 
   return (
     <div className="container">
@@ -187,7 +188,7 @@ function LoginPage() {
             <fieldset className="checking_form_password">
               <label htmlFor="password" className="checking_form_password_label">Choisissez votre mot de passe.</label>
               <input type="password" placeholder='Mot de passe' name='password' ref={signupFocusRef} value={passwordValue} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} className="checking_form_password_input" />
-              <CSSTransition in={passwordSignupFocus.password} nodeRef={signupPasswordRef} classNames="extend-400t" timeout={500} onEntered={() => handleTransitionEntered(signupFocusRef)} unmountOnExit appear>
+              <CSSTransition in={passwordSignupFocus.password} nodeRef={signupPasswordRef} classNames="extend-200" timeout={200} onEntered={() => handleTransitionEntered(signupFocusRef)} unmountOnExit appear>
                 <div ref={signupPasswordRef} className="checking_form_errors checking_form_errors-signup">
                   <span className={Object.values(passwordValidation).every(value => value === true) ? "checking_form_errors_error-signup checking_form_errors_error-signup-ok" : "checking_form_errors_error-signup"}>Le mot de passe doit contenir au minimum</span>
                   <span className={passwordValidation.caractMini8 ? "checking_form_errors_error-signup checking_form_errors_error-signup-ok" : "checking_form_errors_error-signup"}><TbPoint size={15} />8 caractères</span>
@@ -203,7 +204,7 @@ function LoginPage() {
             <fieldset className="checking_form_passwordConfirm">
               <label htmlFor="password" className="checking_form_passwordConfirm_label">Confirmer votre mot de passe.</label>
               <input type="password" placeholder='Mot de passe' name='passwordConfirm' value={passwordConfirmValue} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} className="checking_form_passwordConfirm_input" />
-              <CSSTransition in={passwordSignupFocus.passwordConfirm} nodeRef={signupPasswordConfirmRef} classNames="extend-400t" timeout={500} unmountOnExit appear>
+              <CSSTransition in={passwordSignupFocus.passwordConfirm} nodeRef={signupPasswordConfirmRef} classNames="extend-200" timeout={200} unmountOnExit appear>
                 <div ref={signupPasswordConfirmRef}>
                   <span className={passwordConfirmValidation ? "checking_form_passwordConfirm_error checking_form_passwordConfirm_error-ok" : "checking_form_passwordConfirm_error"}><TbPoint size={15} />Les mots de passe doivent être identiques</span>
                 </div>
