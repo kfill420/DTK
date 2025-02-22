@@ -1,6 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   actionCheckConnexion,
+  actionCheckPasswordRecovery,
+  actionCheckPasswordRecoverySend,
   actionCheckSignin,
   actionCheckSignup,
   actionCheckToken,
@@ -29,18 +31,29 @@ export const initialState = {
     signup: false,
     checkToken: false,
     mailSended: false,
+    passwordRecoveryMailSnded: false,
+    passwordRecoveryPasswordModified: false,
   },
   credentials: {
     email: '',
+    emailRecovery: '',
     passwordSignin: '',
     password: '',
     passwordConfirm: '',
+    newPassword: '',
+    newPasswordConfirm: '',
     formConnection: false,
+    formPasswordRecovery: false,
+    formPasswordRecoveryNew1: false,
+    formPasswordRecoveryNew2: false,
     formLogin: false,
     formSignup1: false,
     formSignup2: false,
     errorSignup: null as string | string[] | null,
     errorSigin: null as string | string[] | null,
+    errorPasswordRecovery: null as string | null,
+    errorPasswordRecoveryNew: null as string | string[] | null,
+    recoveryToken: null as string | null,
     address: {
       id: null,
       account_id: null,
@@ -102,32 +115,70 @@ const accountSlice = createSlice({
     actionChangeCredentials: (state, action: PayloadAction<changeCredentialsPayload>) => {
       const { name, value } = action.payload;
       state.credentials[name] = escapeHtml(value);
-      if (name === 'email') {
-        if (!validateEmail(state.credentials.email)) {
-          state.credentials.formConnection = false;
-          state.credentials.errorSignup = "Email invalide";
-        } else {
-          state.credentials.formConnection = true;
-          state.credentials.errorSignup = null;
-        }
-      }
-      if (name === 'password') {
-        const testPassword = validePassword(state.credentials.password);
-        if (Object.values(testPassword).every(value => value === true)) {
-          state.credentials.formSignup1 = true;
-          state.credentials.errorSignup = null;
-        } else {
-          state.credentials.formSignup1 = false;
-        }
-      }
-      if (name === 'passwordConfirm') {
-        if (state.credentials.password !== state.credentials.passwordConfirm) {
-          state.credentials.formSignup2 = false;
-          state.credentials.errorSignup = ["Les mots de passe ne correspondent pas"];
-        } else {
-          state.credentials.formSignup2 = true;
-          state.credentials.errorSignup = null;
-        }
+      switch (name) {
+        case 'email':
+          if (!validateEmail(state.credentials.email)) {
+            state.credentials.formConnection = false;
+            state.credentials.errorSignup = "Email invalide";
+          } else {
+            state.credentials.formConnection = true;
+            state.credentials.errorSignup = null;
+          }
+          break;
+        case 'emailRecovery':
+          if (!validateEmail(state.credentials.emailRecovery)) {
+            state.credentials.formPasswordRecovery = false;
+            state.credentials.errorPasswordRecovery = "Email invalide";
+          } else {
+            state.credentials.formPasswordRecovery = true;
+            state.credentials.errorPasswordRecovery = null;
+          }
+          break;
+        case 'password':
+          {
+            const testPassword = validePassword(state.credentials.password);
+            if (Object.values(testPassword).every(value => value === true)) {
+              state.credentials.formSignup1 = true;
+            } else {
+              state.credentials.formSignup1 = false;
+            }
+
+            if (state.credentials.password !== state.credentials.passwordConfirm) {
+              state.credentials.formSignup2 = false;
+            } else {
+              state.credentials.formSignup2 = true;
+            }
+            break;
+          }
+        case 'passwordConfirm':
+          if (state.credentials.password !== state.credentials.passwordConfirm) {
+            state.credentials.formSignup2 = false;
+          } else {
+            state.credentials.formSignup2 = true;
+          }
+          break;
+        case 'newPassword':
+          {
+            const testPassword = validePassword(state.credentials.newPassword);
+            if (Object.values(testPassword).every(value => value === true)) {
+              state.credentials.formPasswordRecoveryNew1 = true;
+            } else {
+              state.credentials.formPasswordRecoveryNew1 = false;
+            }
+
+            if (state.credentials.newPassword !== state.credentials.newPasswordConfirm) {
+              state.credentials.formPasswordRecoveryNew2 = false;
+            } else {
+              state.credentials.formPasswordRecoveryNew2 = true;
+            }
+            break;
+          }
+        case 'newPasswordConfirm':
+          if (state.credentials.newPassword !== state.credentials.newPasswordConfirm) {
+            state.credentials.formPasswordRecoveryNew2 = false;
+          } else {
+            state.credentials.formPasswordRecoveryNew2 = true;
+          }
       }
     },
     actionChangeConnection: (state, action) => {
@@ -135,6 +186,9 @@ const accountSlice = createSlice({
     },
     actionChangeAuthentification: (state, action) => {
       state.isAuthentificated = action.payload;
+    },
+    actionSetRecoveryToken: (state, action) => {
+      state.credentials.recoveryToken = action.payload;
     },
     actionChangeAddressOneInfo: (state, action) => {
       const { name, value } = action.payload;
@@ -306,7 +360,7 @@ const accountSlice = createSlice({
         code: escapeHtml(country.code),
         dial_code: escapeHtml(country.dial_code)
       }));
-      state.credentials.errorSignup = null;
+      state.credentials.errorSigin = null;
       state.credentials.passwordSignin = '';
       state.credentials.password = '';
       state.credentials.passwordConfirm = '';
@@ -318,7 +372,7 @@ const accountSlice = createSlice({
       const payload = action.payload as { error: string };
       state.pending.checking = false;
       state.pending.login = false;
-      state.credentials.errorSignup = payload.error;
+      state.credentials.errorSigin = payload.error;
       state.isAuthentificated = false;
     });
     builder.addCase(actionCheckSignup.fulfilled, (state) => {
@@ -332,6 +386,27 @@ const accountSlice = createSlice({
     });
     builder.addCase(actionCheckSignup.rejected, (state) => {
       state.pending.signup = false;
+    });
+    builder.addCase(actionCheckPasswordRecovery.fulfilled, (state) => {
+      state.pending.passwordRecoveryMailSnded = false;
+    });
+    builder.addCase(actionCheckPasswordRecovery.pending, (state) => {
+      state.pending.passwordRecoveryMailSnded = true;
+    });
+    builder.addCase(actionCheckPasswordRecovery.rejected, (state) => {
+      state.pending.passwordRecoveryMailSnded = false;
+    });
+    builder.addCase(actionCheckPasswordRecoverySend.fulfilled, (state) => {
+      state.pending.passwordRecoveryPasswordModified = false;
+      state.connection = 'checking';
+
+    });
+    builder.addCase(actionCheckPasswordRecoverySend.pending, (state) => {
+      state.pending.passwordRecoveryPasswordModified = true;
+    });
+    builder.addCase(actionCheckPasswordRecoverySend.rejected, (state) => {
+      state.pending.passwordRecoveryPasswordModified = false;
+      state.connection = 'checking';
     });
     builder.addCase(actionCheckToken.fulfilled, (state, action) => {
       state.isAuthentificated = action.payload.valid;
@@ -499,6 +574,7 @@ export const { actionChangeCredentials,
   actionChangeAddressAllInfos,
   actionResetAddress,
   actionChangePaymentInfo,
-  actionSetInfos
+  actionSetInfos,
+  actionSetRecoveryToken
 } = accountSlice.actions;
 export default accountSlice.reducer;

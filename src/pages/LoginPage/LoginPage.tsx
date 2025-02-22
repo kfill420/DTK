@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { actionChangeConnection, actionChangeCredentials } from '../../store/reducer/account';
-import { actionCheckConnexion, actionCheckSignin, actionCheckSignup } from '../../store/thunks/checkLogin';
+import { actionChangeConnection, actionChangeCredentials, actionSetRecoveryToken } from '../../store/reducer/account';
+import { actionCheckConnexion, actionCheckPasswordRecovery, actionCheckPasswordRecoverySend, actionCheckSignin, actionCheckSignup } from '../../store/thunks/checkLogin';
 import { TbArrowBackUpDouble, TbPoint } from "react-icons/tb";
 
 import './LoginPage.scss'
@@ -10,34 +10,34 @@ import { CSSTransition } from "react-transition-group";
 import ButtonLoader from "../../components/App/ButtonLoader/ButtonLoader";
 import axios from "axios";
 import { validePassword } from "../../utils/regexValidator";
+import { changeCredentialsPayload } from "../../@types/payload";
+import { usePopupMessage } from "../../utils/usePopup";
 
 function LoginPage() {
   const dispatch = useAppDispatch();
 
   const pending = useAppSelector((state) => state.account.pending);
   const connection = useAppSelector((state) => state.account.connection);
-  const mailValue = useAppSelector((state) => state.account.credentials.email);
-  const passwordSigninValue = useAppSelector((state) => state.account.credentials.passwordSignin);
-  const passwordValue = useAppSelector((state) => state.account.credentials.password);
-  const passwordConfirmValue = useAppSelector((state) => state.account.credentials.passwordConfirm);
-  const validFormConnection = useAppSelector((state) => state.account.credentials.formConnection);
-  const validFormSignup1 = useAppSelector((state) => state.account.credentials.formSignup1);
-  const validFormSignup2 = useAppSelector((state) => state.account.credentials.formSignup2);
-  // const errorSignup = useAppSelector((state) => state.account.credentials.errorSignup);
-  const errorSignin = useAppSelector((state) => state.account.credentials.errorSignup);
+  const credentials = useAppSelector((state) => state.account.credentials);
 
   const connectionFocusRef = useRef<HTMLInputElement>(null);
   const loginFocusRef = useRef<HTMLInputElement>(null);
   const signupFocusRef = useRef<HTMLInputElement>(null);
   const signupPasswordRef = useRef<HTMLInputElement>(null);
   const signupPasswordConfirmRef = useRef<HTMLInputElement>(null);
+  const passwordRecoveryFocusRef = useRef<HTMLInputElement>(null);
+  const passwordRecoveryNewFocusRef = useRef<HTMLInputElement>(null);
+  const passwordRecoveryConfirmNewFocusRef = useRef<HTMLInputElement>(null);
 
   const checkingRef = useRef<HTMLInputElement>(null);
   const loginRef = useRef<HTMLInputElement>(null);
   const signupRef = useRef<HTMLInputElement>(null);
+  const passwordRecoveryRef = useRef<HTMLInputElement>(null);
+  const passwordRecoveryNewRef = useRef<HTMLInputElement>(null);
 
   const [searchParams] = useSearchParams();
 
+  const [emailSended, setEmailSended] = useState(false);
   const [passwordValidation, setPasswordValidation] = useState({
     caractMini8: false,
     minuscule: false,
@@ -50,9 +50,15 @@ function LoginPage() {
     password: false,
     passwordConfirm: false,
   });
+  const [newPasswordConfirmValidation, setNewPasswordConfirmValidation] = useState(false);
+  const [passwordRecoveryFocus, setpasswordRecoveryFocus] = useState({
+    newPassword: false,
+    newPasswordConfirm: false,
+  });
 
 
   const navigate = useNavigate();
+  const { setPopupMessage } = usePopupMessage();
 
   useEffect(() => {
     if (connection === 'checking' && connectionFocusRef.current)
@@ -62,57 +68,92 @@ function LoginPage() {
 
   useEffect(() => {
     const token = searchParams.get('token');
+    const passwordRecoveryToken = searchParams.get('pw-recovery');
 
-    if (!token) {
-      return;
+    if (token) {
+      axios
+        .post(`${import.meta.env.VITE_APP_API_URL}/confirmation/${token}`)
+        .then((res) => {
+          navigate(res.data.redirectUrl);
+        })
+        .catch((err) => {
+          console.log(err);
+          navigate('/login?confirmed=false');
+        });
     }
 
-    axios
-      .post(`${import.meta.env.VITE_APP_API_URL}/confirmation/${token}`)
-      .then((res) => {
-        navigate(res.data.redirectUrl);
-      })
-      .catch((err) => {
-        console.log(err);
-        navigate('/login?confirmed=false');
-      });
+    if (passwordRecoveryToken) {
+      dispatch(actionSetRecoveryToken(passwordRecoveryToken));
+      dispatch(actionChangeConnection('passwordRecoveryNew'));
+    }
+
+    if (pending.passwordRecoveryPasswordModified) {
+      setPopupMessage("Merci de confirmer votre adresse mail avec le mail envoyé");
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target as { name: 'email' | 'password' | 'passwordConfirm' | 'passwordSignin', value: string };
+    const { name, value } = event.target as changeCredentialsPayload;
     if (name === "password") {
       const passwordValidation = validePassword(value);
       setPasswordValidation(passwordValidation);
-      if (value === passwordConfirmValue)
+      if (value === credentials.passwordConfirm)
         setPasswordConfirmValidation(true);
       else
         setPasswordConfirmValidation(false);
     } else if (name === "passwordConfirm") {
-      if (value === passwordValue)
+      if (value === credentials.password)
         setPasswordConfirmValidation(true);
       else
         setPasswordConfirmValidation(false);
+    } else if (name === "newPassword") {
+      const passwordValidation = validePassword(value);
+      setPasswordValidation(passwordValidation);
+      if (value === credentials.newPasswordConfirm)
+        setNewPasswordConfirmValidation(true);
+      else
+        setNewPasswordConfirmValidation(false);
+    } else if (name === "newPasswordConfirm") {
+      if (value === credentials.newPassword)
+        setNewPasswordConfirmValidation(true);
+      else
+        setNewPasswordConfirmValidation(false);
     }
     dispatch(actionChangeCredentials({ name, value }));
   }
 
   const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
     const { name } = event.target;
-    setPasswordSignupFocus(prev => ({
-      ...prev,
-      password: name === 'password' ? true : prev.password,
-      passwordConfirm: name === 'passwordConfirm' ? true : prev.passwordConfirm
-    }))
+    if (name === "password" || name === "passwordConfirm")
+      setPasswordSignupFocus(prev => ({
+        ...prev,
+        password: name === 'password' ? true : prev.password,
+        passwordConfirm: name === 'passwordConfirm' ? true : prev.passwordConfirm
+      }))
+    else if (name === "newPassword" || name === "newPasswordConfirm")
+      setpasswordRecoveryFocus(prev => ({
+        ...prev,
+        newPassword: name === 'newPassword' ? true : prev.newPassword,
+        newPasswordConfirm: name === 'newPasswordConfirm' ? true : prev.newPasswordConfirm
+      }))
   }
 
   const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     const { name } = event.target;
-    setPasswordSignupFocus(prev => ({
-      ...prev,
-      password: name === 'password' ? false : prev.password,
-      passwordConfirm: name === 'passwordConfirm' ? false : prev.passwordConfirm
-    }))
+    if (name === "password" || name === "passwordConfirm")
+      setPasswordSignupFocus(prev => ({
+        ...prev,
+        password: name === 'password' ? false : prev.password,
+        passwordConfirm: name === 'passwordConfirm' ? false : prev.passwordConfirm
+      }))
+    else if (name === "newPassword" || name === "newPasswordConfirm")
+      setpasswordRecoveryFocus(prev => ({
+        ...prev,
+        newPassword: name === 'newPassword' ? false : prev.newPassword,
+        newPasswordConfirm: name === 'newPasswordConfirm' ? false : prev.newPasswordConfirm
+      }))
   }
 
   const changeConnection = () => {
@@ -127,6 +168,31 @@ function LoginPage() {
   const handleSignupSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     await dispatch(actionCheckSignup());
+  }
+
+  const handlePasswordRecoverySubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setEmailSended(true);
+    const result = await dispatch(actionCheckPasswordRecovery());
+    if (actionCheckPasswordRecovery.fulfilled.match(result)) {
+      setPopupMessage("Un mail de réinitialisation de mot de passe vous a été envoyé");
+    } else {
+      setPopupMessage("Un mail de réinitialisation de mot de passe vous a été envoyé");
+    }
+  }
+
+  const handlePasswordRecoveryNewSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const result = await dispatch(actionCheckPasswordRecoverySend());
+    if (actionCheckPasswordRecoverySend.fulfilled.match(result)) {
+      setPopupMessage("Votre mot de passe a bien été modifié");
+    } else {
+      setPopupMessage("Erreur lors du changement de mot de passe");
+    }
+  }
+
+  const handlePasswordRecovery = () => {
+    dispatch(actionChangeConnection('passwordRecovery'));
   }
 
   const handleSiginSubmit = async (e: React.FormEvent) => {
@@ -153,8 +219,8 @@ function LoginPage() {
           <form onSubmit={handleEmailSubmit} className="checking_form">
             <span className="checking_form_title">Se connecter</span>
             <label htmlFor="mail" className="checking_form_mailLabel">Saisissez votre adresse e-mail.</label>
-            <input type="mail" placeholder='E-mail' name='email' ref={connectionFocusRef} value={mailValue} onChange={handleChange} className="checking_form_mailInput" />
-            <ButtonLoader type='submit' disabled={validFormConnection} text='Continuer' isLoading={pending.checking} />
+            <input type="mail" placeholder='E-mail' name='email' ref={connectionFocusRef} value={credentials.email} onChange={handleChange} className="checking_form_mailInput" />
+            <ButtonLoader type='submit' disabled={credentials.formConnection} text='Continuer' isLoading={pending.checking} />
           </form>
           <div className="checking_bottom">
             <span className="checking_bottom_conf">Confidentialité</span>
@@ -167,11 +233,14 @@ function LoginPage() {
           <form onSubmit={handleSiginSubmit} className="checking_form">
             <span className="checking_form_title">Se connecter</span>
             <label htmlFor="password" className="checking_form_mailLabel">Indiquer votre mot de passe.</label>
-            <input type="password" placeholder='Mot de passe' name='passwordSignin' ref={loginFocusRef} value={passwordSigninValue} onChange={handleChange} className="checking_form_mailInput" />
-            <ButtonLoader type='submit' disabled={validFormConnection} text='Continuer' isLoading={pending.login} />
+            <input type="password" placeholder='Mot de passe' name='passwordSignin' ref={loginFocusRef} value={credentials.passwordSignin} onChange={handleChange} className="checking_form_mailInput" />
+            <ButtonLoader type='submit' disabled={credentials.formConnection} text='Continuer' isLoading={pending.login} />
           </form>
           <div className="checking_form_errors">
-            <span className="checking_form_errors_error">{errorSignin}</span>
+            <span className="checking_form_errors_error">{credentials.errorSigin}</span>
+          </div>
+          <div className="checking_form_passwordLost">
+            <button type="button" className="checking_form_passwordLost_text" onClick={handlePasswordRecovery}>Mot de passe oublié ?</button>
           </div>
           <div className={connection === 'checking' ? "checking_bottom checking_bottom-signup" : "checking_bottom"}>
             <span className="checking_bottom_conf">Confidentialité</span>
@@ -186,8 +255,8 @@ function LoginPage() {
             <span className="checking_form_title">S'inscrire</span>
             <fieldset className="checking_form_password">
               <label htmlFor="password" className="checking_form_password_label">Choisissez votre mot de passe.</label>
-              <input type="password" placeholder='Mot de passe' name='password' ref={signupFocusRef} value={passwordValue} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} className="checking_form_password_input" />
-              <CSSTransition in={passwordSignupFocus.password} nodeRef={signupPasswordRef} classNames="extend-400t" timeout={500} onEntered={() => handleTransitionEntered(signupFocusRef)} unmountOnExit appear>
+              <input type="password" placeholder='Mot de passe' name='password' ref={signupFocusRef} value={credentials.password} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} className="checking_form_password_input" />
+              <CSSTransition in={passwordSignupFocus.password} nodeRef={signupPasswordRef} classNames="extend-400t" timeout={500} unmountOnExit appear>
                 <div ref={signupPasswordRef} className="checking_form_errors checking_form_errors-signup">
                   <span className={Object.values(passwordValidation).every(value => value === true) ? "checking_form_errors_error-signup checking_form_errors_error-signup-ok" : "checking_form_errors_error-signup"}>Le mot de passe doit contenir au minimum</span>
                   <span className={passwordValidation.caractMini8 ? "checking_form_errors_error-signup checking_form_errors_error-signup-ok" : "checking_form_errors_error-signup"}><TbPoint size={15} />8 caractères</span>
@@ -202,7 +271,7 @@ function LoginPage() {
 
             <fieldset className="checking_form_passwordConfirm">
               <label htmlFor="password" className="checking_form_passwordConfirm_label">Confirmer votre mot de passe.</label>
-              <input type="password" placeholder='Mot de passe' name='passwordConfirm' value={passwordConfirmValue} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} className="checking_form_passwordConfirm_input" />
+              <input type="password" placeholder='Mot de passe' name='passwordConfirm' value={credentials.passwordConfirm} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} disabled={!credentials.formSignup1} className="checking_form_passwordConfirm_input" />
               <CSSTransition in={passwordSignupFocus.passwordConfirm} nodeRef={signupPasswordConfirmRef} classNames="extend-400t" timeout={500} unmountOnExit appear>
                 <div ref={signupPasswordConfirmRef}>
                   <span className={passwordConfirmValidation ? "checking_form_passwordConfirm_error checking_form_passwordConfirm_error-ok" : "checking_form_passwordConfirm_error"}><TbPoint size={15} />Les mots de passe doivent être identiques</span>
@@ -210,11 +279,66 @@ function LoginPage() {
               </CSSTransition>
             </fieldset>
 
-            <ButtonLoader type='submit' disabled={(validFormSignup1 && validFormSignup2)} text='Continuer' isLoading={pending.signup} />
+            <ButtonLoader type='submit' disabled={(credentials.formSignup1 && credentials.formSignup2)} text='Continuer' isLoading={pending.signup} />
           </form>
           <div className={connection === 'checking' ? "checking_bottom checking_bottom-checking" : "checking_bottom"}>
             <span className="connection_bottom_conf">Confidentialité</span>
             <TbArrowBackUpDouble size={35} onClick={changeConnection} className="checking_bottom_back" />
+          </div>
+        </div>
+      </CSSTransition>
+
+
+      <CSSTransition in={connection === "passwordRecovery"} nodeRef={passwordRecoveryRef} classNames="checking_transi" timeout={300} onEntered={() => handleTransitionEntered(passwordRecoveryFocusRef)} unmountOnExit appear>
+        <div ref={passwordRecoveryRef} className="checking container_part">
+          <form onSubmit={handlePasswordRecoverySubmit} className="checking_form">
+            <span className="checking_form_title">Réinitialiser votre mot de passe</span>
+            <label htmlFor="mail" className="checking_form_mailLabel">Saisissez votre adresse e-mail.</label>
+            <input type="mail" placeholder='E-mail' name='emailRecovery' ref={passwordRecoveryFocusRef} value={credentials.emailRecovery} onChange={handleChange} className="checking_form_mailInput" />
+            <ButtonLoader type='submit' disabled={credentials.formPasswordRecovery || emailSended} text='Continuer' isLoading={pending.passwordRecoveryMailSnded} />
+          </form>
+          <div className="checking_bottom">
+            <span className="checking_bottom_conf">Confidentialité</span>
+            <TbArrowBackUpDouble size={35} onClick={changeConnection} className="checking_bottom_back" />
+          </div>
+        </div>
+      </CSSTransition>
+
+
+      <CSSTransition in={connection === "passwordRecoveryNew"} nodeRef={passwordRecoveryNewRef} classNames="checking_transi" timeout={300} onEntered={() => handleTransitionEntered(passwordRecoveryNewFocusRef)} unmountOnExit appear>
+        <div ref={passwordRecoveryNewRef} className="checking container_part">
+          <form onSubmit={handlePasswordRecoveryNewSubmit} className="checking_form">
+            <span className="checking_form_title">Réinitialiser votre mot de passe</span>
+            <fieldset className="checking_form_password">
+              <label htmlFor="password" className="checking_form_password_label">Choisissez votre mot de passe.</label>
+              <input type="password" placeholder='Mot de passe' name='newPassword' ref={signupFocusRef} value={credentials.newPassword} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} className="checking_form_password_input" />
+              <CSSTransition in={passwordRecoveryFocus.newPassword} nodeRef={passwordRecoveryNewFocusRef} classNames="extend-400t" timeout={500} unmountOnExit appear>
+                <div ref={passwordRecoveryNewFocusRef} className="checking_form_errors checking_form_errors-signup">
+                  <span className={Object.values(passwordValidation).every(value => value === true) ? "checking_form_errors_error-signup checking_form_errors_error-signup-ok" : "checking_form_errors_error-signup"}>Le mot de passe doit contenir au minimum</span>
+                  <span className={passwordValidation.caractMini8 ? "checking_form_errors_error-signup checking_form_errors_error-signup-ok" : "checking_form_errors_error-signup"}><TbPoint size={15} />8 caractères</span>
+                  <span className={passwordValidation.minuscule ? "checking_form_errors_error-signup checking_form_errors_error-signup-ok" : "checking_form_errors_error-signup"}><TbPoint size={15} />1 minuscule</span>
+                  <span className={passwordValidation.majuscule ? "checking_form_errors_error-signup checking_form_errors_error-signup-ok" : "checking_form_errors_error-signup"}><TbPoint size={15} />1 majuscule</span>
+                  <span className={passwordValidation.chiffre ? "checking_form_errors_error-signup checking_form_errors_error-signup-ok" : "checking_form_errors_error-signup"}><TbPoint size={15} />1 chiffre</span>
+                  <span className={passwordValidation.special ? "checking_form_errors_error-signup checking_form_errors_error-signup-ok" : "checking_form_errors_error-signup"}><TbPoint size={15} />1 caractère spécial</span>
+                </div>
+              </CSSTransition>
+            </fieldset>
+
+
+            <fieldset className="checking_form_passwordConfirm">
+              <label htmlFor="password" className="checking_form_passwordConfirm_label">Confirmer votre mot de passe.</label>
+              <input type="password" placeholder='Mot de passe' name='newPasswordConfirm' value={credentials.newPasswordConfirm} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} disabled={!credentials.formPasswordRecoveryNew1} className="checking_form_passwordConfirm_input" />
+              <CSSTransition in={passwordRecoveryFocus.newPasswordConfirm} nodeRef={passwordRecoveryConfirmNewFocusRef} classNames="extend-400t" timeout={500} unmountOnExit appear>
+                <div ref={passwordRecoveryConfirmNewFocusRef}>
+                  <span className={newPasswordConfirmValidation ? "checking_form_passwordConfirm_error checking_form_passwordConfirm_error-ok" : "checking_form_passwordConfirm_error"}><TbPoint size={15} />Les mots de passe doivent être identiques</span>
+                </div>
+              </CSSTransition>
+            </fieldset>
+
+            <ButtonLoader type='submit' disabled={(credentials.formPasswordRecoveryNew1 && credentials.formPasswordRecoveryNew2)} text='Continuer' isLoading={pending.signup} />
+          </form>
+          <div className={connection === 'checking' ? "checking_bottom checking_bottom-checking" : "checking_bottom"}>
+            <span className="checking_bottom_conf">Confidentialité</span>
           </div>
         </div>
       </CSSTransition>

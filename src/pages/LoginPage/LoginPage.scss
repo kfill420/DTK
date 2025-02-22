@@ -171,6 +171,21 @@
       }
     }
 
+    &_passwordLost {
+      font-size: 0.8rem;
+      width: 90%;
+      margin-top: 2rem;
+
+      &_text {
+        border: none;
+        text-decoration: none;
+        background-color: transparent;
+        color: v.$textColor-colorDark;
+        cursor: pointer;
+        padding: 0;
+      }
+    }
+
     &_mailLabel {
       font-size: 1rem;
       color: v.$textColor-colorDark;

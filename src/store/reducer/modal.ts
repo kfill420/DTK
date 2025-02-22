@@ -34,6 +34,7 @@ export const initialState: initialStateModal = {
 
   popup: {
     text: '',
+    error: false,
   }
 }
 
@@ -48,8 +49,11 @@ const ModalMenu = createSlice({
       state.modals[action.payload.modal] = action.payload.value;
     },
     setPopup: (state, action) => {
-      state.popup.text = action.payload;
+      state.popup.text = action.payload.message;
       state.modals.popupIsOpen = true;
+      if (action.payload.error === true) {
+        state.popup.error = true;
+      }
     },
     closeAllModal: (state) => {
       state.modals.burgerModalIsOpen = false;
