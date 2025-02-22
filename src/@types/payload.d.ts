@@ -1,5 +1,5 @@
 export interface changeCredentialsPayload {
-  name: 'email' | 'password' | 'passwordConfirm' | 'passwordSignin';
+  name: 'email' | 'password' | 'passwordConfirm' | 'passwordSignin' | 'emailRecovery' | 'newPassword' | 'newPasswordConfirm';
   value: string;
 }
 
@@ -30,6 +30,7 @@ export interface initialStateModal {
   modalCollectionFilter: PriceRangeModal;
   popup: {
     text: string;
+    error: boolean;
   }
 }
 
@@ -91,10 +92,3 @@ export interface actionCheckSigninResult {
   }
 }
 
-
-
-
-
-// export interface stateAnimationPopupPayload {
-//   state: 'close' | 'open' | 'open-active' | 'exit' | 'exit-active' | 'exit-end';
-// }

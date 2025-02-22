@@ -11,12 +11,13 @@ import { Link, NavLink, useLocation, useNavigate, useSearchParams } from 'react-
 import { IoIosArrowUp } from 'react-icons/io';
 import ModalConfirm from '../Modal/ModalConfirm/ModalConfirm';
 import { actionDeleteAccount } from '../../store/thunks/checkAccount';
-import { closeAllModal, setIsOpen, setPopup, toggleIsOpen } from '../../store/reducer/modal';
+import { closeAllModal, setIsOpen, toggleIsOpen } from '../../store/reducer/modal';
 import { actionLogout } from "../../store/thunks/checkLogin";
 import ModalCart from "../Modal/ModalCart/ModalCart";
 import { useEffect, useState } from "react";
 import Popup from "../Modal/Popup/Popup";
-import { actionChangeCredentials } from "../../store/reducer/account";
+import { actionChangeConnection, actionChangeCredentials } from "../../store/reducer/account";
+import { usePopupMessage } from "../../utils/usePopup";
 
 interface HeaderI {
   isAuthentificated: boolean;
@@ -39,37 +40,44 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
   const cartCountOffline = useAppSelector((state) => state.cart.cartVisitor.length);
   const mailSended = useAppSelector((state) => state.account.pending.mailSended);
 
+  const { setPopupMessage, handleClickPopup, timerPopup } = usePopupMessage();
+
   const [stateAnimationPopup, setstateAnimationPopup] = useState<string>('close');
-  const [timerPopup, setTimerPopup] = useState<NodeJS.Timeout | null>(null);
+  // const [timerPopup, setTimerPopup] = useState<NodeJS.Timeout | null>(null);
 
-  const handlePopup = (message: string) => {
-    dispatch(setPopup(message));
-    const timeout = setTimeout(() => {
-      dispatch(setIsOpen({ modal: "popupIsOpen", value: false }));
-    }, 6000);
-    setTimerPopup(timeout);
+  // const handlePopup = (message: string) => {
+  //   dispatch(setPopup(message));
+  //   const timeout = setTimeout(() => {
+  //     dispatch(setIsOpen({ modal: "popupIsOpen", value: false }));
+  //   }, 6000);
+  //   setTimerPopup(timeout);
 
-    return () => {
-      if (timeout) {
-        clearTimeout(timeout);
-      }
-    }
-  }
+  //   return () => {
+  //     if (timeout) {
+  //       clearTimeout(timeout);
+  //     }
+  //   }
+  // }
 
   useEffect(() => {
     const email = searchParams.get('user');
     const warning = searchParams.get('warning');
 
     if (location.pathname.includes("/profile") && warning === 'true') {
-      return handlePopup("Merci de renseigner vos informations avant de procéder à la commande");
+      return setPopupMessage("Merci de renseigner vos informations avant de procéder à la commande");
     } else if (location.pathname.includes("/login") && searchParams.get('confirmed') === 'true' && email !== null) {
       dispatch(actionChangeCredentials({ name: "email", value: email }));
       if (searchParams.get('confirmed') === 'true')
-        return handlePopup("Votre addresse email a bien été confirmée");
+        return setPopupMessage("Votre addresse email a bien été confirmée");
       else if (searchParams.get('confirmed') === 'false')
-        return handlePopup("Erreur lors de la validation de l'adresse mail");
+        return setPopupMessage("Erreur lors de la validation de l'adresse mail");
     } else if (mailSended) {
-      return handlePopup("Merci de confirmer votre adresse mail avec le mail envoyé");
+      return setPopupMessage("Merci de confirmer votre adresse mail avec le mail envoyé");
+    }
+
+    return () => {
+      if (timerPopup)
+        clearTimeout(timerPopup);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -127,11 +135,11 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
     dispatch(closeAllModal());
   }
 
-  const handleClickPopup = () => {
-    if (timerPopup)
-      clearTimeout(timerPopup);
-    dispatch(setIsOpen({ modal: 'popupIsOpen', value: false }));
-  }
+  // const handleClickPopup = () => {
+  //   if (timerPopup)
+  //     clearTimeout(timerPopup);
+  //   dispatch(setIsOpen({ modal: 'popupIsOpen', value: false }));
+  // }
 
   return (
     <>
@@ -191,7 +199,7 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
                   <FaRegUser className="header_profile_links_link" size={22} />
                 </Link>
                 :
-                <Link to="/login" className={location.pathname === '/' ? "header_profile_links header_profile_links-home" : "header_profile_links"} aria-label="Connection">
+                <Link to="/login" onClick={() => dispatch(actionChangeConnection("checking"))} className={location.pathname === '/' ? "header_profile_links header_profile_links-home" : "header_profile_links"} aria-label="Connection">
                   <PiSignInFill className="header_profile_links_link" size={22} />
                 </Link>
               }
@@ -214,7 +222,7 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
 
       <ModalCart isOpen={cartModalIsOpen} cancelFunction={exitCartModal} />
 
-      <Popup isOpen={popupIsOpen} clearPopup={handleClickPopup} />
+      <Popup isOpen={popupIsOpen} clearPopup={() => handleClickPopup()} />
     </>
   )
 }

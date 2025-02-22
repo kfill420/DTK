@@ -69,6 +69,45 @@ const actionCheckSignup = createAsyncThunk(
   }
 );
 
+const actionCheckPasswordRecovery = createAsyncThunk(
+  'account/CHECK_PASSWORD_RECOVERY',
+  async (_, thunkAPI) => {
+    try {
+      const state = thunkAPI.getState() as RootState;
+      const response = await axiosInstance.post('/password-recovery', {
+        email: escapeHtml(state.account.credentials.emailRecovery),
+      });
+
+      return response.data;
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      return thunkAPI.rejectWithValue(axiosError.response?.data);
+    }
+  }
+);
+
+const actionCheckPasswordRecoverySend = createAsyncThunk(
+  'account/CHECK_PASSWORD_RECOVERY_SNED',
+  async (_, thunkAPI) => {
+    try {
+      const state = thunkAPI.getState() as RootState;
+
+      if (state.account.credentials.recoveryToken) {
+        const response = await axiosInstance.post('/password-recovery-send', {
+          password: escapeHtml(state.account.credentials.newPassword),
+          passwordConfirm: escapeHtml(state.account.credentials.newPasswordConfirm),
+          token: state.account.credentials.recoveryToken,
+        });
+        return response.data;
+      }
+      return thunkAPI.rejectWithValue({ message: 'Token invalide' });
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      return thunkAPI.rejectWithValue(axiosError.response?.data);
+    }
+  }
+);
+
 const actionCheckConnexion = createAsyncThunk(
   'account/CHECK_CONNEXION',
   async (_, thunkAPI) => {
@@ -98,4 +137,4 @@ const actionLogout = createAsyncThunk(
   }
 );
 
-export { actionCheckSignin, actionCheckConnexion, actionCheckSignup, actionCheckToken, actionLogout };
+export { actionCheckSignin, actionCheckConnexion, actionCheckSignup, actionCheckToken, actionCheckPasswordRecovery, actionCheckPasswordRecoverySend, actionLogout };

@@ -16,4 +16,8 @@
   &:hover {
     background-color: v.$bgColor-primary-light;
   }
+
+  &-error {
+    background-color: v.$textColor-error;
+  }
 }
