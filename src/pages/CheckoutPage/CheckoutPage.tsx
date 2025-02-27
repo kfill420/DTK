@@ -15,9 +15,11 @@ import RadioInput from "../../components/App/RadioInput/RadioInput";
 import { AddAddress } from "../ProfilePage/Infos/ModalAddAddress/ModalAddAddress";
 import { actionCheckOneDiscount } from "../../store/thunks/checkDiscount";
 import { usePopupMessage } from "../../utils/usePopup";
+import { useNavigate } from "react-router-dom";
 
 function CheckoutPage() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { setPopupMessage } = usePopupMessage();
 
   // const id = useAppSelector((state) => state.account.account.id);
@@ -46,6 +48,8 @@ function CheckoutPage() {
 
   useEffect(() => {
     let st = 0;
+    if (!cart || cart.length === 0)
+      navigate('/');
     cart.forEach((product) => {
       st += Number(product.price);
     });
