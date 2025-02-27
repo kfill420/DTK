@@ -184,14 +184,10 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
                   <PiSignInFill className="header_profile_links_link" size={22} />
                 </Link>
               }
-
-              {
-                location.pathname !== '/checkout' &&
-                <button className={location.pathname === '/' ? "header_profile_links header_profile_links-home" : "header_profile_links"} onClick={toggleCartModal} aria-label="Panier">
-                  <BiBasket className="header_profile_links_link" size={25} />
-                  <span className="header_profile_links_cartcount">{isLogin ? cartCount : cartCountOffline}</span>
-                </button>
-              }
+              <button className={location.pathname === '/' ? "header_profile_links header_profile_links-home" : "header_profile_links"} onClick={toggleCartModal} aria-label="Panier">
+                <BiBasket className="header_profile_links_link" size={25} />
+                <span className="header_profile_links_cartcount">{isLogin ? cartCount : cartCountOffline}</span>
+              </button>
 
             </div>
           </div >
