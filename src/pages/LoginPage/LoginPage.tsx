@@ -87,9 +87,9 @@ function LoginPage() {
       dispatch(actionChangeConnection('passwordRecoveryNew'));
     }
 
-    if (pending.passwordRecoveryPasswordModified) {
-      setPopupMessage("Merci de confirmer votre adresse mail avec le mail envoyé");
-    }
+    // if (pending.passwordRecoveryPasswordModified) {
+    //   setPopupMessage("Merci de confirmer votre adresse mail avec le mail envoyé");
+    // }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -167,7 +167,10 @@ function LoginPage() {
 
   const handleSignupSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await dispatch(actionCheckSignup());
+    const result = await dispatch(actionCheckSignup());
+    if (actionCheckSignup.fulfilled.match(result)) {
+      setPopupMessage("Merci de confirmer votre adresse mail avec le mail envoyé");
+    }
   }
 
   const handlePasswordRecoverySubmit = async (e: React.FormEvent) => {
