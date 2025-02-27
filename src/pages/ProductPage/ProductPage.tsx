@@ -157,7 +157,6 @@ function ProductPage() {
             <button type="submit" className="product_infos_button">Acheter maintenant</button>
           </div>
 
-
           <div>
             <Question title="Description de l'article" content={decodeHtmlEntities(product.description)} />
           </div>

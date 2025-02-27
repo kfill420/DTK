@@ -1,4 +1,4 @@
-import { useAppDispatch } from '../../../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../../../hooks/redux';
 import { CSSTransition } from 'react-transition-group';
 import { setIsOpen } from '../../../../store/reducer/modal';
 import { PiUserCircleThin } from "react-icons/pi";
@@ -12,6 +12,8 @@ const HamburgerMenu = ({ isOpen, email }: { isOpen: boolean, email: string }) =>
   const navigate = useNavigate();
   const burgerMenuBackgroundRef = useRef<HTMLDivElement>(null);
   const burgerMenuRef = useRef<HTMLDivElement>(null);
+
+  const isAdmin = useAppSelector((state) => state.account.account.admin);
 
   const handleOpen = () => {
     dispatch(setIsOpen({ modal: 'burgerModalIsOpen', value: false }));
@@ -41,6 +43,9 @@ const HamburgerMenu = ({ isOpen, email }: { isOpen: boolean, email: string }) =>
                 <NavLink to="/" onClick={handleOpen} className={({ isActive }) => (isActive ? 'pburgerMenu_list_link pburgerMenu_list_link-active' : 'pburgerMenu_list_link')}>Boutique</NavLink>
                 <NavLink to="/cart" onClick={handleOpen} className={({ isActive }) => (isActive ? 'pburgerMenu_list_link pburgerMenu_list_link-active' : 'pburgerMenu_list_link')}>Panier</NavLink>
                 <NavLink to="/order" onClick={handleOpen} className={({ isActive }) => (isActive ? 'pburgerMenu_list_link pburgerMenu_list_link-active' : 'pburgerMenu_list_link')}>Commandes</NavLink>
+                {
+                  isAdmin && <NavLink to="/panel" onClick={handleOpen} className={({ isActive }) => (isActive ? 'pburgerMenu_list_link pburgerMenu_list_link-active' : 'pburgerMenu_list_link')}>Réductions</NavLink>
+                }
               </ul>
             </div>
 

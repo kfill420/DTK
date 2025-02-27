@@ -19,6 +19,7 @@ import Popup from "../Modal/Popup/Popup";
 import { actionChangeConnection, actionChangeCredentials } from "../../store/reducer/account";
 import { usePopupMessage } from "../../utils/usePopup";
 
+
 interface HeaderI {
   isAuthentificated: boolean;
   email: string;
@@ -43,21 +44,6 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
   const { setPopupMessage, handleClickPopup, timerPopup } = usePopupMessage();
 
   const [stateAnimationPopup, setstateAnimationPopup] = useState<string>('close');
-  // const [timerPopup, setTimerPopup] = useState<NodeJS.Timeout | null>(null);
-
-  // const handlePopup = (message: string) => {
-  //   dispatch(setPopup(message));
-  //   const timeout = setTimeout(() => {
-  //     dispatch(setIsOpen({ modal: "popupIsOpen", value: false }));
-  //   }, 6000);
-  //   setTimerPopup(timeout);
-
-  //   return () => {
-  //     if (timeout) {
-  //       clearTimeout(timeout);
-  //     }
-  //   }
-  // }
 
   useEffect(() => {
     const email = searchParams.get('user');
@@ -135,12 +121,6 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
     dispatch(closeAllModal());
   }
 
-  // const handleClickPopup = () => {
-  //   if (timerPopup)
-  //     clearTimeout(timerPopup);
-  //   dispatch(setIsOpen({ modal: 'popupIsOpen', value: false }));
-  // }
-
   return (
     <>
       {
@@ -154,6 +134,7 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
               <li><Link to="/" aria-label="Accueil" className="header-profile_left_link">Boutique</Link></li>
               <li><button aria-label="Panier" className="header-profile_left_link header-profile_left_link-cart" onClick={toggleCartModal}>Panier</button></li>
               <li><NavLink to="/order" aria-label="Commandes" className={({ isActive }) => (isActive ? 'header-profile_left_link header-profile_left_link-active' : 'header-profile_left_link')}>Commandes</NavLink></li>
+              <li><NavLink to="/panel" aria-label="Panel" className={({ isActive }) => (isActive ? 'header-profile_left_link header-profile_left_link-active' : 'header-profile_left_link')}>Réductions</NavLink></li>
             </ul>
             <div onClick={handlePopupButton} className="header-profile_right" aria-label="Ouverture du menu de profil">
               <div className="header-profile_right_container">
@@ -204,10 +185,14 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
                 </Link>
               }
 
-              <button className={location.pathname === '/' ? "header_profile_links header_profile_links-home" : "header_profile_links"} onClick={toggleCartModal} aria-label="Panier">
-                <BiBasket className="header_profile_links_link" size={25} />
-                <span className="header_profile_links_cartcount">{isLogin ? cartCount : cartCountOffline}</span>
-              </button>
+              {
+                location.pathname !== '/checkout' &&
+                <button className={location.pathname === '/' ? "header_profile_links header_profile_links-home" : "header_profile_links"} onClick={toggleCartModal} aria-label="Panier">
+                  <BiBasket className="header_profile_links_link" size={25} />
+                  <span className="header_profile_links_cartcount">{isLogin ? cartCount : cartCountOffline}</span>
+                </button>
+              }
+
             </div>
           </div >
       }

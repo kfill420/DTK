@@ -3,6 +3,11 @@ export interface changeCredentialsPayload {
   value: string;
 }
 
+export interface changeInputDiscountPayload {
+  name: 'code' | 'discount';
+  value: string;
+}
+
 export interface modal_setIsOpen {
   modal: keyof modalsIsOpenState;
   value: boolean;
@@ -62,6 +67,8 @@ export interface actionCheckTokenPayload {
     cart: {
       productsCart: actionAddToCartPayloadI[];
     };
+    discounts: DiscountI[];
+    admin: boolean;
   }
 }
 
@@ -89,6 +96,7 @@ export interface actionCheckSigninResult {
     token: string;
     csrfToken: string;
     sessionId: string;
+    discounts: DiscountI[];
   }
 }
 

@@ -6,24 +6,29 @@ import { MdOutlineKeyboardArrowUp } from "react-icons/md";
 import { PiLockKeyBold } from "react-icons/pi";
 import { CheckProfileAddressI } from "../../@types/account";
 import Checkbox from "../../components/App/Checkbox/Checkbox";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import { actionChangeAddressOneInfo, actionChangePaymentInfo } from "../../store/reducer/account";
 import Input from "../../components/App/Input/Input";
 import { getDefaultAddress } from "../../utils/addressFunction";
 import { toStringWith2Decimals } from "../../utils/decimals";
 import RadioInput from "../../components/App/RadioInput/RadioInput";
 import { AddAddress } from "../ProfilePage/Infos/ModalAddAddress/ModalAddAddress";
+import { actionCheckOneDiscount } from "../../store/thunks/checkDiscount";
+import { usePopupMessage } from "../../utils/usePopup";
 
 function CheckoutPage() {
   const dispatch = useAppDispatch();
+  const { setPopupMessage } = usePopupMessage();
 
   // const id = useAppSelector((state) => state.account.account.id);
   const email = useAppSelector((state) => state.account.account.email);
+  const id = useAppSelector((state) => state.account.account.id);
   const listAddress = useAppSelector((state) => state.account.account.listAddress);
   const countries = useAppSelector((state) => state.account.listCountries);
   const address = useAppSelector((state) => state.account.account.address);
   const cart = useAppSelector((state) => state.cart.cartConnected);
   const card = useAppSelector((state) => state.account.credentials.card);
+  const discountApplied = useAppSelector((state) => state.discount.discountApplied);
 
   const shippingCost = 6;
 
@@ -38,8 +43,6 @@ function CheckoutPage() {
   const addressFacturationRef = useRef<HTMLDivElement>(null);
   const defaultAddressRef = useRef<HTMLDivElement>(null);
   const listAddressRef = useRef<HTMLDivElement>(null);
-
-  // const navigate = useNavigate();
 
   useEffect(() => {
     let st = 0;
@@ -56,12 +59,6 @@ function CheckoutPage() {
     }
   }, [cart]);
 
-  // useEffect(() => {
-  //   if (listAddress === null || listAddress.length === 0) {
-  //     navigate('/profile?warning=true');
-  //   }
-  // });
-
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
     if (name === "reduction")
@@ -73,6 +70,17 @@ function CheckoutPage() {
     else
       dispatch(actionChangeAddressOneInfo({ name, value }));
   };
+
+  const handleDiscount = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (id) {
+      const result = await dispatch(actionCheckOneDiscount({ code: reductionCode, accountId: id }));
+      if (actionCheckOneDiscount.fulfilled.match(result)) {
+        setPopupMessage("La réduction a bien été appliquée", false);
+      } else
+        setPopupMessage("Code de réduction incorrect", true);
+    }
+  }
 
   return (
     <div className='checkoutPage'>
@@ -91,9 +99,7 @@ function CheckoutPage() {
                 <MdOutlineKeyboardArrowUp size={25} />
               </div>
             }
-
           </div>
-
 
           <div className="checkoutPage_infos_addresses">
             {
@@ -117,7 +123,6 @@ function CheckoutPage() {
                             listAddress && listAddress[0] &&
                             <span className="checkoutPage_infos_address_value">{`${listAddress[0].firstname} ${listAddress[0].lastname} ${listAddress[0].entreprise} ${listAddress[0].address} ${listAddress[0].postal_code} ${listAddress[0].city}`}</span>
                         }
-
                       </div>
                     )
                       :
@@ -133,7 +138,6 @@ function CheckoutPage() {
                                   listAddress && listAddress[0] &&
                                   <RadioInput name="expeditionAddress" id={address.id} checked={listAddress[0].id === address.id} text={`${address.firstname} ${address.lastname} ${address.entreprise} ${address.address} ${address.precision} ${address.postal_code} ${address.city}`} handleChange={handleChange} />
                               }
-
                             </div>
                           ))}
                         </div>
@@ -231,18 +235,22 @@ function CheckoutPage() {
                   <span className="checkoutPage_cart_products_item_infos_description">{product.product.color_name[product.color]} {product.state} {product.stockage}</span>
                 </div>
                 <div className="checkoutPage_cart_products_item_price">
-                  <span className="checkoutPage_cart_products_item_price_text">{product.price} €</span>
+                  <span className="checkoutPage_cart_products_item_price_actual">{product.price} €</span>
+                  {
+                    product.originalPrice &&
+                    <span className="checkoutPage_cart_products_item_price_original">{product.originalPrice} €</span>
+                  }
                 </div>
               </div>
             ))
           }
         </div>
-        <div className="checkoutPage_cart_products_reduction">
+        <form className="checkoutPage_cart_products_reduction" onSubmit={handleDiscount}>
           <div className="checkoutPage_cart_products_reduction_input">
             <Input name="reduction" type='text' text="Code de réduction" backWhite handleChange={handleChange} value={reductionCode} />
           </div>
-          <button className="checkoutPage_cart_products_reduction_btn" type="button">Valider</button>
-        </div>
+          <button className="checkoutPage_cart_products_reduction_btn" type="submit" disabled={discountApplied}>Valider</button>
+        </form>
         <div className="checkoutPage_cart_products_subtotal">
           <span className="checkoutPage_cart_products_subtotal_title">Sous-total</span>
           <span className="checkoutPage_cart_products_subtotal_value">{subtotal} €</span>

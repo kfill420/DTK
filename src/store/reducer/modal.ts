@@ -53,6 +53,8 @@ const ModalMenu = createSlice({
       state.modals.popupIsOpen = true;
       if (action.payload.error === true) {
         state.popup.error = true;
+      } else {
+        state.popup.error = false;
       }
     },
     closeAllModal: (state) => {

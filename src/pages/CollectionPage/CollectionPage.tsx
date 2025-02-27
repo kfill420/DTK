@@ -40,12 +40,10 @@ function CollectionPage() {
       case 'iPhone':
         setBrandList(list.filter((product) => product.brand === 'iPhone'));
         dispatch(setFilterValue({ name: "filtered", value: false }));
-        // setFiltered(false);
         break;
       case 'Samsung':
         setBrandList(list.filter((product) => product.brand === 'Samsung'));
         dispatch(setFilterValue({ name: "filtered", value: false }));
-        // setFiltered(false);
         break;
     }
     setFilteredList(brandList);

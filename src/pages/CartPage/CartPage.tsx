@@ -18,7 +18,6 @@ function CartPage({ cancelFunction }: { cancelFunction?: () => void }) {
   const cartVisitor = useAppSelector((state) => state.cart.cartVisitor);
   const [cart, setCart] = useState<actionAddToCartPayloadI[]>([]);
 
-
   useEffect(() => {
     const ls = JSON.parse(localStorage.getItem('cartVisitor') || '[]');
     dispatch(actionCheckCartOffline(ls))

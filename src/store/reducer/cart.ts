@@ -4,6 +4,7 @@ import { CartStateI } from '../../@types/cart';
 import { escapeHtml } from "../../utils/escapeHtml";
 import { actionAddToCart, actionDeleteOneFromCart, actionGetCart } from "../thunks/checkCart";
 import { actionCheckSignin, actionCheckToken } from "../thunks/checkLogin";
+import { actionCheckOneDiscount } from "../thunks/checkDiscount";
 
 export const initialState: CartStateI = {
   cartVisitor: [],
@@ -63,10 +64,14 @@ const cartSlice = createSlice({
     });
     builder.addCase(actionAddToCart.fulfilled, (state, action) => {
       state.cartConnected = action.payload.productCarts;
-
     });
     builder.addCase(actionDeleteOneFromCart.fulfilled, (state, action) => {
-      state.cartConnected = action.payload.productCarts;
+      if (action.payload.productCarts)
+        state.cartConnected = action.payload.productCarts;
+      else state.cartConnected = [];
+    });
+    builder.addCase(actionCheckOneDiscount.fulfilled, (state, action) => {
+      state.cartConnected = action.payload;
     });
   }
 })
