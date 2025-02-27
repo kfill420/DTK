@@ -26,6 +26,7 @@ const actionAddToCart = createAsyncThunk<actionAddRemovetoCartPayload, actionAdd
         return thunkAPI.rejectWithValue({ tokenExpired: true });
 
       const response = await axiosInstance.post('/cart', payload);
+
       return response.data;
     } catch (error) {
       const axiosError = error as AxiosError;
@@ -42,6 +43,7 @@ const actionDeleteOneFromCart = createAsyncThunk<actionAddRemovetoCartPayload, n
         return thunkAPI.rejectWithValue({ tokenExpired: true });
 
       const response = await axiosInstance.delete(`/cart/${payload}`);
+
       return response.data;
     } catch (error) {
       const axiosError = error as AxiosError;
@@ -49,18 +51,5 @@ const actionDeleteOneFromCart = createAsyncThunk<actionAddRemovetoCartPayload, n
     }
   }
 );
-
-// const actionGetOneProduct = createAsyncThunk(
-//   'product/GET_ONE_PRODUCT',
-//   async (payload: number, thunkAPI) => {
-//     try {
-//       const response = await axiosInstance.get(`/product/${payload}`);
-//       return response.data;
-//     } catch (error) {
-//       const axiosError = error as AxiosError;
-//       return thunkAPI.rejectWithValue(axiosError.response?.data);
-//     }
-//   }
-// );
 
 export { actionGetCart, actionAddToCart, actionDeleteOneFromCart };

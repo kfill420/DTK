@@ -21,6 +21,8 @@ import {
 import { CheckProfileAddressI, CountryI } from '../../@types/account';
 import { escapeHtml } from '../../utils/escapeHtml';
 import { actionAddToCart, actionDeleteOneFromCart } from "../thunks/checkCart";
+import { DisountI } from "../../@types/discount";
+import { actionCheckDiscount, actionCheckOneDiscount, actionDeleteDiscount } from "../thunks/checkDiscount";
 
 export const initialState = {
   id: null,
@@ -77,6 +79,7 @@ export const initialState = {
   account: {
     id: null as null | number,
     email: '',
+    admin: false,
     infos: {
       firstname: '',
       lastname: '',
@@ -106,6 +109,7 @@ export const initialState = {
   connection: 'checking',
   token: null as null | string,
   listCountries: [] as CountryI[],
+  discounts: [] as DisountI[],
 };
 
 const accountSlice = createSlice({
@@ -337,6 +341,7 @@ const accountSlice = createSlice({
       state.account.email = escapeHtml(action.payload.data.account.email);
       if (action.payload.data.account.firstname) state.account.infos.firstname = escapeHtml(action.payload.data.account.firstname);
       if (action.payload.data.account.lastname) state.account.infos.lastname = escapeHtml(action.payload.data.account.lastname);
+      state.account.admin = action.payload.data.account.admin;
       state.account.listAddress = action.payload.data.account.addresses.map((address: CheckProfileAddressI) => ({
         ...address,
         firstname: escapeHtml(address.firstname),
@@ -413,6 +418,7 @@ const accountSlice = createSlice({
       if (action.payload.valid) {
         state.account.id = action.payload.data.id;
         state.account.email = escapeHtml(action.payload.data.email);
+        state.account.admin = action.payload.data.admin;
         if (action.payload.data.firstname) state.account.infos.firstname = escapeHtml(action.payload.data.firstname);
         if (action.payload.data.lastname) state.account.infos.lastname = escapeHtml(action.payload.data.lastname);
         state.account.listAddress = action.payload.data.addresses.map((address: CheckProfileAddressI) => ({
@@ -557,6 +563,27 @@ const accountSlice = createSlice({
       }
     });
     builder.addCase(actionDeleteOneFromCart.rejected, (state, action) => {
+      if (action.payload?.tokenExpired && action.payload?.tokenExpired === true) {
+        state.token = null;
+        deleteLocalStorage();
+        state.isAuthentificated = false;
+      }
+    });
+    builder.addCase(actionCheckDiscount.rejected, (state, action) => {
+      if (action.payload?.tokenExpired && action.payload?.tokenExpired === true) {
+        state.token = null;
+        deleteLocalStorage();
+        state.isAuthentificated = false;
+      }
+    });
+    builder.addCase(actionDeleteDiscount.rejected, (state, action) => {
+      if (action.payload?.tokenExpired && action.payload?.tokenExpired === true) {
+        state.token = null;
+        deleteLocalStorage();
+        state.isAuthentificated = false;
+      }
+    });
+    builder.addCase(actionCheckOneDiscount.rejected, (state, action) => {
       if (action.payload?.tokenExpired && action.payload?.tokenExpired === true) {
         state.token = null;
         deleteLocalStorage();

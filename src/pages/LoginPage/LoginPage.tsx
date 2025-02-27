@@ -176,8 +176,6 @@ function LoginPage() {
     const result = await dispatch(actionCheckPasswordRecovery());
     if (actionCheckPasswordRecovery.fulfilled.match(result)) {
       setPopupMessage("Un mail de réinitialisation de mot de passe vous a été envoyé");
-    } else {
-      setPopupMessage("Un mail de réinitialisation de mot de passe vous a été envoyé");
     }
   }
 
@@ -203,6 +201,7 @@ function LoginPage() {
       resultSignin = await dispatch(actionCheckSignin(ls));
     else
       resultSignin = await dispatch(actionCheckSignin(null));
+
     if (actionCheckSignin.fulfilled.match(resultSignin)) {
       navigate('/profile');
     }

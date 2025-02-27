@@ -15,18 +15,4 @@ const actionCheckProduct = createAsyncThunk(
   }
 );
 
-
-// const actionGetOneProduct = createAsyncThunk(
-//   'product/GET_ONE_PRODUCT',
-//   async (payload: number, thunkAPI) => {
-//     try {
-//       const response = await axiosInstance.get(`/product/${payload}`);
-//       return response.data;
-//     } catch (error) {
-//       const axiosError = error as AxiosError;
-//       return thunkAPI.rejectWithValue(axiosError.response?.data);
-//     }
-//   }
-// );
-
 export { actionCheckProduct };

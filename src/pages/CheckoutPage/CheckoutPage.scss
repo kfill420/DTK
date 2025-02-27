@@ -36,6 +36,7 @@
       display: flex;
       flex-direction: column;
       margin: 1rem;
+      z-index: 0;
 
       &_subtitle {
         font-size: 1rem;
@@ -252,6 +253,16 @@
           flex-direction: column;
           justify-content: center;
           font-weight: 600;
+
+          &_actual {
+            font-size: 1rem;
+          }
+
+          &_original {
+            font-size: .8rem;
+            text-decoration: line-through;
+            color: v.$textColor-colorDarkTrans2;
+          }
         }
       }
 
@@ -273,7 +284,13 @@
           border: none;
           border-radius: 5px;
           color: v.$textColor-colorWhite;
+          transition: background-color .2s ease-in-out;
           cursor: pointer;
+
+          &:disabled {
+            background-color: v.$textColor-colorDarkTrans5;
+            cursor: not-allowed;
+          }
         }
       }
 

@@ -6,7 +6,7 @@ import ScrollToTop from '../components/App/ScrollToTop/ScrollToTop';
 import { Suspense, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { actionCheckToken } from '../store/thunks/checkLogin';
-import { NonPrivateRoute, PrivateRoute } from '../components/App/PrivateRoute/PrivateRoute';
+import { AdminRoute, NonPrivateRoute, PrivateRoute } from '../components/App/PrivateRoute/PrivateRoute';
 import SpinnerSquare from '../components/App/SpinnerSquare/SpinnerSquare';
 import { lazy } from "react";
 import { useModalsWithBackButton } from "../hooks/useModalsWithBackButton.ts";
@@ -14,6 +14,7 @@ import ContactPage from "./ContactPage/ContactPage.tsx";
 import FaqPage from "./FaqPage/FaqPage.tsx";
 import CheckoutPage from "./CheckoutPage/CheckoutPage.tsx";
 import ConfirmationPage from "./ConfirmationPage/ConfirmationPage.tsx";
+
 
 const HomePage = lazy(() => import('./HomePage/HomePage.tsx'));
 const ProductPage = lazy(() => import('./ProductPage/ProductPage.tsx'));
@@ -23,11 +24,12 @@ const Params = lazy(() => import('./ProfilePage/Params/Params.tsx'));
 const Infos = lazy(() => import('./ProfilePage/Infos/Infos.tsx'));
 const CollectionPage = lazy(() => import('./CollectionPage/CollectionPage.tsx'));
 const CartPage = lazy(() => import('./CartPage/CartPage.tsx'));
+const AdminPage = lazy(() => import('./AdminPage/AdminPage.tsx'));
 
 function App() {
   const location = useLocation();
   const dispatch = useAppDispatch();
-  const noFooterPage = location.pathname === '/login' || location.pathname === '/params' || location.pathname === '/order' || location.pathname === '/profile' || location.pathname === '/checkout';
+  const noFooterPage = location.pathname === '/login' || location.pathname === '/params' || location.pathname === '/order' || location.pathname === '/profile' || location.pathname === '/checkout' || location.pathname === '/panel';
   const isAuthentificated = useAppSelector((state) => state.account.isAuthentificated);
   const account = useAppSelector((state) => state.account.account);
   const burgerMenuIsOpen = useAppSelector((state) => state.ModalMenu.modals.burgerModalIsOpen);
@@ -65,6 +67,7 @@ function App() {
           <Route path="/order" element={<PrivateRoute isAuthenticated={isAuthentificated}><Order /></PrivateRoute>} />
           <Route path="/profile" element={<PrivateRoute isAuthenticated={isAuthentificated}>{<Infos />}</PrivateRoute>} />
           <Route path="/confirmation" element={<ConfirmationPage />} />
+          <Route path="/panel" element={<AdminRoute isAuthenticated={isAuthentificated}>{<AdminPage />}</AdminRoute>} />
         </Routes>
 
         {!noFooterPage && <Footer />}
