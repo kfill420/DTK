@@ -54,9 +54,11 @@ export const useAddressHelper = () => {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
+
     if (modalAdressIsOpen) {
       dispatch(actionChangeAddressOneInfo({ name, value }));
-    }
+    } else
+      dispatch(actionChangeAddressOneInfo({ name, value }));
     if
       (modalInfosIsOpen) {
       dispatch(actionSetInfos({ ...infos, [name]: value }));
