@@ -196,6 +196,7 @@ const accountSlice = createSlice({
     },
     actionChangeAddressOneInfo: (state, action) => {
       const { name, value } = action.payload;
+
       switch (name) {
         case 'default':
           state.account.address = {
