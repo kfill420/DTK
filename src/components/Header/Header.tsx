@@ -40,6 +40,7 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
   const cartCount = useAppSelector((state) => state.cart.cartConnected.length);
   const cartCountOffline = useAppSelector((state) => state.cart.cartVisitor.length);
   const mailSended = useAppSelector((state) => state.account.pending.mailSended);
+  const admin = useAppSelector((state) => state.account.account.admin);
 
   const { setPopupMessage, handleClickPopup, timerPopup } = usePopupMessage();
 
@@ -134,7 +135,9 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
               <li><Link to="/" aria-label="Accueil" className="header-profile_left_link">Boutique</Link></li>
               <li><button aria-label="Panier" className="header-profile_left_link header-profile_left_link-cart" onClick={toggleCartModal}>Panier</button></li>
               <li><NavLink to="/order" aria-label="Commandes" className={({ isActive }) => (isActive ? 'header-profile_left_link header-profile_left_link-active' : 'header-profile_left_link')}>Commandes</NavLink></li>
-              <li><NavLink to="/panel" aria-label="Panel" className={({ isActive }) => (isActive ? 'header-profile_left_link header-profile_left_link-active' : 'header-profile_left_link')}>Réductions</NavLink></li>
+              {
+                admin && <li><NavLink to="/panel" aria-label="Panel" className={({ isActive }) => (isActive ? 'header-profile_left_link header-profile_left_link-active' : 'header-profile_left_link')}>Réductions</NavLink></li>
+              }
             </ul>
             <div onClick={handlePopupButton} className="header-profile_right" aria-label="Ouverture du menu de profil">
               <div className="header-profile_right_container">
