@@ -22,7 +22,6 @@ function CheckoutPage() {
   const navigate = useNavigate();
   const { setPopupMessage } = usePopupMessage();
 
-  // const id = useAppSelector((state) => state.account.account.id);
   const email = useAppSelector((state) => state.account.account.email);
   const id = useAppSelector((state) => state.account.account.id);
   const listAddress = useAppSelector((state) => state.account.account.listAddress);
@@ -84,6 +83,28 @@ function CheckoutPage() {
       } else
         setPopupMessage("Code de réduction incorrect", true);
     }
+  }
+
+  const handleSubmit = () => {
+    dispatch(actionChangePaymentInfo({ name: 'total', value: toStringWith2Decimals(Number(subtotal.replace(',', '.')) + (shippingCost)) }));
+    const newDate = new Date();
+    dispatch(actionChangePaymentInfo({ name: 'date', value: `${String(newDate.getDate()).padStart(2, '0')}/${String(newDate.getMonth() + 1).padStart(2, '0')}/${newDate.getFullYear()} ${String(newDate.getHours()).padStart(2, '0')}:${String(newDate.getMinutes()).padStart(2, '0')}:${String(newDate.getSeconds()).padStart(2, '0')}` }));
+    navigate('/payment');
+  }
+
+  const checkPaimentInfos = () => {
+    return !(card.card_number.length === 24 &&
+      card.expiration_date.length === 5 &&
+      card.cvc.length > 2 &&
+      card.card_name.length > 3 &&
+      (listAddress &&
+        listAddress.length > 0) ||
+      (address.firstname.length > 1 &&
+        address.lastname.length > 1 &&
+        address.address.length > 1 &&
+        address.postal_code.length > 1 &&
+        address.city.length > 1 &&
+        address.phone.length > 1));
   }
 
   return (
@@ -268,7 +289,7 @@ function CheckoutPage() {
           <span className="checkoutPage_cart_products_total_value">{toStringWith2Decimals(Number(subtotal.replace(',', '.')) + (shippingCost))} €</span>
         </div>
         {/* <span className="checkoutPage_cart_products_total_taxes">Taxes de € incluses</span> */}
-        <button className="checkoutPage_cart_products_submit" type="button">Vérifier la commande</button>
+        <button className="checkoutPage_cart_products_submit" type="button" onClick={handleSubmit} disabled={checkPaimentInfos()}>Vérifier la commande</button>
       </div>
     </div>
   )

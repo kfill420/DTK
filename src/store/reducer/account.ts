@@ -74,6 +74,9 @@ export const initialState = {
       expiration_date: '',
       cvc: '',
       card_name: '',
+      date: '',
+      total: '',
+      verif_code: ''
     },
   },
   account: {
@@ -231,7 +234,7 @@ const accountSlice = createSlice({
       switch (name) {
         case 'card_number': {
           let valueFormated = value.replace(/\s/g, '').replace(/[^0-9]/gi, '');
-          const matches = valueFormated.match(/\d{4,19}/g);
+          const matches = valueFormated.match(/\d{4,20}/g);
           const match = (matches && matches[0]) || '';
           const parts = [];
 
@@ -280,6 +283,30 @@ const accountSlice = createSlice({
             ...state.credentials.card,
             card_name: valueFormated
           }
+          return;
+        }
+        case 'date': {
+          state.credentials.card = {
+            ...state.credentials.card,
+            date: value
+          }
+          return;
+        }
+        case 'total': {
+          state.credentials.card = {
+            ...state.credentials.card,
+            total: value
+          }
+          return;
+        }
+        case 'verif_code': {
+          if (isNumeric(value)) {
+            state.credentials.card = {
+              ...state.credentials.card,
+              verif_code: value
+            }
+          }
+
           return;
         }
       }

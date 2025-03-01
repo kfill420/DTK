@@ -58,8 +58,6 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
         return setPopupMessage("Votre addresse email a bien été confirmée");
       else if (searchParams.get('confirmed') === 'false')
         return setPopupMessage("Erreur lors de la validation de l'adresse mail");
-    } else if (mailSended) {
-      return setPopupMessage("Merci de confirmer votre adresse mail avec le mail envoyé");
     }
 
     return () => {

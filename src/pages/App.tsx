@@ -14,6 +14,7 @@ import ContactPage from "./ContactPage/ContactPage.tsx";
 import FaqPage from "./FaqPage/FaqPage.tsx";
 import CheckoutPage from "./CheckoutPage/CheckoutPage.tsx";
 import ConfirmationPage from "./ConfirmationPage/ConfirmationPage.tsx";
+import PaymentPage from "./PaymentPage/PaymentPage.tsx";
 
 
 const HomePage = lazy(() => import('./HomePage/HomePage.tsx'));
@@ -29,7 +30,8 @@ const AdminPage = lazy(() => import('./AdminPage/AdminPage.tsx'));
 function App() {
   const location = useLocation();
   const dispatch = useAppDispatch();
-  const noFooterPage = location.pathname === '/login' || location.pathname === '/params' || location.pathname === '/order' || location.pathname === '/profile' || location.pathname === '/checkout' || location.pathname === '/panel';
+  const noHeaderPage = location.pathname === '/payment';
+  const noFooterPage = location.pathname === '/login' || location.pathname === '/params' || location.pathname === '/order' || location.pathname === '/profile' || location.pathname === '/checkout' || location.pathname === '/panel' || location.pathname === '/payment';
   const isAuthentificated = useAppSelector((state) => state.account.isAuthentificated);
   const account = useAppSelector((state) => state.account.account);
   const burgerMenuIsOpen = useAppSelector((state) => state.ModalMenu.modals.burgerModalIsOpen);
@@ -51,7 +53,7 @@ function App() {
     <div className="app">
 
       <Suspense fallback={<SpinnerSquare isOpen={true} />}>
-        <Header isAuthentificated={isAuthentificated} email={account.email} account_id={account.id} />
+        {!noHeaderPage && <Header isAuthentificated={isAuthentificated} email={account.email} account_id={account.id} />}
         <ScrollToTop />
 
         <Routes>
@@ -63,6 +65,7 @@ function App() {
           <Route path="/login" element={<NonPrivateRoute isAuthenticated={isAuthentificated}><LoginPage /></NonPrivateRoute>}></Route>
           <Route path="/cart" element={<CartPage />} />
           <Route path="/checkout" element={<PrivateRoute isAuthenticated={isAuthentificated}><CheckoutPage /></PrivateRoute>} />
+          <Route path="/payment" element={<PrivateRoute isAuthenticated={isAuthentificated}><PaymentPage /></PrivateRoute>} />
           <Route path="/params" element={<PrivateRoute isAuthenticated={isAuthentificated}><Params /></PrivateRoute>} />
           <Route path="/order" element={<PrivateRoute isAuthenticated={isAuthentificated}><Order /></PrivateRoute>} />
           <Route path="/profile" element={<PrivateRoute isAuthenticated={isAuthentificated}>{<Infos />}</PrivateRoute>} />
