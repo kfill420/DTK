@@ -57,7 +57,7 @@ export const validePostalCode = (postalCode: string): boolean => {
 }
 
 export const isNumeric = (text: string): boolean => {
-  const regex = /^\d+$/;
+  const regex = /^\d*$/;
   return regex.test(text);
 }
 
