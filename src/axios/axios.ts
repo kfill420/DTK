@@ -27,12 +27,4 @@ axoiosInstance.interceptors.request.use((config) => {
   return Promise.reject(error);
 });
 
-// export function addTokenJwtToAxiosInstance(token: string) {
-//   axoiosInstance.defaults.headers.common.Authorization = `Bearer ${token}`;
-// }
-
-// export function removeTokenJwtToAxiosInstance() {
-//   axoiosInstance.defaults.headers.common.Accept = '';
-// }
-
 export default axoiosInstance;

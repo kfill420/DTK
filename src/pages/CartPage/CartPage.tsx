@@ -40,28 +40,30 @@ function CartPage({ cancelFunction }: { cancelFunction?: () => void }) {
   if (cart && cart.length > 0) {
     return (
       <div className='cartPage'>
-        {location.pathname !== '/cart' &&
+        {
+          location.pathname !== '/cart' &&
           <div className="cartPage_exit">
             <IoCloseSharp size={25} onClick={cancelFunction} />
           </div>
         }
         <div className="cartPage_container">
-          {cart && cart.map((product, index) => (
-            <div key={index} className="cartPage_container_item">
-              <div className="cartPage_container_item_picture">
-                <img src={product.product.image_url[product.color]} alt="" />
-              </div>
-              <div className="cartPage_container_item_infos">
-                <h3 className="cartPage_container_item_infos_title">{product.product.name}</h3>
-                <span className="cartPage_container_item_infos_price">{`€${product.price},00`}</span>
-                <span className="cartPage_container_item_infos_details">{product.product.color_name[product.color]} / {product.state} / {product.stockage}</span>
-                <div className="cartPage_container_item_infos_quantityContainer">
-                  <span className="cartPage_container_item_infos_quantityContainer_quantity">{product.quantity}</span>
-                  <button className="cartPage_container_item_infos_quantityContainer_deleteBtn" onClick={() => handleDeleteButton(product.id || index)}>Supprimer</button>
+          {
+            cart && cart.map((product, index) => (
+              <div key={index} className="cartPage_container_item">
+                <div className="cartPage_container_item_picture">
+                  <img src={product.product.image_url[product.color]} alt="" />
+                </div>
+                <div className="cartPage_container_item_infos">
+                  <h3 className="cartPage_container_item_infos_title">{product.product.name}</h3>
+                  <span className="cartPage_container_item_infos_price">{`€${product.price},00`}</span>
+                  <span className="cartPage_container_item_infos_details">{product.product.color_name[product.color]} / {product.state} / {product.stockage}</span>
+                  <div className="cartPage_container_item_infos_quantityContainer">
+                    <span className="cartPage_container_item_infos_quantityContainer_quantity">{product.quantity}</span>
+                    <button className="cartPage_container_item_infos_quantityContainer_deleteBtn" onClick={() => handleDeleteButton(product.id || index)}>Supprimer</button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
         <div className="cartPage_total">
           <div className="cartPage_total_subtotal">

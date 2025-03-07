@@ -77,6 +77,16 @@ export type updateInfosPayload = {
   account_id: number | null,
 };
 
+export type accountInfosI = {
+  email: string,
+  firstname: string,
+  lastname: string,
+  id: number | null,
+  confirmed: boolean,
+  created_at: string,
+  cart: cartResponseI
+};
+
 export type updateMailFormAccountResultI = {
   account_id: number;
   email: string;

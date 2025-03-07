@@ -15,7 +15,8 @@ import FaqPage from "./FaqPage/FaqPage.tsx";
 import CheckoutPage from "./CheckoutPage/CheckoutPage.tsx";
 import ConfirmationPage from "./ConfirmationPage/ConfirmationPage.tsx";
 import PaymentPage from "./PaymentPage/PaymentPage.tsx";
-
+import PanelPage from "./PanelPage/PanelPage.tsx";
+import DiscountPage from "./DiscountPage/DiscountPage.tsx";
 
 const HomePage = lazy(() => import('./HomePage/HomePage.tsx'));
 const ProductPage = lazy(() => import('./ProductPage/ProductPage.tsx'));
@@ -25,13 +26,19 @@ const Params = lazy(() => import('./ProfilePage/Params/Params.tsx'));
 const Infos = lazy(() => import('./ProfilePage/Infos/Infos.tsx'));
 const CollectionPage = lazy(() => import('./CollectionPage/CollectionPage.tsx'));
 const CartPage = lazy(() => import('./CartPage/CartPage.tsx'));
-const AdminPage = lazy(() => import('./AdminPage/AdminPage.tsx'));
 
 function App() {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const noHeaderPage = location.pathname === '/payment';
-  const noFooterPage = location.pathname === '/login' || location.pathname === '/params' || location.pathname === '/order' || location.pathname === '/profile' || location.pathname === '/checkout' || location.pathname === '/panel' || location.pathname === '/payment';
+  const noFooterPage = location.pathname === '/login' ||
+    location.pathname === '/params' ||
+    location.pathname === '/order' ||
+    location.pathname === '/profile' ||
+    location.pathname === '/checkout' ||
+    location.pathname === '/panel' ||
+    location.pathname === '/discount' ||
+    location.pathname === '/payment';
   const isAuthentificated = useAppSelector((state) => state.account.isAuthentificated);
   const account = useAppSelector((state) => state.account.account);
   const burgerMenuIsOpen = useAppSelector((state) => state.ModalMenu.modals.burgerModalIsOpen);
@@ -70,7 +77,8 @@ function App() {
           <Route path="/order" element={<PrivateRoute isAuthenticated={isAuthentificated}><Order /></PrivateRoute>} />
           <Route path="/profile" element={<PrivateRoute isAuthenticated={isAuthentificated}>{<Infos />}</PrivateRoute>} />
           <Route path="/confirmation" element={<ConfirmationPage />} />
-          <Route path="/panel" element={<AdminRoute isAuthenticated={isAuthentificated}>{<AdminPage />}</AdminRoute>} />
+          <Route path="/discount" element={<AdminRoute isAuthenticated={isAuthentificated}>{<DiscountPage />}</AdminRoute>} />
+          <Route path="/panel" element={<AdminRoute isAuthenticated={isAuthentificated}>{<PanelPage />}</AdminRoute>} />
         </Routes>
 
         {!noFooterPage && <Footer />}

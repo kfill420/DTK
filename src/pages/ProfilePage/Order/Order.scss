@@ -20,23 +20,119 @@
     margin-bottom: 1rem;
   }
 
+  &_container {
+    display: flex;
+    flex-direction: column;
+
+    &_product {
+      display: flex;
+      flex-direction: column;
+      border: solid 2px v.$textColor-colorLightGray;
+      padding: 1rem;
+      border-radius: 10px;
+      gap: 1rem;
+      text-align: center;
+
+      &_header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        font-size: .9rem;
+        color: v.$textColor-colorDarkTrans2;
+      }
+
+      &_body {
+        display: flex;
+        flex-direction: row;
+
+        &_img {
+          width: 20%;
+        }
+
+        &_infos {
+          display: flex;
+          flex-direction: column;
+
+        }
+      }
+    }
+  }
+
   &_infos {
     display: flex;
     flex-direction: column;
     border: solid 2px v.$textColor-colorLightGray;
+    // background-color: v.$textColor-colorDarkTrans3;
     padding: 1rem;
     border-radius: 10px;
     gap: 1rem;
-    text-align: center;
 
-    &_name {
-      font-size: 1rem;
-      color: v.$textColor-colorBlack;
+    &_header {
+      display: flex;
+      justify-content: space-between;
+      font-size: .9rem;
+      color: v.$textColor-colorDark;
+
+      &_left,
+      &_right {
+
+        &_orderDate,
+        &_shippingDate {
+          display: flex;
+          flex-direction: row;
+          gap: .5rem;
+        }
+      }
     }
 
-    &_value {
+    &_commandNumber {
+      font-size: .9rem;
       color: v.$textColor-colorDark;
-      font-size: 0.8rem;
+    }
+
+    &_body {
+      display: flex;
+      flex-direction: row;
+      gap: 1rem;
+      border-bottom: solid 2px v.$textColor-colorLightGray;
+      background-color: white;
+      padding: 1rem;
+
+      &_img {
+        width: 20%;
+      }
+
+      &_infos {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        width: 100%;
+
+        &_name {
+          font-size: .9rem;
+        }
+
+        &_color {
+          font-size: .9rem;
+          color: v.$textColor-colorDark;
+        }
+
+        &_bottom {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+
+          &_price {
+            font-size: 1rem;
+            font-weight: 500;
+          }
+        }
+      }
+    }
+
+    &_total {
+      text-align: right;
+      font-weight: 500;
     }
   }
 }
