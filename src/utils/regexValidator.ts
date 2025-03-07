@@ -66,8 +66,29 @@ export const isPercentage = (text: string): boolean => {
 }
 
 export const isCreditCard = (text: string): boolean => {
-  const creditCardRegex = /^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35\d{3})\d{11})$/;
-  return creditCardRegex.test(text);
+  const creditCardRegex = /^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13})$/;
+  return creditCardRegex.test(text.replace(/\s+/g, ''));
+}
+
+export const isValidCreditCard = (number: string): boolean => {
+  const reversedDigits = number.split('').reverse();
+  const sum = reversedDigits.reduce((acc, digit, idx) => {
+    let num = parseInt(digit, 10);
+    if (idx % 2 !== 0) {
+      num *= 2;
+      if (num > 9) num -= 9;
+    }
+    return acc + num;
+  }, 0);
+  return sum % 10 === 0;
+}
+
+export const getCardType = (number: string): string => {
+  if (/^4/.test(number)) return 'visa';
+  if (/^5[1-5]/.test(number)) return 'mastercard';
+  if (/^3[47]/.test(number)) return 'amex';
+  if (/^6/.test(number)) return 'discover';
+  return 'unknown';
 }
 
 export const isExpirationDate = (text: string): boolean => {

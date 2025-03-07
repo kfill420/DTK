@@ -26,7 +26,6 @@ const actionAddToCart = createAsyncThunk<actionAddRemovetoCartPayload, actionAdd
         return thunkAPI.rejectWithValue({ tokenExpired: true });
 
       const response = await axiosInstance.post('/cart', payload);
-
       return response.data;
     } catch (error) {
       const axiosError = error as AxiosError;

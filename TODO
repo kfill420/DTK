@@ -4,4 +4,14 @@ https://www.google.com/webmasters/markup-helper/u/0/
 Test:
 Front: Jest
 Back: ?
-Bug Cart adde article
+
+
+PB:
+inscription
+-> prendre lien mail pour connection
+ajouter address
+ajouter panier
+
+organiser order par date décroissante
+
+envoyer le code par socket

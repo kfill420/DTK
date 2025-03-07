@@ -102,4 +102,28 @@ const actionDeleteAccount = createAsyncThunk<number, number | undefined | null, 
   }
 );
 
-export { actionAddAddressFromAccount, actionDeleteAddressFromAccount, actionUpdateAddressFromAccount, actionUpdateInfosFromAccount, actionDeleteAccount };
+
+
+const actionGetAllClients = createAsyncThunk(
+  'account/GET_ALL_CLIENTS',
+  async (_, thunkAPI) => {
+    try {
+
+      const response = await axiosInstance.get(`/account`);
+
+      return response.data;
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      return thunkAPI.rejectWithValue(axiosError.response?.data as RejectPayload);
+    }
+  }
+);
+
+export {
+  actionAddAddressFromAccount,
+  actionDeleteAddressFromAccount,
+  actionUpdateAddressFromAccount,
+  actionUpdateInfosFromAccount,
+  actionDeleteAccount,
+  actionGetAllClients
+};

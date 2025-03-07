@@ -134,7 +134,11 @@ function Header({ isAuthentificated, email, account_id }: HeaderI) {
               <li><button aria-label="Panier" className="header-profile_left_link header-profile_left_link-cart" onClick={toggleCartModal}>Panier</button></li>
               <li><NavLink to="/order" aria-label="Commandes" className={({ isActive }) => (isActive ? 'header-profile_left_link header-profile_left_link-active' : 'header-profile_left_link')}>Commandes</NavLink></li>
               {
-                admin && <li><NavLink to="/panel" aria-label="Panel" className={({ isActive }) => (isActive ? 'header-profile_left_link header-profile_left_link-active' : 'header-profile_left_link')}>Réductions</NavLink></li>
+                admin && <div style={{ display: 'flex', flexDirection: 'row', gap: '2rem' }}>
+                  <li><NavLink to="/discount" aria-label="Panel" className={({ isActive }) => (isActive ? 'header-profile_left_link header-profile_left_link-active' : 'header-profile_left_link')}>Réductions</NavLink></li>
+                  <li><NavLink to="/panel" aria-label="Panel" className={({ isActive }) => (isActive ? 'header-profile_left_link header-profile_left_link-active' : 'header-profile_left_link')}>Panel</NavLink></li>
+                </div>
+
               }
             </ul>
             <div onClick={handlePopupButton} className="header-profile_right" aria-label="Ouverture du menu de profil">

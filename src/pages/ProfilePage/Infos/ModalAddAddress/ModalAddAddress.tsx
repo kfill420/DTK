@@ -41,9 +41,11 @@ function AddAddress({ transiRef, modalAddressIsEdit, nonModal }: AddAddressProps
           </div>
         }
         <select name="country" id="country_id" className="modalAddAddress_countries" value={address.country.code} onChange={handleChange} required>
-          {countries.map((country, index) => (
-            <option key={index} value={country.code}>{country.name}</option>
-          ))}
+          {
+            countries.map((country, index) => (
+              <option key={index} value={country.code}>{country.name}</option>
+            ))
+          }
         </select>
         <div className="modalAddAddress_container">
           <Input name='firstname' type='text' text='Prénom' backWhite required handleChange={handleChange} value={address.firstname} />

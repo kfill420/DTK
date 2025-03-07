@@ -28,6 +28,9 @@ export type ProductInCartI = {
   color: number;
   state: string;
   stockage: string;
+  price: string;
+  quantity: number;
+  id: number;
 };
 
 export type PriceI = {

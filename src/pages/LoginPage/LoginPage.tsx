@@ -221,7 +221,7 @@ function LoginPage() {
           <form onSubmit={handleEmailSubmit} className="checking_form">
             <span className="checking_form_title">Se connecter</span>
             <label htmlFor="mail" className="checking_form_mailLabel">Saisissez votre adresse e-mail.</label>
-            <input type="mail" placeholder='E-mail' name='email' ref={connectionFocusRef} value={credentials.email} onChange={handleChange} className="checking_form_mailInput" />
+            <input type="mail" placeholder='E-mail' name='email' autoComplete="email" ref={connectionFocusRef} value={credentials.email} onChange={handleChange} className="checking_form_mailInput" />
             <ButtonLoader type='submit' disabled={credentials.formConnection} text='Continuer' isLoading={pending.checking} />
           </form>
           <div className="checking_bottom">
@@ -235,7 +235,7 @@ function LoginPage() {
           <form onSubmit={handleSiginSubmit} className="checking_form">
             <span className="checking_form_title">Se connecter</span>
             <label htmlFor="password" className="checking_form_mailLabel">Indiquer votre mot de passe.</label>
-            <input type="password" placeholder='Mot de passe' name='passwordSignin' ref={loginFocusRef} value={credentials.passwordSignin} onChange={handleChange} className="checking_form_mailInput" />
+            <input type="password" placeholder='Mot de passe' name='passwordSignin' autoComplete="current-password" ref={loginFocusRef} value={credentials.passwordSignin} onChange={handleChange} className="checking_form_mailInput" />
             <ButtonLoader type='submit' disabled={credentials.formConnection} text='Continuer' isLoading={pending.login} />
           </form>
           <div className="checking_form_errors">
@@ -257,7 +257,7 @@ function LoginPage() {
             <span className="checking_form_title">S'inscrire</span>
             <fieldset className="checking_form_password">
               <label htmlFor="password" className="checking_form_password_label">Choisissez votre mot de passe.</label>
-              <input type="password" placeholder='Mot de passe' name='password' ref={signupFocusRef} value={credentials.password} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} className="checking_form_password_input" />
+              <input type="password" placeholder='Mot de passe' name='password' autoComplete="new-password" ref={signupFocusRef} value={credentials.password} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} className="checking_form_password_input" />
               <CSSTransition in={passwordSignupFocus.password} nodeRef={signupPasswordRef} classNames="extend-400t" timeout={500} unmountOnExit appear>
                 <div ref={signupPasswordRef} className="checking_form_errors checking_form_errors-signup">
                   <span className={Object.values(passwordValidation).every(value => value === true) ? "checking_form_errors_error-signup checking_form_errors_error-signup-ok" : "checking_form_errors_error-signup"}>Le mot de passe doit contenir au minimum</span>

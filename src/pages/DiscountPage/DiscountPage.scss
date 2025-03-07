@@ -1,7 +1,7 @@
 @use '../../styles/breakpoint.scss';
 @use '../../styles/variables' as v;
 
-.adminPage {
+.discountPage {
 
   @include breakpoint.media("desktop") {
     width: 70%;

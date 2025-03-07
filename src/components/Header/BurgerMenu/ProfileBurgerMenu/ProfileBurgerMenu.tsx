@@ -44,7 +44,11 @@ const HamburgerMenu = ({ isOpen, email }: { isOpen: boolean, email: string }) =>
                 <NavLink to="/cart" onClick={handleOpen} className={({ isActive }) => (isActive ? 'pburgerMenu_list_link pburgerMenu_list_link-active' : 'pburgerMenu_list_link')}>Panier</NavLink>
                 <NavLink to="/order" onClick={handleOpen} className={({ isActive }) => (isActive ? 'pburgerMenu_list_link pburgerMenu_list_link-active' : 'pburgerMenu_list_link')}>Commandes</NavLink>
                 {
-                  isAdmin && <NavLink to="/panel" onClick={handleOpen} className={({ isActive }) => (isActive ? 'pburgerMenu_list_link pburgerMenu_list_link-active' : 'pburgerMenu_list_link')}>Réductions</NavLink>
+                  isAdmin &&
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+                    <NavLink to="/discount" onClick={handleOpen} className={({ isActive }) => (isActive ? 'pburgerMenu_list_link pburgerMenu_list_link-active' : 'pburgerMenu_list_link')}>Réductions</NavLink>
+                    <NavLink to="/panel" onClick={handleOpen} className={({ isActive }) => (isActive ? 'pburgerMenu_list_link pburgerMenu_list_link-active' : 'pburgerMenu_list_link')}>Panel</NavLink>
+                  </div>
                 }
               </ul>
             </div>

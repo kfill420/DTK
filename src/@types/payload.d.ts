@@ -67,6 +67,7 @@ export interface actionCheckTokenPayload {
     cart: {
       productsCart: actionAddToCartPayloadI[];
     };
+    order: OrderI[];
     discounts: DiscountI[];
     admin: boolean;
   }
@@ -74,6 +75,10 @@ export interface actionCheckTokenPayload {
 
 export interface actionAddRemovetoCartPayload {
   productCarts: actionAddToCartPayloadI[];
+}
+
+export interface actionAddOrderPayload {
+  orders: actionAddToOrderPayloadI[];
 }
 
 export interface ErrorPayload {
@@ -92,6 +97,7 @@ export interface actionCheckSigninResult {
   data: {
     account: AccountSigninI;
     cart: cartResponseI;
+    order: OrderI[];
     listCountries: CountryI[];
     token: string;
     csrfToken: string;

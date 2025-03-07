@@ -6,6 +6,18 @@
   display: flex;
   flex-direction: column;
 
+  &_loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+
+
+    @include breakpoint.media('desktop') {
+      width: 60%;
+    }
+  }
+
   @include breakpoint.media('desktop') {
     width: 100%;
     max-width: 1300px;
@@ -32,6 +44,7 @@
     &_email,
     &_address,
     &_expedition,
+    &_payment,
     &_paiement {
       display: flex;
       flex-direction: column;
@@ -48,6 +61,17 @@
         font-size: 1.2rem;
         font-weight: 500;
       }
+
+      &_value {
+        display: flex;
+        flex-direction: row;
+        gap: .3rem;
+
+        &_logo {
+          width: 30px;
+        }
+      }
+
 
       &_top {
         display: flex;

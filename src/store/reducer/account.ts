@@ -15,14 +15,16 @@ import {
   actionAddAddressFromAccount,
   actionDeleteAccount,
   actionDeleteAddressFromAccount,
+  actionGetAllClients,
   actionUpdateAddressFromAccount,
   actionUpdateInfosFromAccount
 } from '../thunks/checkAccount';
-import { CheckProfileAddressI, CountryI } from '../../@types/account';
+import { accountInfosI, CheckProfileAddressI, CountryI } from '../../@types/account';
 import { escapeHtml } from '../../utils/escapeHtml';
 import { actionAddToCart, actionDeleteOneFromCart } from "../thunks/checkCart";
 import { DisountI } from "../../@types/discount";
 import { actionCheckDiscount, actionCheckOneDiscount, actionDeleteDiscount } from "../thunks/checkDiscount";
+import { actionAddToOrder } from "../thunks/checkOrder";
 
 export const initialState = {
   id: null,
@@ -78,6 +80,19 @@ export const initialState = {
       total: '',
       verif_code: ''
     },
+    validAddress: {
+      id: null,
+      account_id: null,
+      default: false,
+      firstname: '',
+      lastname: '',
+      entreprise: '',
+      address: '',
+      precision: '',
+      postal_code: '',
+      city: '',
+      country_id: '',
+    },
   },
   account: {
     id: null as null | number,
@@ -113,6 +128,11 @@ export const initialState = {
   token: null as null | string,
   listCountries: [] as CountryI[],
   discounts: [] as DisountI[],
+
+
+  admin: {
+    listClients: [] as accountInfosI[],
+  }
 };
 
 const accountSlice = createSlice({
@@ -339,6 +359,12 @@ const accountSlice = createSlice({
     actionSetInfos: (state, action) => {
       state.account.infos = {
         ...state.account.infos,
+        ...action.payload,
+      };
+    },
+    actionSetAddressPayment: (state, action) => {
+      state.credentials.validAddress = {
+        ...state.credentials.validAddress,
         ...action.payload,
       };
     },
@@ -583,7 +609,20 @@ const accountSlice = createSlice({
       deleteLocalStorage();
       state.connection = 'checking';
     });
+    builder.addCase(actionLogout.rejected, (state) => {
+      state.isAuthentificated = false;
+      state.token = null;
+      deleteLocalStorage();
+      state.connection = 'checking';
+    });
     builder.addCase(actionAddToCart.rejected, (state, action) => {
+      if (action.payload?.tokenExpired && action.payload?.tokenExpired === true) {
+        state.token = null;
+        deleteLocalStorage();
+        state.isAuthentificated = false;
+      }
+    });
+    builder.addCase(actionAddToOrder.rejected, (state, action) => {
       if (action.payload?.tokenExpired && action.payload?.tokenExpired === true) {
         state.token = null;
         deleteLocalStorage();
@@ -618,6 +657,10 @@ const accountSlice = createSlice({
         state.isAuthentificated = false;
       }
     });
+
+    builder.addCase(actionGetAllClients.fulfilled, (state, action) => {
+      state.admin.listClients = action.payload.accounts
+    });
   },
 });
 
@@ -630,6 +673,7 @@ export const { actionChangeCredentials,
   actionResetAddress,
   actionChangePaymentInfo,
   actionSetInfos,
+  actionSetAddressPayment,
   actionSetRecoveryToken
 } = accountSlice.actions;
 export default accountSlice.reducer;
