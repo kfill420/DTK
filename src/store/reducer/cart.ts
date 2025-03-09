@@ -60,6 +60,8 @@ const cartSlice = createSlice({
         state.cartConnected = action.payload.data.cart.productsCart.concat(ls);
     });
     builder.addCase(actionCheckSignin.fulfilled, (state, action) => {
+      console.log(action.payload.data);
+
       state.cartConnected = action.payload.data.cart.productsCart;
       localStorage.removeItem('cartVisitor');
     });
