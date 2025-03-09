@@ -18,6 +18,7 @@ interface WaitingUser {
     verif_code: string
   },
   status: string;
+  verifCode: string;
 }
 
 interface WaitingUsersState {

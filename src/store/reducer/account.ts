@@ -33,7 +33,7 @@ export const initialState = {
     checking: false,
     login: false,
     signup: false,
-    checkToken: false,
+    checkToken: true,
     mailSended: false,
     passwordRecoveryMailSnded: false,
     passwordRecoveryPasswordModified: false,
