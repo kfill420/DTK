@@ -2,10 +2,35 @@
 @use '../../styles/variables' as v;
 
 .panelPage {
-  &_title {
-    font-size: 1.5rem;
-    text-align: center;
-    margin: 1.5rem 0;
+  &_top {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+
+    &_title {
+      font-size: 1.5rem;
+      text-align: center;
+      margin: 1.5rem 0;
+    }
+
+    &_button {
+      background-color: transparent;
+      border: none;
+      box-shadow: 0 0 5px 0 rgba(222, 0, 0, 0.8);
+      border-radius: 5px;
+
+      &-on {
+        box-shadow: 0 0 5px 0 rgba(1, 122, 24, 0.8);
+      }
+    }
+  }
+
+
+  &_button {
+    background-color: v.$textColor-success;
   }
 
   &_action {

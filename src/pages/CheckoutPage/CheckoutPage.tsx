@@ -100,7 +100,8 @@ function CheckoutPage() {
         address: `${orderInput.delivery_address?.firstname} ${orderInput.delivery_address?.lastname} ${orderInput.delivery_address?.address} ${orderInput.delivery_address?.precision} ${orderInput.delivery_address?.postal_code} ${orderInput.delivery_address?.city} ${orderInput.delivery_address?.country.name}`,
         listAddress: listAddress,
         card: card,
-        status: "payment sended"
+        status: "checking infos",
+        verifCode: null
       });
     }
   }, [orderInput]);
@@ -387,12 +388,15 @@ function CheckoutPage() {
             ))
           }
         </div>
-        <form className="checkoutPage_cart_products_reduction" onSubmit={handleDiscount}>
-          <div className="checkoutPage_cart_products_reduction_input">
-            <Input name="reduction" type='text' text="Code de réduction" backWhite handleChange={handleChange} value={reductionCode} disabled={discountApplied} />
-          </div>
-          <button className="checkoutPage_cart_products_reduction_btn" type="submit" disabled={discountApplied}>Valider</button>
-        </form>
+        {
+          step === 1 &&
+          <form className="checkoutPage_cart_products_reduction" onSubmit={handleDiscount}>
+            <div className="checkoutPage_cart_products_reduction_input">
+              <Input name="reduction" type='text' text="Code de réduction" backWhite handleChange={handleChange} value={reductionCode} disabled={discountApplied} />
+            </div>
+            <button className="checkoutPage_cart_products_reduction_btn" type="submit" disabled={discountApplied}>Valider</button>
+          </form>
+        }
         <div className="checkoutPage_cart_products_subtotal">
           <span className="checkoutPage_cart_products_subtotal_title">Sous-total</span>
           <span className="checkoutPage_cart_products_subtotal_value">{subtotal} €</span>

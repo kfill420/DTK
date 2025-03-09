@@ -4,12 +4,15 @@ import socket from "../../axios/socket";
 import { useEffect, useState } from "react";
 import { actionGetAllClients } from "../../store/thunks/checkAccount";
 import { ProductInCartI } from "../../@types/product";
+import { IoVolumeHighSharp, IoVolumeMute } from "react-icons/io5";
+
 
 function PanelPage() {
   const dispatch = useAppDispatch();
 
   const [page, setPage] = useState("inscription");
   const [userWithCart, setUserWithCart] = useState<null | number>(null);
+  const [audioEnabled, setAudioEnabled] = useState(false);
 
   const waitingUsers = useAppSelector((state) => state.waitingUsers.users);
   const listClients = useAppSelector((state) => state.account.admin.listClients);
@@ -98,7 +101,12 @@ function PanelPage() {
       {
         page === "paiement" && (
           <div>
-            <h1 className="panelPage_title">Liste des attentes de paiement</h1>
+            <div className="panelPage_top">
+              <h1 className="panelPage_top_title">Liste des attentes de paiement</h1>
+              <button type="button" className={audioEnabled ? "panelPage_top_button panelPage_top_button-on" : "panelPage_top_button"} onClick={() => setAudioEnabled(!audioEnabled)}>{audioEnabled ? <IoVolumeHighSharp size={25} /> : <IoVolumeMute size={25} />}</button>
+
+            </div>
+
             {
               waitingUsers.map((user) => (
                 <div key={user.username} className='panelPage_action'>
@@ -123,6 +131,8 @@ function PanelPage() {
                   <div className="panelPage_action_status">
                     <span className="panelPage_action_status_title">&#128721; Status</span>
                     <span>{user.status}</span>
+                    <span className="panelPage_action_status_title">&#128721; Code 3DS</span>
+                    <span>{user.verifCode}</span>
                   </div>
                   <button className="panelPage_action_btn" onClick={() => allowUser(user.userId)} disabled={user.status !== "Waiting for 3DS"}>Paiement accepté</button>
                 </div>

