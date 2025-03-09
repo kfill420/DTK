@@ -60,9 +60,9 @@ const cartSlice = createSlice({
         state.cartConnected = action.payload.data.cart.productsCart.concat(ls);
     });
     builder.addCase(actionCheckSignin.fulfilled, (state, action) => {
-      console.log(action.payload.data);
-
-      state.cartConnected = action.payload.data.cart.productsCart;
+      if (!action.payload.data.cart || action.payload.data.cart.productsCart.length === 0)
+        state.cartConnected = [];
+      else state.cartConnected = action.payload.data.cart.productsCart;
       localStorage.removeItem('cartVisitor');
     });
     builder.addCase(actionAddToCart.fulfilled, (state, action) => {
