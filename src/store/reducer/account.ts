@@ -468,6 +468,8 @@ const accountSlice = createSlice({
       state.connection = 'checking';
     });
     builder.addCase(actionCheckToken.fulfilled, (state, action) => {
+      console.log("fullfiled");
+
       state.isAuthentificated = action.payload.valid;
       if (action.payload.valid) {
         state.account.id = action.payload.data.id;
@@ -503,8 +505,10 @@ const accountSlice = createSlice({
     });
     builder.addCase(actionCheckToken.pending, (state) => {
       state.pending.checkToken = true;
+      console.log("pending");
     });
     builder.addCase(actionCheckToken.rejected, (state, action) => {
+      console.log("rejected");
       state.isAuthentificated = false;
       if (action.payload?.tokenExpired && action.payload?.tokenExpired === true) {
         state.token = null;
