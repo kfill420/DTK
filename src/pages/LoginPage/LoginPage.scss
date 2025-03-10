@@ -205,6 +205,58 @@
       }
     }
 
+    &_passwordSignin {
+      border: none;
+      padding: 0;
+      margin-bottom: 0;
+
+      &_label {
+        font-size: 1rem;
+        color: v.$textColor-colorDark;
+      }
+
+      &_input {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+
+        &_value {
+          width: 100%;
+          padding: 0.5rem 0.6rem;
+          border-radius: 0.5rem;
+          font-size: 1rem;
+          outline: none;
+          transition: border 0.1s ease-in;
+          border: solid 2px v.$textColor-colorDarkTrans1;
+        }
+
+        &_infos {
+          position: absolute;
+          display: flex;
+          flex-direction: row;
+          top: 50%;
+          right: 2%;
+          transform: translateY(-50%);
+
+          &_btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+            z-index: 5;
+          }
+        }
+
+        &:focus {
+          border: solid 2px v.$bgColor-primary;
+        }
+      }
+    }
+
     &_password {
       border: none;
       padding: 0;
@@ -216,13 +268,40 @@
       }
 
       &_input {
-        width: 100%;
-        padding: 0.5rem 0.6rem;
-        border-radius: 0.5rem;
-        font-size: 1rem;
-        outline: none;
-        transition: border 0.1s ease-in;
-        border: solid 2px v.$textColor-colorDarkTrans1;
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+
+        &_value {
+          width: 100%;
+          padding: 0.5rem 0.6rem;
+          border-radius: 0.5rem;
+          font-size: 1rem;
+          outline: none;
+          transition: border 0.1s ease-in;
+          border: solid 2px v.$textColor-colorDarkTrans1;
+        }
+
+        &_infos {
+          position: absolute;
+          display: flex;
+          flex-direction: row;
+          top: 50%;
+          right: 2%;
+          transform: translateY(-50%);
+
+          &_btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+            z-index: 5;
+          }
+        }
 
         &:focus {
           border: solid 2px v.$bgColor-primary;
@@ -240,13 +319,40 @@
       }
 
       &_input {
-        width: 100%;
-        padding: 0.5rem 0.6rem;
-        border-radius: 0.5rem;
-        font-size: 1rem;
-        outline: none;
-        transition: border 0.1s ease-in;
-        border: solid 2px v.$textColor-colorDarkTrans1;
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+
+        &_value {
+          width: 100%;
+          padding: 0.5rem 0.6rem;
+          border-radius: 0.5rem;
+          font-size: 1rem;
+          outline: none;
+          transition: border 0.1s ease-in;
+          border: solid 2px v.$textColor-colorDarkTrans1;
+        }
+
+        &_infos {
+          position: absolute;
+          display: flex;
+          flex-direction: row;
+          top: 50%;
+          right: 2%;
+          transform: translateY(-50%);
+
+          &_btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+            z-index: 5;
+          }
+        }
 
         &:focus {
           border: solid 2px v.$bgColor-primary;
@@ -264,6 +370,11 @@
           color: v.$textColor-success;
         }
       }
+    }
+
+    &_submit {
+      border: none;
+      background-color: transparent;
     }
   }
 

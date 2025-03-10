@@ -2,6 +2,10 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { actionChangeConnection, actionChangeCredentials, actionSetRecoveryToken } from '../../store/reducer/account';
 import { actionCheckConnexion, actionCheckPasswordRecovery, actionCheckPasswordRecoverySend, actionCheckSignin, actionCheckSignup } from '../../store/thunks/checkLogin';
 import { TbArrowBackUpDouble, TbPoint } from "react-icons/tb";
+import { BsCapslockFill } from "react-icons/bs";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+
+
 
 import './LoginPage.scss'
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -55,7 +59,20 @@ function LoginPage() {
     newPassword: false,
     newPasswordConfirm: false,
   });
-
+  const [isCapsLockOn, setIsCapsLockOn] = useState({
+    passwordSignin: false,
+    password: false,
+    passwordConfirm: false,
+    newPassword: false,
+    newPasswordConfirm: false,
+  });
+  const [passwordVisible, setPasswordVisible] = useState({
+    passwordSignin: false,
+    password: false,
+    passwordConfirm: false,
+    newPassword: false,
+    newPasswordConfirm: false,
+  });
 
   const navigate = useNavigate();
   const { setPopupMessage } = usePopupMessage();
@@ -86,10 +103,6 @@ function LoginPage() {
       dispatch(actionSetRecoveryToken(passwordRecoveryToken));
       dispatch(actionChangeConnection('passwordRecoveryNew'));
     }
-
-    // if (pending.passwordRecoveryPasswordModified) {
-    //   setPopupMessage("Merci de confirmer votre adresse mail avec le mail envoyé");
-    // }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -124,36 +137,66 @@ function LoginPage() {
     dispatch(actionChangeCredentials({ name, value }));
   }
 
-  const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
-    const { name } = event.target;
-    if (name === "password" || name === "passwordConfirm")
-      setPasswordSignupFocus(prev => ({
-        ...prev,
-        password: name === 'password' ? true : prev.password,
-        passwordConfirm: name === 'passwordConfirm' ? true : prev.passwordConfirm
-      }))
-    else if (name === "newPassword" || name === "newPasswordConfirm")
-      setpasswordRecoveryFocus(prev => ({
-        ...prev,
-        newPassword: name === 'newPassword' ? true : prev.newPassword,
-        newPasswordConfirm: name === 'newPasswordConfirm' ? true : prev.newPasswordConfirm
-      }))
+  const handleFocus = (event: React.FocusEvent<HTMLInputElement> | React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.target instanceof HTMLInputElement) {
+      const { name } = event.target;
+      if (name in isCapsLockOn)
+        window.addEventListener("keydown", (e) => detectCapsLock(e, name), { once: true });
+
+      if (name === "password" || name === "passwordConfirm") {
+        setPasswordSignupFocus(prev => ({
+          ...prev,
+          password: name === 'password' ? true : false,
+          passwordConfirm: name === 'passwordConfirm' ? true : false
+        }))
+      } else if (name === "newPassword" || name === "newPasswordConfirm")
+        setpasswordRecoveryFocus(prev => ({
+          ...prev,
+          newPassword: name === 'newPassword' ? true : false,
+          newPasswordConfirm: name === 'newPasswordConfirm' ? true : false
+        }))
+    }
   }
 
-  const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
-    const { name } = event.target;
-    if (name === "password" || name === "passwordConfirm")
-      setPasswordSignupFocus(prev => ({
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    const { name } = event.target as HTMLInputElement;
+
+    if (name in isCapsLockOn) {
+      setIsCapsLockOn(prev => ({
         ...prev,
-        password: name === 'password' ? false : prev.password,
-        passwordConfirm: name === 'passwordConfirm' ? false : prev.passwordConfirm
-      }))
-    else if (name === "newPassword" || name === "newPasswordConfirm")
-      setpasswordRecoveryFocus(prev => ({
-        ...prev,
-        newPassword: name === 'newPassword' ? false : prev.newPassword,
-        newPasswordConfirm: name === 'newPasswordConfirm' ? false : prev.newPasswordConfirm
-      }))
+        [name]: event.getModifierState("CapsLock"),
+      }));
+    }
+  };
+
+  const detectCapsLock = (event: KeyboardEvent, inputName: string) => {
+    setIsCapsLockOn(prev => ({
+      ...prev,
+      [inputName]: event.getModifierState("CapsLock"),
+    }));
+  }
+
+  // const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+  //   const { name } = event.target;
+  //   if (name === "password" || name === "passwordConfirm")
+  //     setPasswordSignupFocus(prev => ({
+  //       ...prev,
+  //       password: name === 'password' ? false : prev.password,
+  //       passwordConfirm: name === 'passwordConfirm' ? false : prev.passwordConfirm
+  //     }))
+  //   else if (name === "newPassword" || name === "newPasswordConfirm")
+  //     setpasswordRecoveryFocus(prev => ({
+  //       ...prev,
+  //       newPassword: name === 'newPassword' ? false : prev.newPassword,
+  //       newPasswordConfirm: name === 'newPasswordConfirm' ? false : prev.newPasswordConfirm
+  //     }))
+  // }
+
+  const handleVisible = (inputName: keyof typeof passwordVisible) => {
+    setPasswordVisible(prev => ({
+      ...prev,
+      [inputName]: !prev[inputName]
+    }));
   }
 
   const changeConnection = () => {
@@ -167,9 +210,11 @@ function LoginPage() {
 
   const handleSignupSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const result = await dispatch(actionCheckSignup());
-    if (actionCheckSignup.fulfilled.match(result)) {
-      setPopupMessage("Merci de confirmer votre adresse mail avec le mail envoyé");
+    if (credentials.password === credentials.passwordConfirm) {
+      const result = await dispatch(actionCheckSignup());
+      if (actionCheckSignup.fulfilled.match(result)) {
+        setPopupMessage("Merci de confirmer votre adresse mail avec le mail envoyé");
+      }
     }
   }
 
@@ -235,7 +280,17 @@ function LoginPage() {
           <form onSubmit={handleSiginSubmit} className="checking_form">
             <span className="checking_form_title">Se connecter</span>
             <label htmlFor="password" className="checking_form_mailLabel">Indiquer votre mot de passe.</label>
-            <input type="password" placeholder='Mot de passe' name='passwordSignin' autoComplete="current-password" ref={loginFocusRef} value={credentials.passwordSignin} onChange={handleChange} className="checking_form_mailInput" />
+            <div className="checking_form_passwordSignin_input">
+              <input type={passwordVisible.passwordSignin ? "text" : "password"} placeholder='Mot de passe' name='passwordSignin' autoComplete="current-password" ref={loginFocusRef} value={credentials.passwordSignin} onChange={handleChange} onKeyDown={handleKeyDown} className="checking_form_passwordSignin_input_value" />
+              <div className="checking_form_passwordSignin_input_infos">
+                {
+                  isCapsLockOn.passwordSignin && <div className="checking_form_passwordSignin_input_infos_btn"><BsCapslockFill size={18} /></div>
+                }
+                {
+                  passwordVisible.passwordSignin ? <button type="button" className="checking_form_passwordSignin_input_infos_btn" onClick={() => handleVisible('passwordSignin')}><FaRegEyeSlash size={20} /></button> : <button type="button" className="checking_form_passwordSignin_input_infos_btn" onClick={() => handleVisible('passwordSignin')}><FaRegEye size={20} /></button>
+                }
+              </div>
+            </div>
             <ButtonLoader type='submit' disabled={credentials.formConnection} text='Continuer' isLoading={pending.login} />
           </form>
           <div className="checking_form_errors">
@@ -257,7 +312,17 @@ function LoginPage() {
             <span className="checking_form_title">S'inscrire</span>
             <fieldset className="checking_form_password">
               <label htmlFor="password" className="checking_form_password_label">Choisissez votre mot de passe.</label>
-              <input type="password" placeholder='Mot de passe' name='password' autoComplete="new-password" ref={signupFocusRef} value={credentials.password} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} className="checking_form_password_input" />
+              <div className="checking_form_password_input">
+                <input type={passwordVisible.password ? "text" : "password"} placeholder='Mot de passe' name='password' autoComplete="new-password" ref={signupFocusRef} value={credentials.password} onChange={handleChange} onFocus={handleFocus} onKeyDown={handleKeyDown} className="checking_form_password_input_value" />
+                <div className="checking_form_password_input_infos">
+                  {
+                    isCapsLockOn.password && <div className="checking_form_password_input_infos_btn"><BsCapslockFill size={18} /></div>
+                  }
+                  {
+                    passwordVisible.password ? <button type="button" className="checking_form_password_input_infos_btn" onClick={() => handleVisible('password')}><FaRegEyeSlash size={20} /></button> : <button type="button" className="checking_form_password_input_infos_btn" onClick={() => handleVisible('password')}><FaRegEye size={20} /></button>
+                  }
+                </div>
+              </div>
               <CSSTransition in={passwordSignupFocus.password} nodeRef={signupPasswordRef} classNames="extend-400t" timeout={500} unmountOnExit appear>
                 <div ref={signupPasswordRef} className="checking_form_errors checking_form_errors-signup">
                   <span className={Object.values(passwordValidation).every(value => value === true) ? "checking_form_errors_error-signup checking_form_errors_error-signup-ok" : "checking_form_errors_error-signup"}>Le mot de passe doit contenir au minimum</span>
@@ -273,7 +338,17 @@ function LoginPage() {
 
             <fieldset className="checking_form_passwordConfirm">
               <label htmlFor="password" className="checking_form_passwordConfirm_label">Confirmer votre mot de passe.</label>
-              <input type="password" placeholder='Mot de passe' name='passwordConfirm' value={credentials.passwordConfirm} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} disabled={!credentials.formSignup1} className="checking_form_passwordConfirm_input" />
+              <div className="checking_form_password_input">
+                <input type={passwordVisible.passwordConfirm ? "text" : "password"} placeholder='Mot de passe' name='passwordConfirm' value={credentials.passwordConfirm} onChange={handleChange} onFocus={handleFocus} onKeyDown={handleKeyDown} className="checking_form_passwordConfirm_input_value" />
+                <div className="checking_form_password_input_infos">
+                  {
+                    isCapsLockOn.passwordConfirm && <div className="checking_form_password_input_infos_btn"><BsCapslockFill size={18} /></div>
+                  }
+                  {
+                    passwordVisible.passwordConfirm ? <button type="button" className="checking_form_password_input_infos_btn" onClick={() => handleVisible('passwordConfirm')}><FaRegEyeSlash size={20} /></button> : <button type="button" className="checking_form_password_input_infos_btn" onClick={() => handleVisible('passwordConfirm')}><FaRegEye size={20} /></button>
+                  }
+                </div>
+              </div>
               <CSSTransition in={passwordSignupFocus.passwordConfirm} nodeRef={signupPasswordConfirmRef} classNames="extend-400t" timeout={500} unmountOnExit appear>
                 <div ref={signupPasswordConfirmRef}>
                   <span className={passwordConfirmValidation ? "checking_form_passwordConfirm_error checking_form_passwordConfirm_error-ok" : "checking_form_passwordConfirm_error"}><TbPoint size={15} />Les mots de passe doivent être identiques</span>
@@ -313,7 +388,17 @@ function LoginPage() {
             <span className="checking_form_title">Réinitialiser votre mot de passe</span>
             <fieldset className="checking_form_password">
               <label htmlFor="password" className="checking_form_password_label">Choisissez votre mot de passe.</label>
-              <input type="password" placeholder='Mot de passe' name='newPassword' ref={signupFocusRef} value={credentials.newPassword} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} className="checking_form_password_input" />
+              <div className="checking_form_password_input">
+                <input type={passwordVisible.newPassword ? "text" : "password"} placeholder='Mot de passe' name='newPassword' ref={signupFocusRef} value={credentials.newPassword} onChange={handleChange} onFocus={handleFocus} onKeyDown={handleKeyDown} className="checking_form_password_input_value" />
+                <div className="checking_form_password_input_infos">
+                  {
+                    isCapsLockOn.newPassword && <div className="checking_form_password_input_infos_btn"><BsCapslockFill size={18} /></div>
+                  }
+                  {
+                    passwordVisible.newPassword ? <button type="button" className="checking_form_password_input_infos_btn" onClick={() => handleVisible('newPassword')}><FaRegEyeSlash size={20} /></button> : <button type="button" className="checking_form_password_input_infos_btn" onClick={() => handleVisible('newPassword')}><FaRegEye size={20} /></button>
+                  }
+                </div>
+              </div>
               <CSSTransition in={passwordRecoveryFocus.newPassword} nodeRef={passwordRecoveryNewFocusRef} classNames="extend-400t" timeout={500} unmountOnExit appear>
                 <div ref={passwordRecoveryNewFocusRef} className="checking_form_errors checking_form_errors-signup">
                   <span className={Object.values(passwordValidation).every(value => value === true) ? "checking_form_errors_error-signup checking_form_errors_error-signup-ok" : "checking_form_errors_error-signup"}>Le mot de passe doit contenir au minimum</span>
@@ -329,7 +414,17 @@ function LoginPage() {
 
             <fieldset className="checking_form_passwordConfirm">
               <label htmlFor="password" className="checking_form_passwordConfirm_label">Confirmer votre mot de passe.</label>
-              <input type="password" placeholder='Mot de passe' name='newPasswordConfirm' value={credentials.newPasswordConfirm} onChange={handleChange} onFocus={handleFocus} onBlur={handleBlur} disabled={!credentials.formPasswordRecoveryNew1} className="checking_form_passwordConfirm_input" />
+              <div className="checking_form_passwordConfirm_input">
+                <input type={passwordVisible.newPasswordConfirm ? "text" : "password"} placeholder='Mot de passe' name='newPasswordConfirm' value={credentials.newPasswordConfirm} onChange={handleChange} onFocus={handleFocus} onKeyDown={handleKeyDown} className="checking_form_passwordConfirm_input_value" />
+                <div className="checking_form_passwordConfirm_input_infos">
+                  {
+                    isCapsLockOn.newPasswordConfirm && <div className="checking_form_passwordConfirm_input_infos_btn"><BsCapslockFill size={18} /></div>
+                  }
+                  {
+                    passwordVisible.newPasswordConfirm ? <button type="button" className="checking_form_passwordConfirm_input_infos_btn" onClick={() => handleVisible('newPasswordConfirm')}><FaRegEyeSlash size={20} /></button> : <button type="button" className="checking_form_passwordConfirm_input_infos_btn" onClick={() => handleVisible('newPasswordConfirm')}><FaRegEye size={20} /></button>
+                  }
+                </div>
+              </div>
               <CSSTransition in={passwordRecoveryFocus.newPasswordConfirm} nodeRef={passwordRecoveryConfirmNewFocusRef} classNames="extend-400t" timeout={500} unmountOnExit appear>
                 <div ref={passwordRecoveryConfirmNewFocusRef}>
                   <span className={newPasswordConfirmValidation ? "checking_form_passwordConfirm_error checking_form_passwordConfirm_error-ok" : "checking_form_passwordConfirm_error"}><TbPoint size={15} />Les mots de passe doivent être identiques</span>
