@@ -2,7 +2,7 @@ import { io } from "socket.io-client";
 import { setWaitingUsers } from "../store/reducer/waitingUsers";
 import store from "../store";
 
-const socket = io(import.meta.env.VITE_STATUS === "dev" ? "ws://" + import.meta.env.VITE_APP_URL : "wss://" + import.meta.env.VITE_APP_URL_PROD, {
+const socket = io(import.meta.env.VITE_STATUS === "dev" ? "ws://" + import.meta.env.VITE_APP_DOMAIN : "wss://" + import.meta.env.VITE_APP_URL_PROD, {
   withCredentials: true,
   transports: ['websocket'],
   auth: {
