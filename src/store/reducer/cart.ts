@@ -53,8 +53,6 @@ const cartSlice = createSlice({
     });
     builder.addCase(actionCheckToken.fulfilled, (state, action) => {
       const ls = JSON.parse(localStorage.getItem('cartVisitor') || '[]');
-      console.log(action.payload.data);
-
       if (!ls || ls.length === 0)
         state.cartConnected = action.payload.data.cart.productsCart;
       else
