@@ -21,7 +21,6 @@ import DiscountPage from "./DiscountPage/DiscountPage.tsx";
 const HomePage = lazy(() => import('./HomePage/HomePage.tsx'));
 const ProductPage = lazy(() => import('./ProductPage/ProductPage.tsx'));
 const LoginPage = lazy(() => import('./LoginPage/LoginPage.tsx'));
-const Order = lazy(() => import('./ProfilePage/Order/Order.tsx'));
 const Params = lazy(() => import('./ProfilePage/Params/Params.tsx'));
 const Infos = lazy(() => import('./ProfilePage/Infos/Infos.tsx'));
 const CollectionPage = lazy(() => import('./CollectionPage/CollectionPage.tsx'));
