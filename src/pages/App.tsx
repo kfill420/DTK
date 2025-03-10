@@ -17,6 +17,7 @@ import ConfirmationPage from "./ConfirmationPage/ConfirmationPage.tsx";
 import PaymentPage from "./PaymentPage/PaymentPage.tsx";
 import PanelPage from "./PanelPage/PanelPage.tsx";
 import DiscountPage from "./DiscountPage/DiscountPage.tsx";
+import Order from "./ProfilePage/Order/Order.tsx";
 
 const HomePage = lazy(() => import('./HomePage/HomePage.tsx'));
 const ProductPage = lazy(() => import('./ProductPage/ProductPage.tsx'));
