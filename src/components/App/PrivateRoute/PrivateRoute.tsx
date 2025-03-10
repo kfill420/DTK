@@ -28,7 +28,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, isAuthenticated }
     return <>{children}</>;
 };
 
-const AdminRoute: React.FC<PrivateRouteProps> = ({ children }) => {
+const AdminRoute: React.FC<PrivateRouteProps> = ({ children, isAuthenticated }) => {
     const dispatch = useAppDispatch();
     const [shouldRedirect, setShouldRedirect] = React.useState(false);
     const pending = useAppSelector((state) => state.account.pending.checkToken);
@@ -46,7 +46,7 @@ const AdminRoute: React.FC<PrivateRouteProps> = ({ children }) => {
         }
     }, [dispatch, isAdmin, pending]);
 
-    if (shouldRedirect) {
+    if (shouldRedirect || (!isAuthenticated && pending)) {
         return <Navigate to="/login" />;
     }
 
