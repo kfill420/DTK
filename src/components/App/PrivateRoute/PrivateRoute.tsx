@@ -33,11 +33,12 @@ const AdminRoute: React.FC<PrivateRouteProps> = ({ children }) => {
     const [shouldRedirect, setShouldRedirect] = React.useState(false);
     const pending = useAppSelector((state) => state.account.pending.checkToken);
     const isAdmin = useAppSelector((state) => state.account.account.admin);
+    console.log(isAdmin, pending);
 
     useEffect(() => {
-
-
         if (!pending) {
+            console.log(checkTokenExpiration());
+
             if (checkTokenExpiration() === false || !isAdmin) {
                 dispatch(actionLogout());
                 setShouldRedirect(true);
