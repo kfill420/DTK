@@ -65,8 +65,10 @@ function PanelPage() {
 
   const handleAcceptButton = async (id: number, status: string) => {
     updateRequest({ id, status });
-    if (await deleteNotification(id))
-      setNotifications((prev) => prev.filter((n) => n.id !== id));
+    setTimeout(async () => {
+      if (await deleteNotification(id))
+        setNotifications((prev) => prev.filter((n) => n.id !== id));
+    }, 1000);
   }
 
   return (
