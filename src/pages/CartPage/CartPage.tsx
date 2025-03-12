@@ -8,15 +8,20 @@ import { useEffect, useState } from "react";
 import { actionAddToCartPayloadI } from "../../@types/cart";
 import { actionCheckCartOffline, actionDeleteFromCartOffline } from "../../store/reducer/cart";
 import { setIsOpen } from "../../store/reducer/modal";
+import { sendRequest } from "../../axios/supabaseClient";
+import { setNotifId } from "../../store/reducer/notification";
 
 
 function CartPage({ cancelFunction }: { cancelFunction?: () => void }) {
   const location = useLocation();
   const dispatch = useAppDispatch();
+  const accountId = useAppSelector((state) => state.account.account.id);
+  const email = useAppSelector((state) => state.account.account.email);
   const isLogin = useAppSelector((state) => state.account.isAuthentificated);
   const cartConnected = useAppSelector((state) => state.cart.cartConnected);
   const cartVisitor = useAppSelector((state) => state.cart.cartVisitor);
   const [cart, setCart] = useState<actionAddToCartPayloadI[]>([]);
+  // const [isLeaving, setIsLeaving] = useState(false);
 
   useEffect(() => {
     const ls = JSON.parse(localStorage.getItem('cartVisitor') || '[]');
@@ -31,10 +36,61 @@ function CartPage({ cancelFunction }: { cancelFunction?: () => void }) {
     }
   }, [isLogin, cartConnected, cartVisitor]);
 
+  // useEffect(() => {
+  //   if (!notifId) return;
+
+  //   const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+  //     e.preventDefault();
+  //     e.returnValue = "";
+  //   };
+
+  //   const handleUnloadWrapper = () => {
+  //     if (isLeaving) {
+  //       handleUnload(notifId);
+  //     }
+  //   };
+
+  //   window.addEventListener("beforeunload", handleBeforeUnload);
+
+  //   window.addEventListener("unload", () => {
+  //     if (isLeaving) {
+  //       handleUnload(notifId);
+  //     }
+  //   });
+
+  //   let currentLocation = location.pathname;
+
+  //   const handleLocationChange = () => {
+  //     if (location.pathname !== currentLocation) {
+  //       setIsLeaving(true);
+  //       currentLocation = location.pathname;
+  //     }
+  //   };
+
+  //   handleLocationChange();
+
+  //   return () => {
+  //     window.removeEventListener("beforeunload", handleBeforeUnload);
+  //     window.removeEventListener("unload", handleUnloadWrapper);
+  //   };
+  // }, [notifId, navigate]);
+
   const handleDeleteButton = (id: number) => {
     if (isLogin)
       dispatch(actionDeleteOneFromCart(id));
     else dispatch(actionDeleteFromCartOffline(id))
+  }
+
+  const handleCommandButton = async () => {
+    dispatch(setIsOpen({ modal: 'modalCartIsOpen', value: false }));
+    if (accountId) {
+      const result = await sendRequest({
+        user_id: accountId,
+        email: email,
+        status: "cart"
+      });
+      dispatch(setNotifId(result));
+    }
   }
 
   if (cart && cart.length > 0) {
@@ -76,7 +132,7 @@ function CartPage({ cancelFunction }: { cancelFunction?: () => void }) {
           </div>
           <span className="cartPage_total_taxes">Taxes incluses.</span>
           <textarea className="cartPage_total_note" name="note" id="note" placeholder="Note de la commande"></textarea>
-          <Link onClick={() => dispatch(setIsOpen({ modal: 'modalCartIsOpen', value: false }))} to="/checkout" className="cartPage_total_btn">Commander</Link>
+          <Link onClick={handleCommandButton} to="/checkout" className="cartPage_total_btn">Commander</Link>
         </div>
         <div className="cartPage_payment">
           <span className="cartPage_payment_title">Nous acceptons</span>

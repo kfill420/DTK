@@ -113,6 +113,8 @@ const actionGetAllClients = createAsyncThunk(
 
       return response.data;
     } catch (error) {
+      console.log(error);
+
       const axiosError = error as AxiosError;
       return thunkAPI.rejectWithValue(axiosError.response?.data as RejectPayload);
     }
