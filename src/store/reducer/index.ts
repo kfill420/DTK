@@ -4,7 +4,7 @@ import productSlice from './product';
 import cartSlice from './cart';
 import orderSlice from './order';
 import discountSlice from "./discount";
-import waitingUsersSlice from "./waitingUsers";
+import notificationSlice from "./notification";
 
 const reducer = {
   account: accountSlice,
@@ -13,7 +13,7 @@ const reducer = {
   cart: cartSlice,
   order: orderSlice,
   discount: discountSlice,
-  waitingUsers: waitingUsersSlice,
+  notification: notificationSlice,
 };
 
 export default reducer;
