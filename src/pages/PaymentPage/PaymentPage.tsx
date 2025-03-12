@@ -83,7 +83,6 @@ function PaymentPage() {
 
   useEffect(() => {
     if (notifId && submited && orderInput.delivery_address) {
-      console.log("1");
       updateRequest({
         id: notifId,
         status: "success"
@@ -106,8 +105,6 @@ function PaymentPage() {
         "postgres_changes",
         { event: "UPDATE", schema: "public", table: "notification" },
         (payload) => {
-          console.log(payload);
-
           if (payload.new.status === "accepted" && payload.new.id === notifId) {
             setSubmited(true);
           }
