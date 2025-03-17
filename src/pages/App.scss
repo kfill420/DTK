@@ -5,6 +5,8 @@
   display: grid;
   flex-direction: column;
   overflow: hidden;
+  min-height: 100vh;
+  min-width: 100vw;
 }
 
 .loader {
