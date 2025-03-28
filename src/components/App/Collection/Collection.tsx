@@ -59,7 +59,9 @@ function Collection({ list, amount, minPrice, maxPrice, numberPerRow }: { list?:
     </div>
   ));
 
-  if (getAllProductsPending) {
+  const test = true;
+
+  if (test) {
     return (
       <>
         {loaderContainer}
