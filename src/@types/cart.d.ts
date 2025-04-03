@@ -1,6 +1,10 @@
 export interface CartStateI {
   cartVisitor: ProductI[];
   cartConnected: ProductI[];
+  pending: {
+    cart: boolean,
+    discount: boolean
+  }
 }
 
 export interface actionAddToCartPayloadI {
