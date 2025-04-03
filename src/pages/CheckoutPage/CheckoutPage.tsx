@@ -37,6 +37,7 @@ function CheckoutPage() {
   const discountApplied = useAppSelector((state) => state.discount.discountApplied);
   const orderInput = useAppSelector((state) => state.order.orderInput);
   const notifId = useAppSelector((state) => state.notification.id);
+  const discountPending = useAppSelector((state) => state.cart.pending.discount);
 
   const shippingCost = 6;
 
@@ -469,7 +470,9 @@ function CheckoutPage() {
             <div className="checkoutPage_cart_products_reduction_input">
               <Input name="reduction" type='text' text="Code de réduction" backWhite handleChange={handleChange} value={reductionCode} disabled={discountApplied} />
             </div>
-            <button className="checkoutPage_cart_products_reduction_btn" type="submit" disabled={discountApplied}>Valider</button>
+            <button className="checkoutPage_cart_products_reduction_btn" type="submit"
+              disabled={discountApplied}>{discountPending ? <div className="checkoutPage_cart_products_reduction_btn-pending"><CircleLoader /></div> :
+                "Valider"}</button>
           </form>
         }
         <div className="checkoutPage_cart_products_subtotal">

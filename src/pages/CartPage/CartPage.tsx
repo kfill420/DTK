@@ -10,6 +10,7 @@ import { actionCheckCartOffline, actionDeleteFromCartOffline } from "../../store
 import { setIsOpen } from "../../store/reducer/modal";
 import { sendRequest } from "../../axios/supabaseClient";
 import { setNotifId } from "../../store/reducer/notification";
+import CircleLoader from "../../components/App/CircleLoader/CircleLoader";
 
 
 function CartPage({ cancelFunction }: { cancelFunction?: () => void }) {
@@ -20,6 +21,7 @@ function CartPage({ cancelFunction }: { cancelFunction?: () => void }) {
   const isLogin = useAppSelector((state) => state.account.isAuthentificated);
   const cartConnected = useAppSelector((state) => state.cart.cartConnected);
   const cartVisitor = useAppSelector((state) => state.cart.cartVisitor);
+  const cardPending = useAppSelector((state) => state.cart.pending.cart);
   const [cart, setCart] = useState<actionAddToCartPayloadI[]>([]);
   // const [isLeaving, setIsLeaving] = useState(false);
 
@@ -92,6 +94,12 @@ function CartPage({ cancelFunction }: { cancelFunction?: () => void }) {
       dispatch(setNotifId(result));
     }
   }
+
+  if (cardPending) return (
+    <div className="cartpage-pending">
+      <CircleLoader black={true} />
+    </div>
+  )
 
   if (cart && cart.length > 0) {
     return (

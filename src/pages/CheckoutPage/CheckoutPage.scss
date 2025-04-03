@@ -311,6 +311,10 @@
           transition: background-color .2s ease-in-out;
           cursor: pointer;
 
+          &-pending {
+            transform: scale(0.7);
+          }
+
           &:disabled {
             background-color: v.$textColor-colorDarkTrans5;
             cursor: not-allowed;

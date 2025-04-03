@@ -8,6 +8,13 @@
   gap: 2rem;
   height: 100%;
 
+  &-pending {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+
   &-noCart {
     justify-content: center;
   }
