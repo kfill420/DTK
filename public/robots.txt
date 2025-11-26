@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+
+Sitemap: https://dtk-shop.vercel.app/sitemap.xml
