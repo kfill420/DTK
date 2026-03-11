@@ -1,50 +1,78 @@
-# React + TypeScript + Vite
+# DTK – Application Web Moderne
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+DTK est une application web conçue pour offrir une expérience fluide, réactive et sécurisée autour de fonctionnalités interactives, en temps réel et orientées utilisateur. Le projet repose sur une architecture front-end moderne, intégrant des outils performants pour la gestion d’état, la communication réseau et la sécurité des données.
 
-Currently, two official plugins are available:
+## Objectifs du projet
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Fournir une interface moderne et intuitive.
 
-## Expanding the ESLint configuration
+Gérer des interactions en temps réel via WebSockets.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Assurer une communication sécurisée avec une API externe.
 
-- Configure the top-level `parserOptions` property like this:
+Offrir une structure front-end robuste, scalable et maintenable.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+Intégrer une authentification fiable via Supabase.
+
+## Stack technique
+
+### Framework & outils principaux
+
+React 18 – Interface utilisateur.
+
+React Router DOM – Navigation entre les pages.
+
+Redux Toolkit – Gestion d’état centralisée.
+
+Reselect – Sélecteurs optimisés.
+
+React Transition Group – Animations fluides.
+
+React Intersection Observer – Déclenchement d’animations au scroll.
+
+### Communication & sécurité
+
+Axios – Requêtes HTTP.
+
+Socket.io  Client – Communication en temps réel.
+
+Supabase – Authentification et gestion des utilisateurs.
+
+DOMPurify – Sécurisation des contenus HTML.
+
+jwt-decode – Gestion des tokens JWT.
+
+### Outils de développement
+
+Vite – Dev server rapide et build optimisé.
+
+TypeScript – Typage strict et fiabilité.
+
+Sass – Styles modulaires.
+
+ESLint + Prettier – Qualité et cohérence du code.
+
+Rollup Visualizer – Analyse du bundle.
+
+## Scripts disponibles
+
+```json
+"dev": "vite",
+"build": "tsc -b && vite build",
+"lint": "eslint .",
+"preview": "vite preview"
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## Structure générale du projet
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+```
+src/
+  components/        # Composants UI réutilisables
+  pages/             # Pages principales
+  store/             # Redux Toolkit (slices, store)
+  hooks/             # Hooks personnalisés
+  utils/             # Fonctions utilitaires (auth, formatage…)
+  styles/            # Fichiers SCSS
+  App.tsx
+  main.tsx
 ```
