@@ -4,55 +4,55 @@ DTK est une application web conçue pour offrir une expérience fluide, réactiv
 
 ## Objectifs du projet
 
-Fournir une interface moderne et intuitive.
+- Fournir une interface moderne et intuitive.
 
-Gérer des interactions en temps réel via WebSockets.
+- Gérer des interactions en temps réel via WebSockets.
 
-Assurer une communication sécurisée avec une API externe.
+- Assurer une communication sécurisée avec une API externe.
 
-Offrir une structure front-end robuste, scalable et maintenable.
+- Offrir une structure front-end robuste, scalable et maintenable.
 
-Intégrer une authentification fiable via Supabase.
+- Intégrer une authentification fiable via Supabase.
 
 ## Stack technique
 
 ### Framework & outils principaux
 
-React 18 – Interface utilisateur.
+- React 18 – Interface utilisateur.
 
-React Router DOM – Navigation entre les pages.
+- React Router DOM – Navigation entre les pages.
 
-Redux Toolkit – Gestion d’état centralisée.
+- Redux Toolkit – Gestion d’état centralisée.
 
-Reselect – Sélecteurs optimisés.
+- Reselect – Sélecteurs optimisés.
 
-React Transition Group – Animations fluides.
+- React Transition Group – Animations fluides.
 
-React Intersection Observer – Déclenchement d’animations au scroll.
+- React Intersection Observer – Déclenchement d’animations au scroll.
 
 ### Communication & sécurité
 
-Axios – Requêtes HTTP.
+- Axios – Requêtes HTTP.
 
-Socket.io  Client – Communication en temps réel.
+- Socket.io  Client – Communication en temps réel.
 
-Supabase – Authentification et gestion des utilisateurs.
+- Supabase – Authentification et gestion des utilisateurs.
 
-DOMPurify – Sécurisation des contenus HTML.
+- DOMPurify – Sécurisation des contenus HTML.
 
-jwt-decode – Gestion des tokens JWT.
+- jwt-decode – Gestion des tokens JWT.
 
 ### Outils de développement
 
-Vite – Dev server rapide et build optimisé.
+- Vite – Dev server rapide et build optimisé.
 
-TypeScript – Typage strict et fiabilité.
+- TypeScript – Typage strict et fiabilité.
 
-Sass – Styles modulaires.
+- Sass – Styles modulaires.
 
-ESLint + Prettier – Qualité et cohérence du code.
+- ESLint + Prettier – Qualité et cohérence du code.
 
-Rollup Visualizer – Analyse du bundle.
+- Rollup Visualizer – Analyse du bundle.
 
 ## Scripts disponibles
 
