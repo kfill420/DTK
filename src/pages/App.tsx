@@ -63,23 +63,25 @@ function App() {
         {!noHeaderPage && <Header isAuthentificated={isAuthentificated} email={account.email} account_id={account.id} />}
         <ScrollToTop />
 
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/collection/:brand" element={<CollectionPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/faq" element={<FaqPage />} />
-          <Route path="/products/:id" element={<ProductPage />} />
-          <Route path="/login" element={<NonPrivateRoute isAuthenticated={isAuthentificated}><LoginPage /></NonPrivateRoute>}></Route>
-          <Route path="/cart" element={<CartPage />} />
-          <Route path="/checkout" element={<PrivateRoute isAuthenticated={isAuthentificated}><CheckoutPage /></PrivateRoute>} />
-          <Route path="/payment" element={<PrivateRoute isAuthenticated={isAuthentificated}><PaymentPage /></PrivateRoute>} />
-          <Route path="/params" element={<PrivateRoute isAuthenticated={isAuthentificated}><Params /></PrivateRoute>} />
-          <Route path="/order" element={<PrivateRoute isAuthenticated={isAuthentificated}><Order /></PrivateRoute>} />
-          <Route path="/profile" element={<PrivateRoute isAuthenticated={isAuthentificated}>{<Infos />}</PrivateRoute>} />
-          <Route path="/confirmation" element={<ConfirmationPage />} />
-          <Route path="/discount" element={<AdminRoute isAuthenticated={isAuthentificated}>{<DiscountPage />}</AdminRoute>} />
-          <Route path="/panel" element={<AdminRoute isAuthenticated={isAuthentificated}>{<PanelPage />}</AdminRoute>} />
-        </Routes>
+        <main id="main-content">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/collection/:brand" element={<CollectionPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/faq" element={<FaqPage />} />
+            <Route path="/products/:id" element={<ProductPage />} />
+            <Route path="/login" element={<NonPrivateRoute isAuthenticated={isAuthentificated}><LoginPage /></NonPrivateRoute>}></Route>
+            <Route path="/cart" element={<CartPage />} />
+            <Route path="/checkout" element={<PrivateRoute isAuthenticated={isAuthentificated}><CheckoutPage /></PrivateRoute>} />
+            <Route path="/payment" element={<PrivateRoute isAuthenticated={isAuthentificated}><PaymentPage /></PrivateRoute>} />
+            <Route path="/params" element={<PrivateRoute isAuthenticated={isAuthentificated}><Params /></PrivateRoute>} />
+            <Route path="/order" element={<PrivateRoute isAuthenticated={isAuthentificated}><Order /></PrivateRoute>} />
+            <Route path="/profile" element={<PrivateRoute isAuthenticated={isAuthentificated}>{<Infos />}</PrivateRoute>} />
+            <Route path="/confirmation" element={<ConfirmationPage />} />
+            <Route path="/discount" element={<AdminRoute isAuthenticated={isAuthentificated}>{<DiscountPage />}</AdminRoute>} />
+            <Route path="/panel" element={<AdminRoute isAuthenticated={isAuthentificated}>{<PanelPage />}</AdminRoute>} />
+          </Routes>
+        </main>
 
         {!noFooterPage && <Footer />}
       </Suspense>
